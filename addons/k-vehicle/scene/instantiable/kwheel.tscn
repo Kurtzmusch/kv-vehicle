@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://bj233wg0k5djo"]
+
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/kwheel.gd" id="1_2oa8d"]
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/wheelSteerPivot.gd" id="2_1lmvs"]
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/debugVectors.gd" id="3_mfh17"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5vg7i"]
+height = 0.1
+radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_327r1"]
+no_depth_test = true
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ldieg"]
+resource_local_to_scene = true
+
+[node name="kwheel" type="Node3D"]
+script = ExtResource("1_2oa8d")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+enabled = false
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+enabled = false
+shape = SubResource("CylinderShape3D_5vg7i")
+target_position = Vector3(0, 0, -1)
+
+[node name="wheelSteerPivot" type="Node3D" parent="."]
+script = ExtResource("2_1lmvs")
+
+[node name="wheelRollPivot" type="Node3D" parent="wheelSteerPivot"]
+
+[node name="wheelMesh" type="MeshInstance3D" parent="wheelSteerPivot/wheelRollPivot"]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="labelLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="labelValue" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="contactTransform" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_327r1")
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_ldieg")
+script = ExtResource("3_mfh17")

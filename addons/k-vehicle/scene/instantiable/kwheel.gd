@@ -4,8 +4,11 @@ class_name KWheel
 
 @export_category('Wheel and Tire')
 @export var radius = 0.2
+@export var mass = 30.0
 ## overwrites [b]radius[/b] from the computed mesh bounding box
 @export var getRadiusFromMeshAABB = false
+@export var tireResponses: Array[TireResponse]
+var tireResponseDictionary: Dictionary
 
 @export_category('Steering')
 @export var steer = false
@@ -16,11 +19,14 @@ class_name KWheel
 @export var stiffness = 4.0
 @export_range(0.0,1.0) var compressionDamp = 0.5
 @export_range(0.0,1.0) var relaxationDamp = 0.9
+@export var normalDirectionLimit = 0.6
 
 @export_category('Physics Tweaking')
 ## if true, use shapecast collision data for physics.[br]
 ## shapcasting is currently broken in godot
 @export var useShapecastForPhysics = false
+
+var debugString: String
 
 var vehicle: KVehicle
 
@@ -39,13 +45,23 @@ var restExtension = 0.0
 var maxExtension = 0.0
 var restRatio = 1.0
 
-var forceAtRest = 0.0
+var normalForceAtRest = 0.0
 var suspensionForceMagnitude = 0.0
 var wheelContribution = 0.25
+var massPerWheel = 0.0
+
+var feedback = 0.0
 
 var globalGravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var contactTransform
+var localVelocity = Vector3.ZERO
+
+var radsPerSec = 0.0
+
+var relativeZSpeed = 0.0
+
+var breakTorque = 0.0
 
 func findVehicle():
 	var parent = get_parent()
@@ -54,6 +70,9 @@ func findVehicle():
 	vehicle = parent
 
 func _enter_tree():
+	for tireResponse in tireResponses:
+		tireResponseDictionary[tireResponse.materialName] = tireResponse
+	
 	findVehicle()
 	vehicle.wheels.append(self)
 	$RayCast3D.add_exception(vehicle)
@@ -61,18 +80,17 @@ func _enter_tree():
 	
 	if getRadiusFromMeshAABB:
 		radius = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb().size.y*0.5
-		print('radius: ' + str(radius))
 
 func _ready():
 	calculateAckerman()
 	maxSteerAngleActual = -ackerman*maxSteerAngle
 	previousGlobalPosition = global_position
-	restExtension = abs($wheelSteerPivot.restExtension)+.2
-	maxExtension = abs($wheelSteerPivot.maxExtension)+.2
+	restExtension = abs($wheelSteerPivot.restExtension)#+.2
+	maxExtension = abs($wheelSteerPivot.maxExtension)#+.2
 	restRatio = restExtension/maxExtension
 	wheelContribution = 1.0/vehicle.wheels.size()
-	forceAtRest = vehicle.mass*vehicle.gravity_scale*globalGravity*wheelContribution
-	print(forceAtRest)
+	massPerWheel = wheelContribution*vehicle.mass
+	normalForceAtRest = vehicle.mass*vehicle.gravity_scale*globalGravity*wheelContribution
 	$RayCast3D.target_position.y = -maxExtension-radius
 	$ShapeCast3D.target_position.z = -maxExtension
 
@@ -82,18 +100,23 @@ func calculateAckerman():
 func _physics_process(delta):
 	if steer:
 		$wheelSteerPivot.rotation.y = vehicle.normalizedSteering*maxSteerAngleActual
+	$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
 
-func updateCasts():
+func updateCasts(state, delta, oneByDelta, contribution):
 	contactTransform = null
 	$RayCast3D.force_raycast_update()
 	$ShapeCast3D.force_shapecast_update()
-	var collisionNormal
+	var collisionNormal: Vector3
 	var globalCollisionPoint
 	if !useShapecastForPhysics:
 		globalCollisionPoint = $RayCast3D.get_collision_point()
 		collisionNormal = $RayCast3D.get_collision_normal()
+	if collisionNormal.dot(global_transform.basis.y) < normalDirectionLimit:
+		collisionNormal = collisionNormal.slerp(global_transform.basis.y, 0.9)
 	grounded = $RayCast3D.is_colliding()
+	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
 	if grounded:
+		
 		contactTransform = Transform3D()
 		contactTransform.origin = globalCollisionPoint
 		contactTransform.basis.y = collisionNormal
@@ -102,13 +125,75 @@ func updateCasts():
 		var basisX = collisionNormal.cross(basisZ)
 		contactTransform.basis.z = basisZ
 		contactTransform.basis.x = basisX
+		
+		localVelocity = contactTransform.basis.inverse() * globalVelocity
+		
 		$contactTransform.clear()
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.y, Color.GREEN_YELLOW)
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.x, Color.INDIAN_RED)
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.z, Color.SKY_BLUE)
+	else:
+		feedback = 0.0
+	
+	previousGlobalPosition = global_position
+
+func applyFrictionForces(state, delta, oneByDelta, contribution):
+	if !grounded: return
+	
+	var necessaryXFriction = localVelocity.x*oneByDelta*massPerWheel*0.9
+	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
+	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
+	
+	var tireResponse = tireResponseDictionary['tarmac'] 
+	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
+	feedback = coeficients.y
+	
+	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
+	var zFriction = min(abs(necessaryZFriction), coeficients.z*suspensionForceMagnitude)
+	zFriction *= sign(necessaryZFriction)
+	xFriction *= sign(necessaryXFriction)
+	var frictionColor = Color.RED
+	if coeficients.x < tireResponse.gripMultiplier:
+		frictionColor = Color.ORANGE
+	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
+	vehicle.applyGlobalForceState(zFriction*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
+	applyTorqueFromFriction(zFriction, delta, relativeZSpeed)
+
+func applyTorqueFromFriction(friction, delta, relativeZSpeed):
+	var targetRPS = localVelocity.z/radius
+	var prevRPS = radsPerSec
+	var frictionTorque = -friction*radius
+	applyTorque(frictionTorque, delta)
+	
+	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
+	
+	#if !is_zero_approx(prevRPS):
+	if sign(newRelativeZspeed) != sign(relativeZSpeed):
+		#pass
+		radsPerSec = targetRPS
+	var signBefore = sign(radsPerSec)
+	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
+	var signAfter = sign(radsPerSec)
+	if (signBefore != signAfter):
+		radsPerSec = 0.0
+	breakTorque = 0.0
+	
+	debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
+
+func applyBreakTorque(torque, delta):
+	"""
+	var signBefore = sign(radsPerSec)
+	applyTorque(torque, delta)
+	var signAfter = sign(radsPerSec)
+	if signBefore != signAfter:
+		radsPerSec = 0.0
+	"""
+	breakTorque = abs(torque)
+
+func applyTorque(torque, delta):
+	radsPerSec += torque/(mass*0.25)*delta
 
 func applySuspensionForce(state, delta, oneByDelta, contribution):
-	
 	if !grounded: return
 	
 	var wheelPivotPositionY = to_local(contactTransform.origin).y+radius
@@ -124,11 +209,10 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	var damp = 0.0
 	if compressionDelta > 0.0:
 		damp = compressionDamp
-		#print('compression')
 	else:
 		damp = relaxationDamp
 	damp *= compressionDelta*vehicle.mass*wheelContribution
-	suspensionForceMagnitude = compression*forceAtRest
+	suspensionForceMagnitude = compression*normalForceAtRest
 	suspensionForceMagnitude += damp
 	suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
 	

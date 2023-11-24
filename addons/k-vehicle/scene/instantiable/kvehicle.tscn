@@ -1,7 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxw72hy1o23b5"]
+[gd_scene load_steps=6 format=3 uid="uid://bxw72hy1o23b5"]
 
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/kvehicle.gd" id="1_by773"]
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/debugVectors.gd" id="2_3gkt3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mgw6p"]
+friction = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g5pof"]
 no_depth_test = true
@@ -13,6 +16,7 @@ resource_local_to_scene = true
 
 [node name="kvehicle" type="RigidBody3D"]
 mass = 1000.0
+physics_material_override = SubResource("PhysicsMaterial_mgw6p")
 script = ExtResource("1_by773")
 
 [node name="debugVectors" type="MeshInstance3D" parent="."]

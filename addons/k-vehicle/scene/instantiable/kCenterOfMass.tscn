@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://b2gbcjjc1sqdp"]
+
+[ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="1_vx7w4"]
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/centerOfMass.gd" id="2_845gv"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_1iyjx"]
+size = Vector2(0.125, 0.125)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gxbvy"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0, 0.74902, 1, 1)
+albedo_texture = ExtResource("1_vx7w4")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[node name="centerOfMass" type="MeshInstance3D"]
+mesh = SubResource("QuadMesh_1iyjx")
+surface_material_override/0 = SubResource("StandardMaterial3D_gxbvy")
+script = ExtResource("2_845gv")

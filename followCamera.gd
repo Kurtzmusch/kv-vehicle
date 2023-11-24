@@ -1,5 +1,6 @@
 extends Camera3D
 
+@export var height = 1.5
 @export var distance = 8.0
 @export var lerpFactor = 0.125
 @export var target: Node
@@ -21,6 +22,10 @@ func _unhandled_input(event):
 
 func _physics_process(delta):
 	var dir = global_position.direction_to(target.global_position)
-	var targetPosition = target.global_position-dir*distance
+	var dirOnVehicle = dir*target.global_transform.basis.inverse()
+	dirOnVehicle*=distance
+	dirOnVehicle.y = -height
+	dir = dirOnVehicle*target.global_transform.basis
+	var targetPosition = target.global_position-dir
 	global_position = global_position.lerp(targetPosition, lerpFactor)
 	look_at(target.global_position)

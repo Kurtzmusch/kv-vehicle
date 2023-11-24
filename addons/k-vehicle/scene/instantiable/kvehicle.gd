@@ -12,6 +12,8 @@ var breaking = false
 
 var wheels = []
 
+var speedMS = 0.0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if createWheelMinimumColliders:
@@ -29,13 +31,25 @@ func _ready():
 func _process(delta):
 	pass
 
+func _physics_process(delta):
+	speedMS = linear_velocity.length()
+
 func _integrate_forces(state):
 	var contribution = 1.0/wheels.size()
+	var delta = state.step
+	var oneByDelta = 1.0/delta
 	$debugVectors.clear()
-	apply_central_force(accelerationInput*mass*global_transform.basis.z)
+	#apply_central_force(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0)
+	#applyGlobalForceState(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0, to_global(Vector3.DOWN*0.5), state, Color.AQUA)
+	$handbreak._integrate(delta)
 	for wheel in wheels:
-		wheel.updateCasts()
-		wheel.applySuspensionForce(state, state.step, 1.0/state.step, contribution)
+		#wheel.force_update_transform()
+		wheel.updateCasts(state, delta, oneByDelta, contribution)
+	for wheel in wheels:
+		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
+		wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*400.0,delta)
+		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
+		
 
 func applyGlobalForceState(globalForce, globalPosition, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
 	var forcePosition = globalPosition-state.transform.origin

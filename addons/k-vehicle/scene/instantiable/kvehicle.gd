@@ -42,12 +42,14 @@ func _integrate_forces(state):
 	#apply_central_force(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0)
 	#applyGlobalForceState(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0, to_global(Vector3.DOWN*0.5), state, Color.AQUA)
 	$handbreak._integrate(delta)
+	$lsd._integrate(delta)
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)
 	for wheel in wheels:
 		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
-		wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*400.0,delta)
+		if !wheel.steer:
+			wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
 		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
 		
 

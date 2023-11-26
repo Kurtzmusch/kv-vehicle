@@ -62,3 +62,11 @@ double_sided = false
 no_depth_test = true
 fixed_size = true
 script = ExtResource("4_snyr5")
+
+[node name="RollingAudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+volume_db = -80.0
+
+[node name="SlippingAudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+volume_db = -80.0
+
+[node name="Particles" type="Node3D" parent="."]

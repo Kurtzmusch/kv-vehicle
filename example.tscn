@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=38 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Texture2D" uid="uid://b3iac2qroe0l0" path="res://texture/texture_04.png" id="1_fqlpg"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
@@ -9,10 +9,15 @@
 [ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="6_a4r0p"]
 [ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="6_ckdhr"]
 [ext_resource type="PackedScene" uid="uid://5i7leg7uek4d" path="res://addons/k-vehicle/scene/instantiable/kInputHandler.tscn" id="7_hv87p"]
+[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-loop.wav" id="8_8nc0w"]
+[ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://addons/k-vehicle/scene/instantiable/particles-tarmac-slipping.tscn" id="8_ch31h"]
 [ext_resource type="Script" path="res://speedMonitor.gd" id="8_rxotk"]
 [ext_resource type="PackedScene" uid="uid://b2gbcjjc1sqdp" path="res://addons/k-vehicle/scene/instantiable/kCenterOfMass.tscn" id="9_bv31a"]
 [ext_resource type="Texture2D" uid="uid://de5j2rxr5g5fk" path="res://godot-icon-white.png" id="10_xhvi2"]
 [ext_resource type="PackedScene" uid="uid://b1rygb1612ojy" path="res://addons/k-vehicle/scene/instantiable/handbreak.tscn" id="12_d82ic"]
+[ext_resource type="Script" path="res://sideCamera.gd" id="15_w3hgf"]
+[ext_resource type="PackedScene" uid="uid://csbfypw6a2bh0" path="res://addons/k-vehicle/scene/instantiable/lsd.tscn" id="16_gycjp"]
+[ext_resource type="Script" path="res://Camera3D.gd" id="17_mo8j4"]
 
 [sub_resource type="Environment" id="Environment_b44jp"]
 
@@ -31,7 +36,9 @@ subdivide_width = 128
 subdivide_depth = 128
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m6cs2"]
+albedo_color = Color(0.435294, 0.607843, 0.607843, 1)
 albedo_texture = ExtResource("1_fqlpg")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_djtpe"]
@@ -65,15 +72,15 @@ point_count = 3
 
 [sub_resource type="Curve" id="Curve_ahlfm"]
 bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.621053), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_4p6nj"]
 bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.442105), 0.0911277, 0.0911277, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_1jbe4"]
+[sub_resource type="Resource" id="Resource_3xnk5"]
 script = ExtResource("6_a4r0p")
 materialName = "tarmac"
 gripMultiplier = 1.2
@@ -82,8 +89,17 @@ slipAngleBegin = 8.0
 slipAngleEnd = 10.0
 gripZCurve = SubResource("Curve_4p6nj")
 relativeZSpeedBegin = 2.0
-relativeZSpeedEnd = 3.0
+relativeZSpeedEnd = 4.0
 feedbackCurve = SubResource("Curve_oooal")
+slippingStream = ExtResource("8_8nc0w")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.9
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+slippingParticleScenes = Array[PackedScene]([ExtResource("8_ch31h")])
+slippingEmitThreshold = 8.0
+rollingEmitThreshold = 1.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_eojsd"]
 height = 0.2
@@ -95,10 +111,10 @@ resource_local_to_scene = true
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_8tqy8"]
 resource_local_to_scene = true
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_oshuu"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_s2ldo"]
 resource_local_to_scene = true
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_s2ldo"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_oshuu"]
 resource_local_to_scene = true
 
 [node name="world" type="WorldEnvironment"]
@@ -199,11 +215,13 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 [node name="FR" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_1jbe4")])
+tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
 steer = true
-stiffness = 3.0
+maxSteerAngle = 1.047
+stiffness = 5.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
+normalDirectionLimit = 0.8
 
 [node name="ShapeCast3D" parent="kvehicle/FR" index="1"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.029213, 0, 0)
@@ -226,9 +244,10 @@ mesh = SubResource("ImmediateMesh_weifp")
 [node name="FL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_1jbe4")])
+tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
 steer = true
-stiffness = 3.0
+maxSteerAngle = 1.047
+stiffness = 5.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
 
@@ -249,11 +268,34 @@ visible = true
 [node name="contactTransform" parent="kvehicle/FL" index="4"]
 mesh = SubResource("ImmediateMesh_8tqy8")
 
+[node name="RR" parent="kvehicle" instance=ExtResource("5_iknt5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
+getRadiusFromMeshAABB = true
+tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
+maxSteerAngle = 0.0
+stiffness = 5.0
+compressionDamp = 0.06
+relaxationDamp = 0.5
+
+[node name="wheelSteerPivot" parent="kvehicle/RR" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.161139, 0)
+restExtension = -0.0984703
+maxExtension = -0.161139
+
+[node name="wheelMesh" parent="kvehicle/RR/wheelSteerPivot/wheelRollPivot" index="0"]
+mesh = ExtResource("6_ckdhr")
+surface_material_override/0 = SubResource("StandardMaterial3D_8u1g1")
+surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
+
+[node name="contactTransform" parent="kvehicle/RR" index="4"]
+mesh = SubResource("ImmediateMesh_s2ldo")
+
 [node name="RL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_1jbe4")])
-stiffness = 3.0
+tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
+maxSteerAngle = 0.0
+stiffness = 5.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
 
@@ -270,27 +312,6 @@ surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 
 [node name="contactTransform" parent="kvehicle/RL" index="4"]
 mesh = SubResource("ImmediateMesh_oshuu")
-
-[node name="RR" parent="kvehicle" instance=ExtResource("5_iknt5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
-getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_1jbe4")])
-stiffness = 3.0
-compressionDamp = 0.06
-relaxationDamp = 0.5
-
-[node name="wheelSteerPivot" parent="kvehicle/RR" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.161139, 0)
-restExtension = -0.0984703
-maxExtension = -0.161139
-
-[node name="wheelMesh" parent="kvehicle/RR/wheelSteerPivot/wheelRollPivot" index="0"]
-mesh = ExtResource("6_ckdhr")
-surface_material_override/0 = SubResource("StandardMaterial3D_8u1g1")
-surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
-
-[node name="contactTransform" parent="kvehicle/RR" index="4"]
-mesh = SubResource("ImmediateMesh_s2ldo")
 
 [node name="kInputHandler" parent="kvehicle" instance=ExtResource("7_hv87p")]
 steeringFunctionIndex = 0
@@ -326,11 +347,20 @@ lower_fade = 7.32422e-05
 
 [node name="sideCamera" type="Camera3D" parent="kvehicle"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4, 0.580353, -1.74846e-07)
+script = ExtResource("15_w3hgf")
 
 [node name="handbreak" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("12_d82ic")]
 wheels = [NodePath("../RL"), NodePath("../RR")]
 
+[node name="lsd" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("16_gycjp")]
+wheels = [NodePath("../RR"), NodePath("../RL")]
+limit = 2.0
+
+[node name="Camera3D" type="Camera3D" parent="kvehicle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358006, 0.671878, -0.233562)
+script = ExtResource("17_mo8j4")
+
 [editable path="kvehicle/FR"]
 [editable path="kvehicle/FL"]
-[editable path="kvehicle/RL"]
 [editable path="kvehicle/RR"]
+[editable path="kvehicle/RL"]

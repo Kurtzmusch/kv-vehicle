@@ -21,6 +21,7 @@ func _unhandled_input(event):
 			translate_object_local(Vector3(-event.velocity.x, event.velocity.y, 0.0)*orbitSpeed)
 
 func _physics_process(delta):
+	if Input.is_key_pressed(KEY_1): current = true
 	var dir = global_position.direction_to(target.global_position)
 	var dirOnVehicle = dir*target.global_transform.basis.inverse()
 	dirOnVehicle*=distance

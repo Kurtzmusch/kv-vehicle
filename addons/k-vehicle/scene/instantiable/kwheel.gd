@@ -19,12 +19,15 @@ var tireResponseDictionary: Dictionary
 @export var stiffness = 4.0
 @export_range(0.0,1.0) var compressionDamp = 0.5
 @export_range(0.0,1.0) var relaxationDamp = 0.9
-@export var normalDirectionLimit = 0.6
+
 
 @export_category('Physics Tweaking')
 ## if true, use shapecast collision data for physics.[br]
 ## shapcasting is currently broken in godot
 @export var useShapecastForPhysics = false
+
+## usefull for smoothing sidewalk physics response
+@export var normalDirectionLimit = 0.6
 
 var debugString: String
 
@@ -70,6 +73,11 @@ func findVehicle():
 	vehicle = parent
 
 func _enter_tree():
+	var newResponses = tireResponses.duplicate()
+	newResponses.clear()
+	for tireResponse in tireResponses:
+		newResponses.append(tireResponse.duplicate())
+	tireResponses = (newResponses as Array[TireResponse])
 	for tireResponse in tireResponses:
 		tireResponseDictionary[tireResponse.materialName] = tireResponse
 	
@@ -93,6 +101,8 @@ func _ready():
 	normalForceAtRest = vehicle.mass*vehicle.gravity_scale*globalGravity*wheelContribution
 	$RayCast3D.target_position.y = -maxExtension-radius
 	$ShapeCast3D.target_position.z = -maxExtension
+	for r in tireResponses:
+		r.populateParticles($Particles)
 
 func calculateAckerman():
 	ackerman = ackermanRatio*ackermanSide
@@ -108,12 +118,14 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	$ShapeCast3D.force_shapecast_update()
 	var collisionNormal: Vector3
 	var globalCollisionPoint
+	
 	if !useShapecastForPhysics:
 		globalCollisionPoint = $RayCast3D.get_collision_point()
 		collisionNormal = $RayCast3D.get_collision_normal()
 	if collisionNormal.dot(global_transform.basis.y) < normalDirectionLimit:
 		collisionNormal = collisionNormal.slerp(global_transform.basis.y, 0.9)
 	grounded = $RayCast3D.is_colliding()
+	$Particles.global_position = globalCollisionPoint
 	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
 	if grounded:
 		
@@ -144,8 +156,10 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
 	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
 	
-	var tireResponse = tireResponseDictionary['tarmac'] 
+	var tireResponse: TireResponse = tireResponseDictionary['tarmac'] 
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
+	var stream = tireResponse.slippingStream
+	
 	feedback = coeficients.y
 	
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
@@ -153,11 +167,16 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
 	var frictionColor = Color.RED
+	#debugString = str( snapped(coeficients.x, 0.1) )
 	if coeficients.x < tireResponse.gripMultiplier:
 		frictionColor = Color.ORANGE
 	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFriction*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
 	applyTorqueFromFriction(zFriction, delta, relativeZSpeed)
+	
+	tireResponse.handleAudio(delta, $RollingAudioStreamPlayer3D, $SlippingAudioStreamPlayer3D, localVelocity, radsPerSec, radius)
+	tireResponse.handleParticles(delta, localVelocity, radsPerSec, radius)
+	
 
 func applyTorqueFromFriction(friction, delta, relativeZSpeed):
 	var targetRPS = localVelocity.z/radius
@@ -177,7 +196,7 @@ func applyTorqueFromFriction(friction, delta, relativeZSpeed):
 	if (signBefore != signAfter):
 		radsPerSec = 0.0
 	breakTorque = 0.0
-	
+	radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.2 )/60*TAU
 	debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
 
 func applyBreakTorque(torque, delta):

@@ -4,7 +4,7 @@ class_name KWheel
 
 @export_category('Wheel and Tire')
 @export var radius = 0.2
-@export var mass = 30.0
+@export var momentOfInertia = 1.0
 ## overwrites [b]radius[/b] from the computed mesh bounding box
 @export var getRadiusFromMeshAABB = false
 @export var tireResponses: Array[TireResponse]
@@ -66,6 +66,8 @@ var relativeZSpeed = 0.0
 
 var breakTorque = 0.0
 
+var powered = false
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVehicle):
@@ -110,7 +112,7 @@ func calculateAckerman():
 func _physics_process(delta):
 	if steer:
 		$wheelSteerPivot.rotation.y = vehicle.normalizedSteering*maxSteerAngleActual
-	$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
+	
 
 func updateCasts(state, delta, oneByDelta, contribution):
 	contactTransform = null
@@ -177,13 +179,15 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	tireResponse.handleAudio(delta, $RollingAudioStreamPlayer3D, $SlippingAudioStreamPlayer3D, localVelocity, radsPerSec, radius)
 	tireResponse.handleParticles(delta, localVelocity, radsPerSec, radius)
 	
+	$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
 
 func applyTorqueFromFriction(friction, delta, relativeZSpeed):
 	var targetRPS = localVelocity.z/radius
 	var prevRPS = radsPerSec
 	var frictionTorque = -friction*radius
+	#if !powered:
 	applyTorque(frictionTorque, delta)
-	
+	#debugString = str( snapped(frictionTorque, 0.1) )
 	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
 	
 	#if !is_zero_approx(prevRPS):
@@ -196,8 +200,8 @@ func applyTorqueFromFriction(friction, delta, relativeZSpeed):
 	if (signBefore != signAfter):
 		radsPerSec = 0.0
 	breakTorque = 0.0
-	radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.2 )/60*TAU
-	debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
+	#radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.1 )/60*TAU
+	#debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
 
 func applyBreakTorque(torque, delta):
 	"""
@@ -207,10 +211,11 @@ func applyBreakTorque(torque, delta):
 	if signBefore != signAfter:
 		radsPerSec = 0.0
 	"""
-	breakTorque = abs(torque)
+	breakTorque += abs(torque)
 
 func applyTorque(torque, delta):
-	radsPerSec += torque/(mass*0.25)*delta
+	#debugString = str(torque)
+	radsPerSec += torque/(momentOfInertia)*delta
 
 func applySuspensionForce(state, delta, oneByDelta, contribution):
 	if !grounded: return

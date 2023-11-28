@@ -9,6 +9,7 @@ var normalizedSteering = 0.0
 var break2Input = 0.0
 var accelerationInput = 0.0
 var breaking = false
+var clutchInput = 0.0
 
 var wheels = []
 
@@ -41,17 +42,21 @@ func _integrate_forces(state):
 	$debugVectors.clear()
 	#apply_central_force(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0)
 	#applyGlobalForceState(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0, to_global(Vector3.DOWN*0.5), state, Color.AQUA)
-	$handbreak._integrate(delta)
-	$lsd._integrate(delta)
+	$engine._integrate(delta, oneByDelta)
+	$handbreak._integrate(delta, oneByDelta)
+	$breakFront._integrate(delta, oneByDelta)
+	$breakRear._integrate(delta, oneByDelta)
+	$lsd._integrate(delta, oneByDelta)
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)
 	for wheel in wheels:
 		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
 		if !wheel.steer:
-			wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
+			pass
+			#wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
 		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
-		
+	$drivetrain._integrate(delta, oneByDelta)
 
 func applyGlobalForceState(globalForce, globalPosition, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
 	var forcePosition = globalPosition-state.transform.origin

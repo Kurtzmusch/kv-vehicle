@@ -12,7 +12,7 @@ initial_velocity_max = 0.7
 transparency = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
-albedo_color = Color(1, 1, 1, 0.235294)
+albedo_color = Color(1, 0, 0.0156863, 0.588235)
 albedo_texture = ExtResource("1_mjfnm")
 billboard_mode = 1
 

@@ -65,11 +65,13 @@ func handleInput(delta):
 	steeringFunction = steeringFunctions[steeringFunctionIndex]
 	if transmission:
 		if sign( transmission.getGearRatio() ) >= 0:
-			vehicle.accelerationInput = -Input.get_action_strength('acceleration+')
+			vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 			vehicle.break2Input = Input.get_action_strength('acceleration-')
 		else:
 			vehicle.accelerationInput = -Input.get_action_strength('acceleration-')
 			vehicle.break2Input = Input.get_action_strength('acceleration+')
+	else:
+		vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 	if steeringFunction == steerGpad:
 		vehicle.accelerationInput = -Input.get_action_strength('acceleration+')
 		vehicle.break2Input = Input.get_action_strength('acceleration-')

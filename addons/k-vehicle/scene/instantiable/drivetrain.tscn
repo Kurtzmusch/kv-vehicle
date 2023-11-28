@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmtcpbwh5t3lc"]
+
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/drivetrain.gd" id="1_kgqfw"]
+
+[node name="drivetrain" type="Node"]
+script = ExtResource("1_kgqfw")

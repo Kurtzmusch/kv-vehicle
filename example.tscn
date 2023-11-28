@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=47 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Texture2D" uid="uid://b3iac2qroe0l0" path="res://texture/texture_04.png" id="1_fqlpg"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
@@ -18,6 +18,13 @@
 [ext_resource type="Script" path="res://sideCamera.gd" id="15_w3hgf"]
 [ext_resource type="PackedScene" uid="uid://csbfypw6a2bh0" path="res://addons/k-vehicle/scene/instantiable/lsd.tscn" id="16_gycjp"]
 [ext_resource type="Script" path="res://Camera3D.gd" id="17_mo8j4"]
+[ext_resource type="PackedScene" uid="uid://b0hama08v0ayv" path="res://addons/k-vehicle/scene/instantiable/engine.tscn" id="19_5wjw3"]
+[ext_resource type="PackedScene" uid="uid://nqf277e8w6vf" path="res://addons/k-vehicle/scene/instantiable/engine_pitcher_sfx.tscn" id="20_ehgk5"]
+[ext_resource type="AudioStream" uid="uid://bva43nfkmlxx1" path="res://snd/fx/engine-crawler/crawler4000.wav" id="20_u6nvn"]
+[ext_resource type="PackedScene" uid="uid://cmtcpbwh5t3lc" path="res://addons/k-vehicle/scene/instantiable/drivetrain.tscn" id="22_00gv8"]
+[ext_resource type="Script" path="res://engineRPM.gd" id="22_dcf3h"]
+[ext_resource type="Script" path="res://Label3D.gd" id="22_o4s4e"]
+[ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/k-vehicle/scene/instantiable/k-breaks.tscn" id="24_dqj00"]
 
 [sub_resource type="Environment" id="Environment_b44jp"]
 
@@ -50,6 +57,13 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 12
+
+[sub_resource type="Curve3D" id="Curve3D_7kvsh"]
+_data = {
+"points": PackedVector3Array(3, 0, 17, -3, 0, -17, -40, 0, 1, -6, 0, 12, 6, 0, -12, -25, 0, -18, 19.4, 0, -3.5, -19.4, 0, 3.5, -41, 0, -38, 15, 0, -3, -15, 0, 3, -69, 0, -59, 14.7, 0, 3.1, -14.7, 0, -3.1, -85, 0, -36, 11, 0, -5, -11, 0, 5, -112, 0, -50, 5, 0, -4, -5, 0, 4, -116, 0, -22, 3, 0, -10, -3, 0, 10, -135, 0, -13, -13, 0, -5, 13, 0, 5, -125, 0, 8, -11, 0, -3.8, 11, 0, 3.8, -98, 0, -3, -0.6, 0, -11.4, 0.6, 0, 11.4, -93, 0, 13, -14, 0, 2, 14, 0, -2, -77, 0, 29, -16, 0, 4, 16, 0, -4, -62, 0, 16, -6, 0, 12, 6, 0, -12, -32, 0, 19, 2, 0, 8, -2, 0, -8, -40, 0, 1),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 15
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fbd4v"]
 albedo_color = Color(1, 0.329412, 0.329412, 1)
@@ -93,7 +107,7 @@ relativeZSpeedEnd = 4.0
 feedbackCurve = SubResource("Curve_oooal")
 slippingStream = ExtResource("8_8nc0w")
 slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.9
+slipAudioMinimumPitch = 0.7
 slipAudioMaximumVelocity = 100.0
 slipAudioMaximumPitch = 1.0
 audioVolumeEase = 0.25
@@ -116,6 +130,10 @@ resource_local_to_scene = true
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_oshuu"]
 resource_local_to_scene = true
+
+[sub_resource type="Curve" id="Curve_j6yyq"]
+_data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0718954, 0.715789), 0.0, 0.0, 0, 0, Vector2(0.980392, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.894737), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [node name="world" type="WorldEnvironment"]
 environment = SubResource("Environment_b44jp")
@@ -185,6 +203,26 @@ path_u_distance = 1.0
 path_joined = false
 material = ExtResource("2_d6bgi")
 
+[node name="Path3D2" type="Path3D" parent="map"]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
+curve = SubResource("Curve3D_7kvsh")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="map/Path3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -2.42512, -40.6)
+use_collision = true
+polygon = PackedVector2Array(6, 2, -7, 2, -8, 1, -8, 0, 7, 0, 7, 1)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 4.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = ExtResource("2_d6bgi")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.612372, 0.353553, 0, 0.5, 0.866025, -0.707107, -0.612372, 0.353553, 0, 0, 0)
 shadow_enabled = true
@@ -198,7 +236,7 @@ distance = 4.0
 target = NodePath("../kvehicle")
 
 [node name="kvehicle" parent="." instance=ExtResource("3_xt81q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 2, 0)
 continuous_cd = true
 can_sleep = false
 
@@ -214,6 +252,7 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 
 [node name="FR" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
+momentOfInertia = 0.01
 getRadiusFromMeshAABB = true
 tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
 steer = true
@@ -243,6 +282,7 @@ mesh = SubResource("ImmediateMesh_weifp")
 
 [node name="FL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
+momentOfInertia = 0.01
 getRadiusFromMeshAABB = true
 tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
 steer = true
@@ -313,7 +353,8 @@ surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 [node name="contactTransform" parent="kvehicle/RL" index="4"]
 mesh = SubResource("ImmediateMesh_oshuu")
 
-[node name="kInputHandler" parent="kvehicle" instance=ExtResource("7_hv87p")]
+[node name="kInputHandler" parent="kvehicle" node_paths=PackedStringArray("transmission") instance=ExtResource("7_hv87p")]
+transmission = NodePath("../drivetrain")
 steeringFunctionIndex = 0
 
 [node name="LabelSpeed" type="Label" parent="kvehicle"]
@@ -359,6 +400,82 @@ limit = 2.0
 [node name="Camera3D" type="Camera3D" parent="kvehicle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358006, 0.671878, -0.233562)
 script = ExtResource("17_mo8j4")
+
+[node name="engine" parent="kvehicle" instance=ExtResource("19_5wjw3")]
+torqueCurve = SubResource("Curve_j6yyq")
+peakTorque = 1200.0
+limmiterCounterTorqueRatio = 4.0
+
+[node name="enginePitcherSFX" parent="kvehicle/engine" instance=ExtResource("20_ehgk5")]
+stream = ExtResource("20_u6nvn")
+autoplay = true
+streamRevsPerMinute = 4000.0
+
+[node name="Label3D" type="Label3D" parent="kvehicle/engine"]
+pixel_size = 0.002
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+script = ExtResource("22_o4s4e")
+
+[node name="drivetrain" parent="kvehicle" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("22_00gv8")]
+poweredWheels = [NodePath("../RR"), NodePath("../RL")]
+engine = NodePath("../engine")
+gearRatios = Array[float]([0.15, 0.3, 0.45, 0.7, 1.2])
+
+[node name="breakFront" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("24_dqj00")]
+wheels = [NodePath("../FL"), NodePath("../FR")]
+strength = 300.0
+
+[node name="breakRear" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("24_dqj00")]
+wheels = [NodePath("../RR"), NodePath("../RL")]
+strength = 100.0
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="engineRPM" type="ProgressBar" parent="UI" node_paths=PackedStringArray("engine", "drivetrain")]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 1.0
+step = 0.001
+show_percentage = false
+script = ExtResource("22_dcf3h")
+engine = NodePath("../../kvehicle/engine")
+drivetrain = NodePath("../../kvehicle/drivetrain")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/engineRPM"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="LabelGear" type="Label" parent="UI/engineRPM/HBoxContainer"]
+layout_mode = 2
+text = "gear: "
+
+[node name="LabelGearValue" type="Label" parent="UI/engineRPM/HBoxContainer"]
+layout_mode = 2
+text = "gear: "
 
 [editable path="kvehicle/FR"]
 [editable path="kvehicle/FL"]

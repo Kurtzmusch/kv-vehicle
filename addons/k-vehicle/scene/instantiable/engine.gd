@@ -22,6 +22,8 @@ var vehicle
 
 var debugString: String
 
+var prevRPS
+
 func _ready():
 	vehicle = get_parent()
 	maxRadsPerSec = maxRevsPerMinute*TAU/60.0
@@ -44,7 +46,10 @@ func _integrate(delta, oneByDelta):
 	var samplePosition = revsPerMinute/maxRevsPerMinute
 	var torque = vehicle.accelerationInput*torqueCurve.sample_baked(samplePosition)*peakTorque
 	torque -= internalFrictionTorque
-	torque -= breakTorque*(1.0-abs(vehicle.accelerationInput))
+	#torque -= breakTorque*(1.0-sign(abs(vehicle.accelerationInput)))
+	var bT = -breakTorque*(1.0-sign(abs(vehicle.accelerationInput)))
 	if radsPerSec > maxRadsPerSec:
 		torque = -peakTorque*limmiterCounterTorqueRatio
+	applyTorque(bT, delta)
+	prevRPS = radsPerSec
 	applyTorque(torque, delta)

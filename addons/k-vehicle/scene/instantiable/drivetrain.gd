@@ -14,6 +14,10 @@ var neutralGearIndex: int
 var _totalWheelMomentOfInertia = 0.0
 var vehicle
 
+var clutchInput = 0.0
+
+var prevCT = 0.0
+
 func _ready():
 	for idx in range(gearRatios.size()):
 		var ratio = gearRatios[idx]
@@ -33,13 +37,8 @@ func _physics_process(delta):
 		currentGearIndex -= 1
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
 
-func _integrate(delta, oneByDelta):
-	gearRatio = gearRatios[currentGearIndex]*finalRatio
-	var clutchInput = max(0.0, 1.0-Input.get_action_strength('clutch')-vehicle.clutchInput)
-	if engine.radsPerSec < engine.idleRadsPerSec+1:
-		clutchInput = 0.0
-	if is_zero_approx(gearRatio): return
-	if is_zero_approx(clutchInput): return
+func clutch(delta, oneByDelta):
+	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput): return
 	var engineAngularModified = engine.radsPerSec*gearRatio
 	var wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
 	#var rpsDelta = -getFastestWheel().radsPerSec -engineAngularModified 
@@ -60,15 +59,14 @@ func _integrate(delta, oneByDelta):
 	
 	torque = ((engineMoment*wheelMoment*wheelAngular)-(engineMoment*wheelMoment*engineAngular))/(engineMoment+wheelMoment)
 	
-	
 	torque*=oneByDelta
-	print(torque)
 	var torqueEngine = torque#*ratio#*sign(rpsDelta)
 	#print(torqueEngine)
 	engine.applyTorque(torqueEngine, delta)
 	var torqueWheels = torque/gearRatio#*sign(rpsDelta)
 	#print('rpsDelta: '+ str(rpsDelta) + ' | '+'engineT: '+str(torqueEngine) +' | '+'wheelT: '+str(torqueWheels))
 	for wheel in poweredWheels:
+		wheel.powered = true
 		wheel.debugString = str( snapped(torqueWheels/poweredWheels.size(),1.0))
 		#wheel.debugString = str(snapped(wheel.radsPerSec,1.0))
 		wheel.applyTorque(torqueWheels/poweredWheels.size(), delta)
@@ -81,6 +79,25 @@ func _integrate(delta, oneByDelta):
 	#var rpsDelta = -getFastestWheel().radsPerSec -engineAngularModified 
 	rpsDelta = wheelAngularModified - engine.radsPerSec
 	#print(str(snapped(rpsDelta, 0.1)))
+
+func _integrate(delta, oneByDelta):
+	gearRatio = gearRatios[currentGearIndex]*finalRatio
+	clutchInput = max(0.0, 1.0-Input.get_action_strength('clutch')-vehicle.clutchInput)
+	if engine.radsPerSec < engine.idleRadsPerSec+1:
+		clutchInput = 0.0
+	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput):
+		for wheel in poweredWheels:
+			wheel.powered = false
+		return
+	var counterTorque = 0.0
+	for wheel in poweredWheels:
+		counterTorque -= wheel.frictionTorque*gearRatio
+	#var prevEngineRPS = engine.radsPerSec
+	engine.applyTorque((counterTorque+prevCT)*0.25, delta)
+	engine.radsPerSec = max(engine.prevRPS, engine.radsPerSec)
+	prevCT = counterTorque
+	clutch(delta, oneByDelta)
+	
 
 
 func getGearRatio():

@@ -69,6 +69,8 @@ var breakTorque = 0.0
 var powered = false
 
 var frictionTorque = 0.0
+var prevFrictionTorque = 0.0
+var appliedZFriction = 0.0
 
 func findVehicle():
 	var parent = get_parent()
@@ -152,6 +154,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		feedback = 0.0
 	
 	previousGlobalPosition = global_position
+	
 
 func applyFrictionForces(state, delta, oneByDelta, contribution):
 	if !grounded: return
@@ -176,29 +179,35 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 		frictionColor = Color.ORANGE
 	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFriction*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
-	applyTorqueFromFriction(zFriction, delta, relativeZSpeed)
+	#applyTorqueFromFriction(zFriction, delta, relativeZSpeed)
+	
+	appliedZFriction = zFriction
+	
 	
 	tireResponse.handleAudio(delta, $RollingAudioStreamPlayer3D, $SlippingAudioStreamPlayer3D, localVelocity, radsPerSec, radius)
 	tireResponse.handleParticles(delta, localVelocity, radsPerSec, radius)
 
 func animate(delta):
 	$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
+	applyTorqueFromFriction(delta)
 
-func applyTorqueFromFriction(friction, delta, relativeZSpeed):
-	
+func applyTorqueFromFriction(delta):
+	if !grounded: return
 	var targetRPS = localVelocity.z/radius
 	var prevRPS = radsPerSec
-	frictionTorque = -friction*radius
+	frictionTorque = -appliedZFriction*radius
+	#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
+	prevFrictionTorque = frictionTorque
 	#if !powered:
-	applyTorque(frictionTorque, delta)
+	applyTorque(frictionTorque*1.0, delta)
 	#debugString = str( snapped(frictionTorque, 0.1) )
 	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
 	
 	#if !is_zero_approx(prevRPS):
 	if sign(newRelativeZspeed) != sign(relativeZSpeed):
 		#pass
+		#if !powered:
 		radsPerSec = targetRPS
-	
 	var signBefore = sign(radsPerSec)
 	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
 	var signAfter = sign(radsPerSec)

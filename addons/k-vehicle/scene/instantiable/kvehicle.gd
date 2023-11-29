@@ -61,6 +61,8 @@ func _integrate_forces(state):
 	
 	for wheel in wheels:
 		wheel.animate(delta)
+	#$drivetrain.clutch(delta, oneByDelta)
+
 func applyGlobalForceState(globalForce, globalPosition, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
 	var forcePosition = globalPosition-state.transform.origin
 	state.apply_force(globalForce, forcePosition)

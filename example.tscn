@@ -407,7 +407,6 @@ script = ExtResource("17_mo8j4")
 torqueCurve = SubResource("Curve_j6yyq")
 peakTorque = 250.0
 internalFrictionTorque = 20.0
-breakTorque = 0.0
 limmiterCounterTorqueRatio = 4.0
 momentOfInertia = 0.2
 
@@ -432,11 +431,11 @@ finalRatio = 0.28
 
 [node name="breakFront" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("24_dqj00")]
 wheels = [NodePath("../FL"), NodePath("../FR")]
-strength = 300.0
+strength = 50.0
 
 [node name="breakRear" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("24_dqj00")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
-strength = 100.0
+strength = 400.0
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

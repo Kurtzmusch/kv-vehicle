@@ -47,6 +47,7 @@ func _integrate_forces(state):
 	$breakFront._integrate(delta, oneByDelta)
 	$breakRear._integrate(delta, oneByDelta)
 	$lsd._integrate(delta, oneByDelta)
+	$drivetrain._integrate(delta, oneByDelta)
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)
@@ -56,8 +57,10 @@ func _integrate_forces(state):
 			pass
 			#wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
 		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
-	$drivetrain._integrate(delta, oneByDelta)
-
+		
+	
+	for wheel in wheels:
+		wheel.animate(delta)
 func applyGlobalForceState(globalForce, globalPosition, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
 	var forcePosition = globalPosition-state.transform.origin
 	state.apply_force(globalForce, forcePosition)

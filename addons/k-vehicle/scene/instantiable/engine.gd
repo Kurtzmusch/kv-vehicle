@@ -5,6 +5,7 @@ extends Node3D
 @export var maxRevsPerMinute = 6500.0
 @export var idleRevsPerMinute = 800.0
 @export var internalFrictionTorque = 100.0
+@export var breakTorque = 100.0
 @export var limmiterCounterTorqueRatio = 8.0
 ## how difficult the engine is to rev,
 ## but also how much energy it stores when
@@ -31,17 +32,19 @@ func _process(delta):
 
 func _physics_process(delta):
 	revsPerMinute = radsPerSec/TAU*60.0
-	debugString = str( 'rps: ' + str(snapped(radsPerSec,1))+'\n'+\
-	'rpm: '+str(snapped(revsPerMinute,1)) )
+	#debugString = str( 'rps: ' + str(snapped(radsPerSec,1))+'\n'+\
+	#'rpm: '+str(snapped(revsPerMinute,1)) )
 
 func applyTorque(torque, delta):
 	radsPerSec += torque/momentOfInertia*delta
 	radsPerSec = max(radsPerSec, idleRadsPerSec)
 
 func _integrate(delta, oneByDelta):
+	revsPerMinute = radsPerSec/TAU*60.0
 	var samplePosition = revsPerMinute/maxRevsPerMinute
 	var torque = vehicle.accelerationInput*torqueCurve.sample_baked(samplePosition)*peakTorque
 	torque -= internalFrictionTorque
+	torque -= breakTorque*(1.0-abs(vehicle.accelerationInput))
 	if radsPerSec > maxRadsPerSec:
 		torque = -peakTorque*limmiterCounterTorqueRatio
 	applyTorque(torque, delta)

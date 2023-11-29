@@ -68,6 +68,8 @@ var breakTorque = 0.0
 
 var powered = false
 
+var frictionTorque = 0.0
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVehicle):
@@ -178,13 +180,15 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	
 	tireResponse.handleAudio(delta, $RollingAudioStreamPlayer3D, $SlippingAudioStreamPlayer3D, localVelocity, radsPerSec, radius)
 	tireResponse.handleParticles(delta, localVelocity, radsPerSec, radius)
-	
+
+func animate(delta):
 	$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
 
 func applyTorqueFromFriction(friction, delta, relativeZSpeed):
+	
 	var targetRPS = localVelocity.z/radius
 	var prevRPS = radsPerSec
-	var frictionTorque = -friction*radius
+	frictionTorque = -friction*radius
 	#if !powered:
 	applyTorque(frictionTorque, delta)
 	#debugString = str( snapped(frictionTorque, 0.1) )
@@ -194,11 +198,13 @@ func applyTorqueFromFriction(friction, delta, relativeZSpeed):
 	if sign(newRelativeZspeed) != sign(relativeZSpeed):
 		#pass
 		radsPerSec = targetRPS
+	
 	var signBefore = sign(radsPerSec)
 	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
 	var signAfter = sign(radsPerSec)
 	if (signBefore != signAfter):
 		radsPerSec = 0.0
+	#FIXME break torque must be applied even if there is no contact
 	breakTorque = 0.0
 	#radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.1 )/60*TAU
 	#debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhhtvl7tjwfbw"]
+
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/k-ackerman.gd" id="1_aqpys"]
+
+[node name="kackerman" type="Node"]
+script = ExtResource("1_aqpys")

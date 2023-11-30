@@ -97,9 +97,13 @@ func _enter_tree():
 	if getRadiusFromMeshAABB:
 		radius = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb().size.y*0.5
 
+func updateAckerman(newRatio):
+	ackermanRatio = newRatio
+	updateMaxSteering()
+
 func _ready():
-	calculateAckerman()
-	maxSteerAngleActual = -ackerman*maxSteerAngle
+	updateMaxSteering()
+	
 	previousGlobalPosition = global_position
 	restExtension = abs($wheelSteerPivot.restExtension)#+.2
 	maxExtension = abs($wheelSteerPivot.maxExtension)#+.2
@@ -112,12 +116,20 @@ func _ready():
 	for r in tireResponses:
 		r.populateParticles($Particles)
 
-func calculateAckerman():
+func updateMaxSteering():
+	ackermanSide = sign(position.x)
 	ackerman = ackermanRatio*ackermanSide
+	maxSteerAngleActual = -ackerman*maxSteerAngle
 
 func _physics_process(delta):
 	if steer:
-		$wheelSteerPivot.rotation.y = vehicle.normalizedSteering*maxSteerAngleActual
+		var steerAngleActual = maxSteerAngle
+		#var ackermanActual = lerp(1.0, ackermanRatio,\
+		#sin( abs(vehicle.normalizedSteering)*PI*0.5 ) )
+		var ackermanActual = lerp(1.0, ackermanRatio,abs(vehicle.normalizedSteering) )
+		if is_equal_approx( sign(vehicle.normalizedSteering), ackermanSide):
+			steerAngleActual = ackermanActual*maxSteerAngle
+		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual
 	
 
 func updateCasts(state, delta, oneByDelta, contribution):
@@ -155,7 +167,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		
 		$contactTransform.clear()
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.y, Color.GREEN_YELLOW)
-		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.x, Color.INDIAN_RED)
+		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.x*10.0, Color.INDIAN_RED)
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.z, Color.SKY_BLUE)
 	else:
 		feedback = 0.0
@@ -183,10 +195,11 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
 	var frictionColor = Color.RED
-	#debugString = str( snapped(coeficients.x, 0.1) )
-	debugString = str( snapped(coeficients.x/tireResponse.gripMultiplier, 0.1 ) )
+	#debugString = str( snapped(coeficients.x, 0.1)
+	var frictionFraction = coeficients.x/tireResponse.gripMultiplier
+	debugString = str( snapped(frictionFraction, 0.1 ) )
 	if coeficients.x < tireResponse.gripMultiplier:
-		frictionColor = Color.ORANGE
+		frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
 	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFriction*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
 	#applyTorqueFromFriction(zFriction, delta, relativeZSpeed)

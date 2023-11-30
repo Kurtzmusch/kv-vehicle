@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="1_cqm8x"]
 [ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://addons/k-vehicle/scene/instantiable/particles-tarmac-slipping.tscn" id="2_5a7tn"]
-[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="3_2eiqg"]
+[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="3_tq2sf"]
 
 [sub_resource type="Curve" id="Curve_oooal"]
 min_value = -0.1
@@ -27,10 +27,10 @@ gripXCurve = SubResource("Curve_ahlfm")
 slipAngleBegin = 8.0
 slipAngleEnd = 10.0
 gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 0.5
+relativeZSpeedBegin = 0.25
 relativeZSpeedEnd = 4.0
 feedbackCurve = SubResource("Curve_oooal")
-slippingStream = ExtResource("3_2eiqg")
+slippingStream = ExtResource("3_tq2sf")
 slipAudioMinimumVelocity = 5.0
 slipAudioMinimumPitch = 0.7
 slipAudioMaximumVelocity = 100.0

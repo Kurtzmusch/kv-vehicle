@@ -1,11 +1,12 @@
-[gd_scene load_steps=44 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=45 format=3 uid="uid://5daiwjyh4ocx"]
 
-[ext_resource type="Texture2D" uid="uid://b3iac2qroe0l0" path="res://texture/texture_04.png" id="1_fqlpg"]
+[ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
 [ext_resource type="Script" path="res://followCamera.gd" id="3_jhh6f"]
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/k-vehicle/scene/instantiable/kvehicle.tscn" id="3_xt81q"]
 [ext_resource type="ArrayMesh" uid="uid://cqkqh0h585ai2" path="res://mesh/hatchback.obj" id="4_161nw"]
 [ext_resource type="PackedScene" uid="uid://bj233wg0k5djo" path="res://addons/k-vehicle/scene/instantiable/kwheel.tscn" id="5_iknt5"]
+[ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/k-vehicle/scene/instantiable/k-ackerman.tscn" id="5_o7bjy"]
 [ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="6_ckdhr"]
 [ext_resource type="PackedScene" uid="uid://5i7leg7uek4d" path="res://addons/k-vehicle/scene/instantiable/kInputHandler.tscn" id="7_hv87p"]
 [ext_resource type="Resource" uid="uid://h7ppi1emxgji" path="res://tarmacTireResponse.tres" id="7_xd3oq"]
@@ -44,8 +45,8 @@ subdivide_width = 128
 subdivide_depth = 128
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m6cs2"]
-albedo_color = Color(0.435294, 0.607843, 0.607843, 1)
-albedo_texture = ExtResource("1_fqlpg")
+albedo_color = Color(3.5, 2.98, 1.96, 1)
+albedo_texture = ExtResource("2_1wc47")
 uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true
 
@@ -206,6 +207,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 2, 0)
 continuous_cd = true
 can_sleep = false
 
+[node name="kackerman" parent="kvehicle" node_paths=PackedStringArray("steeringPair", "staticPair") instance=ExtResource("5_o7bjy")]
+steeringPair = [NodePath("../FR"), NodePath("../FL")]
+staticPair = [NodePath("../RR"), NodePath("../RL")]
+
 [node name="chassi" type="MeshInstance3D" parent="kvehicle"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 mesh = ExtResource("4_161nw")
@@ -218,11 +223,11 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 
 [node name="FR" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
-momentOfInertia = 0.5
+momentOfInertia = 8.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 steer = true
-maxSteerAngle = 1.047
+maxSteerAngle = 0.785
 stiffness = 5.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
@@ -248,11 +253,11 @@ mesh = SubResource("ImmediateMesh_weifp")
 
 [node name="FL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
-momentOfInertia = 0.5
+momentOfInertia = 8.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 steer = true
-maxSteerAngle = 1.047
+maxSteerAngle = 0.785
 stiffness = 5.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
@@ -276,7 +281,7 @@ mesh = SubResource("ImmediateMesh_8tqy8")
 
 [node name="RR" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
-momentOfInertia = 0.5
+momentOfInertia = 8.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 maxSteerAngle = 0.0
@@ -299,7 +304,7 @@ mesh = SubResource("ImmediateMesh_s2ldo")
 
 [node name="RL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
-momentOfInertia = 0.5
+momentOfInertia = 8.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 maxSteerAngle = 0.0
@@ -390,7 +395,7 @@ fixed_size = true
 script = ExtResource("22_o4s4e")
 
 [node name="drivetrain" parent="kvehicle" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("22_00gv8")]
-poweredWheels = [NodePath("../RR"), NodePath("../RL")]
+poweredWheels = [NodePath("../RR"), NodePath("../RL"), NodePath("../FL"), NodePath("../FR")]
 engine = NodePath("../engine")
 gearRatios = Array[float]([-0.1, 0.0, 0.12, 0.3, 0.5, 0.7, 1.0, 1.2])
 finalRatio = 0.28

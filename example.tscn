@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=46 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://engineRPM.gd" id="22_dcf3h"]
 [ext_resource type="Script" path="res://Label3D.gd" id="22_o4s4e"]
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/k-vehicle/scene/instantiable/k-breaks.tscn" id="24_dqj00"]
+[ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/k-vehicle/scene/instantiable/k_sway_bar.tscn" id="25_117a2"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
 
@@ -407,6 +408,8 @@ strength = 50.0
 [node name="breakRear" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("24_dqj00")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 strength = 400.0
+
+[node name="k-swayBar" parent="kvehicle" instance=ExtResource("25_117a2")]
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

@@ -74,6 +74,8 @@ var appliedZFriction = 0.0
 
 var surfaceMaterial: StringName = 'tarmac'
 
+var normalizedCompression = 0.0
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVehicle):
@@ -261,7 +263,7 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	
 	var wheelPivotPositionY = to_local(contactTransform.origin).y+radius
 	wheelPivotPositionY = min(wheelPivotPositionY, 0.0)
-	var normalizedCompression = 1.0-abs(wheelPivotPositionY)/maxExtension
+	normalizedCompression = 1.0-abs(wheelPivotPositionY)/maxExtension
 	var compression = remap(normalizedCompression,\
 	(1.0-restRatio), 1.0,\
 	1.0, stiffness)

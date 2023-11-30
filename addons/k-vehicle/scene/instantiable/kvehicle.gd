@@ -52,6 +52,7 @@ func _integrate_forces(state):
 	$breakRear._integrate(delta, oneByDelta)
 	$lsd._integrate(delta, oneByDelta)
 	$drivetrain._integrate(delta, oneByDelta)
+	$"k-swayBar"._integrate(delta, oneByDelta)
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)
@@ -66,6 +67,24 @@ func _integrate_forces(state):
 	for wheel in wheels:
 		wheel.animate(delta)
 	#$drivetrain.clutch(delta, oneByDelta)
+
+func accelerateYaw(delta, oneByDelta, acceleration):
+	applyYawTorque(acceleration*inertia.y)
+
+func applyYawTorque(torqueMagnitude):
+	apply_torque(global_transform.basis.x*torqueMagnitude)
+
+func acceleratePitch(delta, oneByDelta, acceleration):
+	applyPitchTorque(acceleration*inertia.x)
+
+func applyPitchTorque(torqueMagnitude):
+	apply_torque(global_transform.basis.x*torqueMagnitude)
+
+func accelerateRoll(delta, oneByDelta, acceleration):
+	applyRollTorque(acceleration*inertia.z)
+
+func applyRollTorque(torqueMagnitude):
+	apply_torque(global_transform.basis.z*torqueMagnitude)
 
 func applyGlobalForceState(globalForce, globalPosition, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
 	var forcePosition = globalPosition-state.transform.origin

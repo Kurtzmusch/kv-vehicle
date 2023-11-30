@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkitefvmd6uu0"]
+
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/k_sway_bar.gd" id="1_cvp4r"]
+
+[node name="k-swayBar" type="Node"]
+script = ExtResource("1_cvp4r")

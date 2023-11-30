@@ -34,6 +34,10 @@ func _process(delta):
 
 func _physics_process(delta):
 	speedMS = linear_velocity.length()
+	if Input.is_action_pressed('slowmo'):
+		Engine.time_scale = 0.125
+	else:
+		Engine.time_scale = 1.0
 
 func _integrate_forces(state):
 	var contribution = 1.0/wheels.size()

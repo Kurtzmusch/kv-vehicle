@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://cv6l53q3kvo1a"
-path="res://.godot/imported/tire-loop.wav-00a662df0c1141707052c6e37f113502.sample"
+path="res://.godot/imported/tire-slip-tarmac.wav-6dba5b264587ce5313f9c7177439861e.sample"
 
 [deps]
 
-source_file="res://snd/fx/tire-loop.wav"
-dest_files=["res://.godot/imported/tire-loop.wav-00a662df0c1141707052c6e37f113502.sample"]
+source_file="res://snd/fx/tire-slip-tarmac.wav"
+dest_files=["res://.godot/imported/tire-slip-tarmac.wav-6dba5b264587ce5313f9c7177439861e.sample"]
 
 [params]
 

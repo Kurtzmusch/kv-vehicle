@@ -102,6 +102,38 @@ func getAudioLevels(localVelocity, radsPerSec, radius):
 	var normalizedSlippingVolume = clamp( relativeVelocity.length(), 0.0, 12.0 )/12.0
 	return(normalizedSlippingVolume)
 
+func getSamplePositionX(localVelocity, radsPerSec, radius):
+	var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
+	var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
+	
+	var relativeVelocity = Vector3(0.0, 0.0, relativeZSpeed)
+	if abs(slipAngleDeg) > slipAngleBegin:
+		relativeVelocity.x = localVelocity.x
+	
+	var xRange = slipAngleEnd-slipAngleBegin
+	var xSamplePosition = clamp( abs(slipAngleDeg), slipAngleBegin, slipAngleEnd )
+	xSamplePosition = (xSamplePosition-slipAngleBegin)/xRange
+	
+	var zRange = relativeZSpeedEnd-relativeZSpeedBegin
+	
+	var zSamplePosition = clamp( abs(relativeZSpeed), relativeZSpeedBegin, relativeZSpeedEnd )
+	zSamplePosition = (zSamplePosition-relativeZSpeedBegin)/zRange
+	
+	
+	var samplePosition = max(xSamplePosition, zSamplePosition)
+	
+	samplePosition = -0.1 + relativeVelocity.length()*0.25
+	var x = gripXCurve.sample_baked(samplePosition)
+	var z = gripZCurve.sample_baked(samplePosition)
+	if abs(relativeZSpeed) < relativeZSpeedBegin:
+		#z = ease(lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) ),0.8 )
+		z = lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) )
+	
+	var feedbackRange = slipAngleEnd
+	var feedbackSamplePosition = clamp( abs(slipAngleDeg), 0.0, slipAngleEnd )
+	var feedback = feedbackCurve.sample_baked(feedbackSamplePosition/feedbackRange)
+	
+	return samplePosition
 func getCoeficients(localVelocity, radsPerSec, radius):
 	var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
 	var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
@@ -115,13 +147,19 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 	xSamplePosition = (xSamplePosition-slipAngleBegin)/xRange
 	
 	var zRange = relativeZSpeedEnd-relativeZSpeedBegin
+	
 	var zSamplePosition = clamp( abs(relativeZSpeed), relativeZSpeedBegin, relativeZSpeedEnd )
 	zSamplePosition = (zSamplePosition-relativeZSpeedBegin)/zRange
 	
+	
 	var samplePosition = max(xSamplePosition, zSamplePosition)
-	samplePosition = -0.1 + relativeVelocity.length()*0.125
+	
+	samplePosition = -0.1 + relativeVelocity.length()*0.25
 	var x = gripXCurve.sample_baked(samplePosition)
 	var z = gripZCurve.sample_baked(samplePosition)
+	if abs(relativeZSpeed) < relativeZSpeedBegin:
+		#z = ease(lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) ),0.8 )
+		z = lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) )
 	
 	var feedbackRange = slipAngleEnd
 	var feedbackSamplePosition = clamp( abs(slipAngleDeg), 0.0, slipAngleEnd )

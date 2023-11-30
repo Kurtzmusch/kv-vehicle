@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="TireResponse" load_steps=7 format=3 uid="uid://h7ppi1emxgji"]
+
+[ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="1_cqm8x"]
+[ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://addons/k-vehicle/scene/instantiable/particles-tarmac-slipping.tscn" id="2_5a7tn"]
+[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="3_2eiqg"]
+
+[sub_resource type="Curve" id="Curve_oooal"]
+min_value = -0.1
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_ahlfm"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.251381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_4p6nj"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("1_cqm8x")
+materialName = "tarmac"
+gripMultiplier = 1.0
+gripXCurve = SubResource("Curve_ahlfm")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_4p6nj")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+feedbackCurve = SubResource("Curve_oooal")
+slippingStream = ExtResource("3_2eiqg")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+slippingParticleScenes = Array[PackedScene]([ExtResource("2_5a7tn")])
+slippingEmitThreshold = 8.0
+rollingEmitThreshold = 1.0

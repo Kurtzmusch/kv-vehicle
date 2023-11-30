@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://xsccdvjjl8c8"
-path="res://.godot/imported/tire-dirt.wav-cba68c6c851f1e253759c6d971f0d8ac.sample"
+path="res://.godot/imported/tire-slip-gravel.wav-e08457fdeaab141b4fdd5f1cf34aa700.sample"
 
 [deps]
 
-source_file="res://snd/fx/tire-dirt.wav"
-dest_files=["res://.godot/imported/tire-dirt.wav-cba68c6c851f1e253759c6d971f0d8ac.sample"]
+source_file="res://snd/fx/tire-slip-gravel.wav"
+dest_files=["res://.godot/imported/tire-slip-gravel.wav-e08457fdeaab141b4fdd5f1cf34aa700.sample"]
 
 [params]
 

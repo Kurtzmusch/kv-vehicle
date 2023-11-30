@@ -67,7 +67,7 @@ func clutch(delta, oneByDelta):
 	#print('rpsDelta: '+ str(rpsDelta) + ' | '+'engineT: '+str(torqueEngine) +' | '+'wheelT: '+str(torqueWheels))
 	for wheel in poweredWheels:
 		wheel.powered = true
-		wheel.debugString = str( snapped(torqueWheels/poweredWheels.size(),1.0))
+		#wheel.debugString = str( snapped(torqueWheels/poweredWheels.size(),1.0))
 		#wheel.debugString = str(snapped(wheel.radsPerSec,1.0))
 		wheel.applyTorque(torqueWheels/poweredWheels.size(), delta)
 	engine.debugString = str( snapped(engine.radsPerSec, 1.0)) + '/' + str(snapped(-poweredWheels[0].radsPerSec/gearRatio,1.0))
@@ -93,8 +93,8 @@ func _integrate(delta, oneByDelta):
 	for wheel in poweredWheels:
 		counterTorque -= wheel.frictionTorque*gearRatio
 	#var prevEngineRPS = engine.radsPerSec
-	engine.applyTorque((counterTorque+prevCT)*0.25, delta)
-	engine.radsPerSec = max(engine.prevRPS, engine.radsPerSec)
+	#engine.applyTorque((counterTorque+prevCT)*0.45, delta)
+	#engine.radsPerSec = max(engine.prevRPS, engine.radsPerSec)
 	prevCT = counterTorque
 	clutch(delta, oneByDelta)
 	

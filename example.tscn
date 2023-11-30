@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=44 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Texture2D" uid="uid://b3iac2qroe0l0" path="res://texture/texture_04.png" id="1_fqlpg"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
@@ -6,11 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/k-vehicle/scene/instantiable/kvehicle.tscn" id="3_xt81q"]
 [ext_resource type="ArrayMesh" uid="uid://cqkqh0h585ai2" path="res://mesh/hatchback.obj" id="4_161nw"]
 [ext_resource type="PackedScene" uid="uid://bj233wg0k5djo" path="res://addons/k-vehicle/scene/instantiable/kwheel.tscn" id="5_iknt5"]
-[ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="6_a4r0p"]
 [ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="6_ckdhr"]
 [ext_resource type="PackedScene" uid="uid://5i7leg7uek4d" path="res://addons/k-vehicle/scene/instantiable/kInputHandler.tscn" id="7_hv87p"]
-[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-loop.wav" id="8_8nc0w"]
-[ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://addons/k-vehicle/scene/instantiable/particles-tarmac-slipping.tscn" id="8_ch31h"]
+[ext_resource type="Resource" uid="uid://h7ppi1emxgji" path="res://tarmacTireResponse.tres" id="7_xd3oq"]
+[ext_resource type="Resource" uid="uid://bm5v24h1pg6wn" path="res://gravelTireResponse.tres" id="8_ig8kl"]
 [ext_resource type="Script" path="res://speedMonitor.gd" id="8_rxotk"]
 [ext_resource type="PackedScene" uid="uid://b2gbcjjc1sqdp" path="res://addons/k-vehicle/scene/instantiable/kCenterOfMass.tscn" id="9_bv31a"]
 [ext_resource type="Texture2D" uid="uid://de5j2rxr5g5fk" path="res://godot-icon-white.png" id="10_xhvi2"]
@@ -25,6 +24,8 @@
 [ext_resource type="Script" path="res://engineRPM.gd" id="22_dcf3h"]
 [ext_resource type="Script" path="res://Label3D.gd" id="22_o4s4e"]
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/k-vehicle/scene/instantiable/k-breaks.tscn" id="24_dqj00"]
+[ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
+[ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
 
 [sub_resource type="Environment" id="Environment_b44jp"]
 
@@ -78,42 +79,6 @@ texture_repeat = false
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_t6ymc"]
 points = PackedVector3Array(-1.06351, 0.243368, 1.17088, 0.972053, 0.0714927, 1.50198, 1.03844, -0.375011, 1.60349, 0.7292, -0.313122, -1.91974, 0.54759, 0.806304, -1.45998, -0.939649, -0.251234, -1.7962, -1.06351, -0.375011, 1.60388, -0.569281, 0.858844, 0.219177, 1.03844, 0.552304, 0.552371, -0.518434, 0.808312, -1.46547, -0.182852, 0.302525, 1.75918, 1.03844, -0.189472, -1.73384, -1.06351, 0.181607, -1.48713, 0.544532, 0.859179, 0.219304, -1.00158, 0.614066, 0.552758, 0.580426, 0.125993, 1.89452, -0.602996, 0.303623, -1.83413, 1.03844, -0.375011, -0.992168, -0.815992, -0.313122, -1.85778, -0.657862, 0.186298, 1.81576, -0.31083, -0.233311, 1.90742, 1.03844, 0.181353, -1.54871, 0.719793, 0.414936, 1.46121, 0.636758, 0.421718, -1.77455, -1.06351, -0.375011, 0.676306, -0.690915, 0.415455, 1.4666, 0.54781, 0.862621, -0.563787, -1.06351, -0.313122, -0.992555, -0.549662, 0.065348, -1.91406, 0.677983, -0.330188, 1.78062, -0.570604, 0.860235, -0.505564, -0.547846, 0.125502, 1.9008)
-
-[sub_resource type="Curve" id="Curve_oooal"]
-min_value = -0.1
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_ahlfm"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_4p6nj"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_3xnk5"]
-script = ExtResource("6_a4r0p")
-materialName = "tarmac"
-gripMultiplier = 1.2
-gripXCurve = SubResource("Curve_ahlfm")
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 2.0
-relativeZSpeedEnd = 4.0
-feedbackCurve = SubResource("Curve_oooal")
-slippingStream = ExtResource("8_8nc0w")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-slippingParticleScenes = Array[PackedScene]([ExtResource("8_ch31h")])
-slippingEmitThreshold = 8.0
-rollingEmitThreshold = 1.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_eojsd"]
 height = 0.2
@@ -179,6 +144,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_m6cs2")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="map/grassFloor"]
+metadata/material = &"gravel"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="map/grassFloor/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_djtpe")
@@ -254,7 +220,7 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 momentOfInertia = 0.5
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
+tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 steer = true
 maxSteerAngle = 1.047
 stiffness = 5.0
@@ -284,7 +250,7 @@ mesh = SubResource("ImmediateMesh_weifp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
 momentOfInertia = 0.5
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
+tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 steer = true
 maxSteerAngle = 1.047
 stiffness = 5.0
@@ -312,7 +278,7 @@ mesh = SubResource("ImmediateMesh_8tqy8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 momentOfInertia = 0.5
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
+tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 maxSteerAngle = 0.0
 stiffness = 5.0
 compressionDamp = 0.06
@@ -335,7 +301,7 @@ mesh = SubResource("ImmediateMesh_s2ldo")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
 momentOfInertia = 0.5
 getRadiusFromMeshAABB = true
-tireResponses = Array[ExtResource("6_a4r0p")]([SubResource("Resource_3xnk5")])
+tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 maxSteerAngle = 0.0
 stiffness = 5.0
 compressionDamp = 0.06
@@ -481,6 +447,16 @@ text = "gear: "
 [node name="LabelGearValue" type="Label" parent="UI/engineRPM/HBoxContainer"]
 layout_mode = 2
 text = "gear: "
+
+[node name="Sprite2D" type="TextureRect" parent="UI" node_paths=PackedStringArray("vehicle")]
+custom_minimum_size = Vector2(4, 4)
+layout_mode = 0
+scale = Vector2(0.125, 0.125)
+pivot_offset = Vector2(2, 2)
+texture = ExtResource("26_g7xvv")
+expand_mode = 1
+script = ExtResource("27_pjwq2")
+vehicle = NodePath("../../kvehicle")
 
 [editable path="kvehicle/FR"]
 [editable path="kvehicle/FL"]

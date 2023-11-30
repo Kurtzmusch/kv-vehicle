@@ -72,6 +72,8 @@ var frictionTorque = 0.0
 var prevFrictionTorque = 0.0
 var appliedZFriction = 0.0
 
+var surfaceMaterial: StringName = 'tarmac'
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVehicle):
@@ -131,10 +133,15 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	if collisionNormal.dot(global_transform.basis.y) < normalDirectionLimit:
 		collisionNormal = collisionNormal.slerp(global_transform.basis.y, 0.9)
 	grounded = $RayCast3D.is_colliding()
+	var collider = $RayCast3D.get_collider()
 	$Particles.global_position = globalCollisionPoint
+	
 	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
 	if grounded:
-		
+		surfaceMaterial = StringName('tarmac')
+		if collider.has_meta('material'):
+			var surfaceMaterialString = collider.get_meta('material')
+			surfaceMaterial = surfaceMaterialString
 		contactTransform = Transform3D()
 		contactTransform.origin = globalCollisionPoint
 		contactTransform.basis.y = collisionNormal
@@ -163,8 +170,10 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
 	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
 	
-	var tireResponse: TireResponse = tireResponseDictionary['tarmac'] 
+	var tireResponse: TireResponse = tireResponseDictionary[surfaceMaterial] 
+	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
+	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))
 	var stream = tireResponse.slippingStream
 	
 	feedback = coeficients.y
@@ -175,6 +184,7 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	xFriction *= sign(necessaryXFriction)
 	var frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1) )
+	debugString = str( snapped(coeficients.x/tireResponse.gripMultiplier, 0.1 ) )
 	if coeficients.x < tireResponse.gripMultiplier:
 		frictionColor = Color.ORANGE
 	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
@@ -199,15 +209,16 @@ func applyTorqueFromFriction(delta):
 	#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
 	prevFrictionTorque = frictionTorque
 	#if !powered:
-	applyTorque(frictionTorque*1.0, delta)
+	applyTorque(frictionTorque*0.9, delta)
 	#debugString = str( snapped(frictionTorque, 0.1) )
 	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
 	
 	#if !is_zero_approx(prevRPS):
 	if sign(newRelativeZspeed) != sign(relativeZSpeed):
 		#pass
-		#if !powered:
-		radsPerSec = targetRPS
+		if !powered:
+			
+			radsPerSec = targetRPS
 	var signBefore = sign(radsPerSec)
 	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
 	var signAfter = sign(radsPerSec)

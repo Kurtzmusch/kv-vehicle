@@ -17,6 +17,7 @@ var speedMS = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	if createWheelMinimumColliders:
 		for wheel in wheels:
 			var collisionShape = CollisionShape3D.new()
@@ -40,6 +41,7 @@ func _physics_process(delta):
 		Engine.time_scale = 1.0
 
 func _integrate_forces(state):
+	inertia = state.inverse_inertia.inverse()
 	var contribution = 1.0/wheels.size()
 	var delta = state.step
 	var oneByDelta = 1.0/delta
@@ -52,7 +54,8 @@ func _integrate_forces(state):
 	$breakRear._integrate(delta, oneByDelta)
 	$lsd._integrate(delta, oneByDelta)
 	$drivetrain._integrate(delta, oneByDelta)
-	$"k-swayBar"._integrate(delta, oneByDelta)
+	$"k-swayBarFront"._integrate(delta, oneByDelta)
+	$"k-swayBarRear"._integrate(delta, oneByDelta)
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)

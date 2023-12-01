@@ -94,11 +94,14 @@ func _enter_tree():
 	findVehicle()
 	vehicle.wheels.append(self)
 	$RayCast3D.add_exception(vehicle)
-	$ShapeCast3D.add_exception(vehicle)
+	$shapecastPivot/ShapeCast3D.add_exception(vehicle)
 	
 	if getRadiusFromMeshAABB:
-		radius = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb().size.y*0.5
-
+		var aabb = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb()
+		radius = aabb.size.y*0.5
+		$shapecastPivot/ShapeCast3D.shape.radius = radius
+		$shapecastPivot/ShapeCast3D.shape.height = aabb.size.x
+	
 func updateAckerman(newRatio):
 	ackermanRatio = newRatio
 	updateMaxSteering()
@@ -114,7 +117,8 @@ func _ready():
 	massPerWheel = wheelContribution*vehicle.mass
 	normalForceAtRest = vehicle.mass*vehicle.gravity_scale*globalGravity*wheelContribution
 	$RayCast3D.target_position.y = -maxExtension-radius
-	$ShapeCast3D.target_position.z = -maxExtension
+	$shapecastPivot/ShapeCast3D.target_position.z = -maxExtension
+	$shapecastPivot/ShapeCast3D.add_exception(get_parent())
 	for r in tireResponses:
 		r.populateParticles($Particles)
 
@@ -132,22 +136,36 @@ func _physics_process(delta):
 		if is_equal_approx( sign(vehicle.normalizedSteering), ackermanSide):
 			steerAngleActual = ackermanActual*maxSteerAngle
 		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual
-	
+	$shapecastPivot/ShapeCast3D.target_position = (Vector3.DOWN*abs(maxExtension+radius))*$shapecastPivot/ShapeCast3D.global_transform.basis
 
 func updateCasts(state, delta, oneByDelta, contribution):
 	contactTransform = null
-	$RayCast3D.force_raycast_update()
-	$ShapeCast3D.force_shapecast_update()
-	var collisionNormal: Vector3
-	var globalCollisionPoint
 	
+	
+	var collisionNormal: Vector3
+	var globalCollisionPoint: Vector3
+	#var rayCollisionPoint = $RayCast3D.get_collision_point()
+	#var shapecastCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
+	var collider
 	if !useShapecastForPhysics:
-		globalCollisionPoint = $RayCast3D.get_collision_point()
-		collisionNormal = $RayCast3D.get_collision_normal()
+		$RayCast3D.force_raycast_update()
+		grounded = $RayCast3D.is_colliding()
+		if grounded:
+			collider = $RayCast3D.get_collider()
+			globalCollisionPoint = $RayCast3D.get_collision_point()
+			collisionNormal = $RayCast3D.get_collision_normal()
+	else:
+		$shapecastPivot/ShapeCast3D.force_shapecast_update()
+		grounded = $shapecastPivot/ShapeCast3D.is_colliding()
+		if grounded:
+			collider = $shapecastPivot/ShapeCast3D.get_collider(0)
+			collisionNormal = $shapecastPivot/ShapeCast3D.get_collision_normal(0)
+			globalCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
+	
 	if collisionNormal.dot(global_transform.basis.y) < normalDirectionLimit:
 		collisionNormal = collisionNormal.slerp(global_transform.basis.y, 0.9)
-	grounded = $RayCast3D.is_colliding()
-	var collider = $RayCast3D.get_collider()
+	
+	#var collider = $RayCast3D.get_collider()
 	$Particles.global_position = globalCollisionPoint
 	
 	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
@@ -169,10 +187,11 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		
 		$contactTransform.clear()
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.y, Color.GREEN_YELLOW)
-		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.x*10.0, Color.INDIAN_RED)
+		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.x, Color.INDIAN_RED)
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.z, Color.SKY_BLUE)
 	else:
 		feedback = 0.0
+		$wheelSteerPivot.position.y = -maxExtension
 	
 	previousGlobalPosition = global_position
 	
@@ -286,5 +305,4 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	vehicle.applyGlobalForceState(suspensionForce, contactTransform.origin, state, Color.GREEN)
 	
 	$wheelSteerPivot.position.y = wheelPivotPositionY
-	
 	previousCompression = compression

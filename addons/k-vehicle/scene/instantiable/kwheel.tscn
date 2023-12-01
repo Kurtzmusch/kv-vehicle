@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bj233wg0k5djo"]
+[gd_scene load_steps=9 format=3 uid="uid://bj233wg0k5djo"]
 
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/kwheel.gd" id="1_2oa8d"]
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/wheelSteerPivot.gd" id="2_1lmvs"]
+[ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="3_fiy6t"]
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/debugVectors.gd" id="3_mfh17"]
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/Label3DRPS.gd" id="4_snyr5"]
 
@@ -23,30 +24,24 @@ script = ExtResource("1_2oa8d")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 enabled = false
 
-[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+[node name="shapecastPivot" type="Node3D" parent="."]
+transform = Transform3D(0.933013, -0.25, 0.258819, 0.258819, 0.965926, 0, -0.25, 0.0669873, 0.965926, 0, 0, 0)
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="shapecastPivot"]
+transform = Transform3D(-2.79397e-08, -1, -1.49012e-08, 1, -2.04891e-08, 0, 7.45058e-09, 0, 1, 0, 0, 0)
 enabled = false
 shape = SubResource("CylinderShape3D_5vg7i")
-target_position = Vector3(0, 0, -1)
+target_position = Vector3(-1, 0, 0)
 
 [node name="wheelSteerPivot" type="Node3D" parent="."]
+transform = Transform3D(0.933013, -0.25, 0.258819, 0.258819, 0.965926, 0, -0.25, 0.0669873, 0.965926, 0, 0, 0)
 script = ExtResource("2_1lmvs")
 
 [node name="wheelRollPivot" type="Node3D" parent="wheelSteerPivot"]
 
 [node name="wheelMesh" type="MeshInstance3D" parent="wheelSteerPivot/wheelRollPivot"]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-visible = false
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="labelLabel" type="Label" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="labelValue" type="Label" parent="HBoxContainer"]
-layout_mode = 2
+mesh = ExtResource("3_fiy6t")
 
 [node name="contactTransform" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_327r1")
@@ -54,7 +49,7 @@ cast_shadow = 0
 mesh = SubResource("ImmediateMesh_ldieg")
 script = ExtResource("3_mfh17")
 
-[node name="Label3DRPS" type="Label3D" parent="."]
+[node name="Label3DDebug" type="Label3D" parent="."]
 sorting_offset = 1.0
 pixel_size = 0.002
 billboard = 1

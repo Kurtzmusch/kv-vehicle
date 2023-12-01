@@ -134,6 +134,7 @@ func getSamplePositionX(localVelocity, radsPerSec, radius):
 	var feedback = feedbackCurve.sample_baked(feedbackSamplePosition/feedbackRange)
 	
 	return samplePosition
+
 func getCoeficients(localVelocity, radsPerSec, radius):
 	var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
 	var relativeZSpeed = (radsPerSec*radius)-localVelocity.z

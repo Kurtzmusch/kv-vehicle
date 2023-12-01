@@ -1,6 +1,6 @@
 extends Node
-
-@export var poweredWheels: Array[Node]
+class_name KVDrivetrain
+@export var poweredWheels: Array[KVWheel]
 @export var engine: Node
 @export var clutchMaxTorque = 800.0
 

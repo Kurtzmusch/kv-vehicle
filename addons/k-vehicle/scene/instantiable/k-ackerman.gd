@@ -1,7 +1,7 @@
 extends Node
 
-@export var steeringPair: Array[KWheel]
-@export var staticPair: Array[KWheel]
+@export var steeringPair: Array[KVWheel]
+@export var staticPair: Array[KVWheel]
 
 func _ready():
 	

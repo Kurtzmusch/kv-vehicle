@@ -1,6 +1,6 @@
 extends Node
 
-@export var wheels: Array[Node]
+@export var wheels: Array[KVWheel]
 @export var strength = 20000.0
 
 var vehicle

@@ -1,13 +1,13 @@
 extends Node
-
-@export var wheels: Array[KWheel]
+class_name KVSwayBar
+@export var wheels: Array[KVWheel]
 @export var stiffness = 4.0
 @export var exponent = 1.0
 
-var w1: KWheel
-var w2: KWheel
+var w1: KVWheel
+var w2: KVWheel
 
-var vehicle: KVehicle
+var vehicle: KVVehicle
 
 func _ready():
 	vehicle = get_parent()

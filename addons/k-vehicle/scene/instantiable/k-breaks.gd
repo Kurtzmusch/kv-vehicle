@@ -1,6 +1,7 @@
 extends Node
+class_name KVBreak
 
-@export var wheels: Array[KWheel]
+@export var wheels: Array[KVWheel]
 @export var strength = 2000.0
 
 var vehicle

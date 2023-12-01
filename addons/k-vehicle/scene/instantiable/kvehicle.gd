@@ -1,6 +1,6 @@
 extends RigidBody3D
 
-class_name KVehicle
+class_name KVVehicle
 
 ## if true, creates a cilinder collider for each wheel
 @export var createWheelMinimumColliders = true

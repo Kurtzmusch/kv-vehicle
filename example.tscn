@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=46 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
@@ -12,7 +12,9 @@
 [ext_resource type="Resource" uid="uid://bm5v24h1pg6wn" path="res://gravelTireResponse.tres" id="8_ig8kl"]
 [ext_resource type="Script" path="res://speedMonitor.gd" id="8_rxotk"]
 [ext_resource type="PackedScene" uid="uid://b2gbcjjc1sqdp" path="res://addons/k-vehicle/scene/instantiable/kCenterOfMass.tscn" id="9_bv31a"]
+[ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="10_navyo"]
 [ext_resource type="Texture2D" uid="uid://de5j2rxr5g5fk" path="res://godot-icon-white.png" id="10_xhvi2"]
+[ext_resource type="PackedScene" uid="uid://bfqa1bfvsj6hl" path="res://particles-gravel.tscn" id="11_lveum"]
 [ext_resource type="PackedScene" uid="uid://b1rygb1612ojy" path="res://addons/k-vehicle/scene/instantiable/handbreak.tscn" id="12_d82ic"]
 [ext_resource type="Script" path="res://sideCamera.gd" id="15_w3hgf"]
 [ext_resource type="PackedScene" uid="uid://csbfypw6a2bh0" path="res://addons/k-vehicle/scene/instantiable/lsd.tscn" id="16_gycjp"]
@@ -246,6 +248,10 @@ surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 [node name="contactTransform" parent="kvehicle/FR" index="3"]
 mesh = SubResource("ImmediateMesh_weifp")
 
+[node name="tarmac" parent="kvehicle/FR/Particles" index="0" instance=ExtResource("10_navyo")]
+
+[node name="gravel" parent="kvehicle/FR/Particles" index="1" instance=ExtResource("11_lveum")]
+
 [node name="FL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
 momentOfInertia = 8.0
@@ -273,6 +279,10 @@ surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 [node name="contactTransform" parent="kvehicle/FL" index="3"]
 mesh = SubResource("ImmediateMesh_8tqy8")
 
+[node name="tarmac" parent="kvehicle/FL/Particles" index="0" instance=ExtResource("10_navyo")]
+
+[node name="gravel" parent="kvehicle/FL/Particles" index="1" instance=ExtResource("11_lveum")]
+
 [node name="RR" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 momentOfInertia = 8.0
@@ -297,6 +307,10 @@ surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 
 [node name="contactTransform" parent="kvehicle/RR" index="3"]
 mesh = SubResource("ImmediateMesh_s2ldo")
+
+[node name="tarmac" parent="kvehicle/RR/Particles" index="0" instance=ExtResource("10_navyo")]
+
+[node name="gravel" parent="kvehicle/RR/Particles" index="1" instance=ExtResource("11_lveum")]
 
 [node name="RL" parent="kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
@@ -323,6 +337,10 @@ surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 
 [node name="contactTransform" parent="kvehicle/RL" index="3"]
 mesh = SubResource("ImmediateMesh_oshuu")
+
+[node name="tarmac" parent="kvehicle/RL/Particles" index="0" instance=ExtResource("10_navyo")]
+
+[node name="gravel" parent="kvehicle/RL/Particles" index="1" instance=ExtResource("11_lveum")]
 
 [node name="kInputHandler" parent="kvehicle" node_paths=PackedStringArray("transmission") instance=ExtResource("7_hv87p")]
 transmission = NodePath("../drivetrain")
@@ -411,6 +429,10 @@ wheels = [NodePath("../FR"), NodePath("../FL")]
 
 [node name="k-swayBarRear" parent="kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("25_117a2")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
+
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="kvehicle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
+size = Vector3(2.2, 1, 3.3)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

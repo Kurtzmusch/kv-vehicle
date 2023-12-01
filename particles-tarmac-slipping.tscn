@@ -1,12 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5fhne1183tjh"]
+[gd_scene load_steps=8 format=3 uid="uid://b5fhne1183tjh"]
 
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="1_mjfnm"]
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/k-tireParticles-smoke.gd" id="2_mq2sy"]
+
+[sub_resource type="Curve" id="Curve_6etfm"]
+max_value = 4.0
+_data = [Vector2(0, 0.968421), 0.0, 0.0, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ljsam"]
+width = 32
+curve = SubResource("Curve_6etfm")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b7vsu"]
 direction = Vector3(0, 1, 0)
 gravity = Vector3(0, 0, 0)
 initial_velocity_min = 0.5
 initial_velocity_max = 0.7
+scale_curve = SubResource("CurveTexture_ljsam")
+collision_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bmnb5"]
 transparency = 1
@@ -14,7 +26,11 @@ shading_mode = 0
 vertex_color_use_as_albedo = true
 albedo_color = Color(1, 0, 0.0156863, 0.588235)
 albedo_texture = ExtResource("1_mjfnm")
-billboard_mode = 1
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_8282u"]
 material = SubResource("StandardMaterial3D_bmnb5")
@@ -26,3 +42,5 @@ amount = 64
 trail_lifetime = 1.0
 process_material = SubResource("ParticleProcessMaterial_b7vsu")
 draw_pass_1 = SubResource("QuadMesh_8282u")
+script = ExtResource("2_mq2sy")
+slippingEmitThreshold = 8.0

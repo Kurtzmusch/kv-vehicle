@@ -1,6 +1,6 @@
 extends Node
 
-@export var wheels: Array[KWheel]
+@export var wheels: Array[KVWheel]
 @export var limit = 10.0
 
 # Called when the node enters the scene tree for the first time.

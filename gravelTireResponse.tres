@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="TireResponse" load_steps=7 format=3 uid="uid://bm5v24h1pg6wn"]
 
 [ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="1_2mhfd"]
-[ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://addons/k-vehicle/scene/instantiable/particles-tarmac-slipping.tscn" id="2_l7mk5"]
+[ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="2_l7mk5"]
 [ext_resource type="AudioStream" uid="uid://xsccdvjjl8c8" path="res://snd/fx/tire-slip-gravel.wav" id="3_fdui6"]
 
 [sub_resource type="Curve" id="Curve_oooal"]

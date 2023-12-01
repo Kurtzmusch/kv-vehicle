@@ -1,7 +1,7 @@
 @icon("res://addons/k-vehicle/car-wheel.svg")
 extends Node3D
 
-class_name KWheel
+class_name KVWheel
 
 
 @export_category('Wheel and Tire')
@@ -33,7 +33,7 @@ var tireResponseDictionary: Dictionary
 
 var debugString: String
 
-var vehicle: KVehicle
+var vehicle: KVVehicle
 
 var ackermanSide = 1.0
 var ackermanRatio = 1.0
@@ -80,9 +80,13 @@ var normalizedCompression = 0.0
 
 var suspensionForce = Vector3.ZERO
 
+var contactRelativeVelocity = Vector3.ZERO
+
+var tireResponse: TireResponse
+
 func findVehicle():
 	var parent = get_parent()
-	while !(parent is KVehicle):
+	while !(parent is KVVehicle):
 		parent = parent.get_parent()
 	vehicle = parent
 
@@ -123,8 +127,6 @@ func _ready():
 	$RayCast3D.target_position.y = -maxExtension-radius
 	$shapecastPivot/ShapeCast3D.target_position.z = -maxExtension
 	$shapecastPivot/ShapeCast3D.add_exception(get_parent())
-	for r in tireResponses:
-		r.populateParticles($Particles)
 
 func updateMaxSteering():
 	ackermanSide = sign(position.x)
@@ -170,7 +172,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		collisionNormal = collisionNormal.slerp(global_transform.basis.y, 0.9)
 	
 	#var collider = $RayCast3D.get_collider()
-	$Particles.global_position = globalCollisionPoint
+	
 	
 	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
 	if grounded:
@@ -188,6 +190,12 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		contactTransform.basis.x = basisX
 		
 		localVelocity = contactTransform.basis.inverse() * globalVelocity
+		
+		var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
+		var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
+		contactRelativeVelocity = Vector3(localVelocity.x, 0.0, relativeZSpeed)
+		
+		$Particles.global_transform = contactTransform
 		
 		$contactTransform.clear()
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.y, Color.GREEN_YELLOW)
@@ -207,7 +215,7 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
 	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
 	
-	var tireResponse: TireResponse = tireResponseDictionary[surfaceMaterial] 
+	tireResponse = tireResponseDictionary[surfaceMaterial] 
 	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
 	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))

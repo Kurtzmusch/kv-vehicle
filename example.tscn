@@ -339,7 +339,7 @@ script = ExtResource("8_rxotk")
 unit = "kmh"
 
 [node name="centerOfMass" parent="kvehicle" instance=ExtResource("9_bv31a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.128613, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.129, 0)
 
 [node name="Decal" type="Decal" parent="kvehicle"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.26241, -1.33013)

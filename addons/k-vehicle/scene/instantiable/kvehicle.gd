@@ -45,6 +45,8 @@ func _physics_process(delta):
 		Engine.time_scale = 1.0
 
 func _integrate_forces(state):
+	# state.transform.origin == global_position
+	# state.center_of_mass == center_of_mass
 	var localLinearVelocity = state.linear_velocity*global_transform.basis
 	debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )
 	inertia = state.inverse_inertia.inverse()
@@ -85,9 +87,9 @@ func _integrate_forces(state):
 	#if abs(localLinearVelocity.z) < 0.125 and breaking:
 	if breaking and ((requiredZFriction.normalized().dot(linear_velocity.normalized())<0.0)\
 	or abs(localLinearVelocity.z) < 0.0625):
-		applyGlobalForceState(requiredZFriction, global_position, state, Color.LIGHT_SKY_BLUE)
+		applyCentralGlobalForceState(requiredZFriction,  state, Color.LIGHT_SKY_BLUE)
 	if abs(localLinearVelocity.x) < 0.125:
-		applyGlobalForceState(requiredXFriction, global_position, state, Color.LIGHT_PINK)
+		applyCentralGlobalForceState(requiredXFriction,  state, Color.LIGHT_PINK)
 	for wheel in wheels:
 		wheel.animate(delta)
 	#$drivetrain.clutch(delta, oneByDelta)
@@ -109,6 +111,11 @@ func accelerateRoll(delta, oneByDelta, acceleration):
 
 func applyRollTorque(torqueMagnitude):
 	apply_torque(global_transform.basis.z*torqueMagnitude)
+
+func applyCentralGlobalForceState(globalForce, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
+	#var forcePosition = globalPosition-state.transform.origin
+	state.apply_central_force(globalForce)
+	$debugVectors.addVector(state.transform.origin+(state.center_of_mass*state.transform.basis), globalForce*state.inverse_mass, color)
 
 func applyGlobalForceState(globalForce, globalPosition, state:PhysicsDirectBodyState3D, color=Color.MAGENTA):
 	var forcePosition = globalPosition-state.transform.origin

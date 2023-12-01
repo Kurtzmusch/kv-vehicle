@@ -14,8 +14,12 @@ var clutchInput = 0.0
 var wheels = []
 
 var speedMS = 0.0
-
+var globalGravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 # Called when the node enters the scene tree for the first time.
+var localLinearVelocity = Vector3.ZERO
+
+var debugString: String
+
 func _ready():
 	
 	if createWheelMinimumColliders:
@@ -41,6 +45,8 @@ func _physics_process(delta):
 		Engine.time_scale = 1.0
 
 func _integrate_forces(state):
+	var localLinearVelocity = state.linear_velocity*global_transform.basis
+	debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )
 	inertia = state.inverse_inertia.inverse()
 	var contribution = 1.0/wheels.size()
 	var delta = state.step
@@ -59,14 +65,29 @@ func _integrate_forces(state):
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)
+	var totalSuspensionForce = Vector3.ZERO
 	for wheel in wheels:
 		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
+		if wheel.grounded:
+			totalSuspensionForce += wheel.suspensionForce
 		if !wheel.steer:
 			pass
 			#wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
 		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
-		
 	
+	# there is room for improvement here
+	# perhaps feeding slopeResultingForce vector into each wheel as vehicle motion 
+	var gravityForce = Vector3.DOWN*globalGravity*gravity_scale*mass
+	var slopeResultingForce = gravityForce + totalSuspensionForce
+	$debugVectors.addVector(global_position, slopeResultingForce/mass, Color.BLACK)
+	var requiredXFriction = -(slopeResultingForce.project(global_transform.basis.x))
+	var requiredZFriction = -(slopeResultingForce.project(global_transform.basis.z))
+	#if abs(localLinearVelocity.z) < 0.125 and breaking:
+	if breaking and ((requiredZFriction.normalized().dot(linear_velocity.normalized())<0.0)\
+	or abs(localLinearVelocity.z) < 0.0625):
+		applyGlobalForceState(requiredZFriction, global_position, state, Color.LIGHT_SKY_BLUE)
+	if abs(localLinearVelocity.x) < 0.125:
+		applyGlobalForceState(requiredXFriction, global_position, state, Color.LIGHT_PINK)
 	for wheel in wheels:
 		wheel.animate(delta)
 	#$drivetrain.clutch(delta, oneByDelta)

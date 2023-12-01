@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxw72hy1o23b5"]
+[gd_scene load_steps=7 format=3 uid="uid://bxw72hy1o23b5"]
 
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/kvehicle.gd" id="1_by773"]
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/debugVectors.gd" id="2_3gkt3"]
+[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/Label3DRPS.gd" id="3_i1gs3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mgw6p"]
 friction = 0.0
@@ -24,3 +25,13 @@ material_override = SubResource("StandardMaterial3D_g5pof")
 cast_shadow = 0
 mesh = SubResource("ImmediateMesh_ixsks")
 script = ExtResource("2_3gkt3")
+
+[node name="Label3DDebug" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+sorting_offset = 1.0
+pixel_size = 0.002
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+script = ExtResource("3_i1gs3")

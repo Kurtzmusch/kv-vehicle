@@ -76,6 +76,8 @@ var surfaceMaterial: StringName = 'tarmac'
 
 var normalizedCompression = 0.0
 
+var suspensionForce = Vector3.ZERO
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVehicle):
@@ -300,7 +302,7 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	suspensionForceMagnitude += damp
 	suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
 	
-	var suspensionForce = suspensionForceMagnitude*contactTransform.basis.y
+	suspensionForce = suspensionForceMagnitude*contactTransform.basis.y
 	
 	vehicle.applyGlobalForceState(suspensionForce, contactTransform.origin, state, Color.GREEN)
 	

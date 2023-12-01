@@ -18,7 +18,7 @@ func _process(delta):
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			translate_object_local(Vector3(-event.velocity.x, event.velocity.y, 0.0)*orbitSpeed)
+			translate_object_local(Vector3(-event.velocity.x, event.velocity.y, 0.0)*orbitSpeed*0.001)
 
 func _physics_process(delta):
 	if Input.is_key_pressed(KEY_1): current = true

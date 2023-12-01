@@ -1,6 +1,8 @@
+@icon("res://addons/k-vehicle/car-wheel.svg")
 extends Node3D
 
 class_name KWheel
+
 
 @export_category('Wheel and Tire')
 @export var radius = 0.2

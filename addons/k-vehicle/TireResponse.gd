@@ -25,22 +25,23 @@ class_name TireResponse
 @export var audioVolumeEase = 0.5
 @export var rollingStream: AudioStream
 
-@export_category('Particles')
-#@export var slippingParticleMaterial: ParticleProcessMaterial
-@export var slippingParticleScenes: Array[PackedScene]
-@export var slippingEmitThreshold = 1.0
-#@export var rollingParticleMaterial: ParticleProcessMaterial
-@export var rollingEmitThreshold = 1.0
+@export var bumpHeight = 0.0
+@export var bumpNoise: NoiseTexture2D
+var bumpNoiseImageValues: PackedFloat32Array
 
 
-var _particleNodes: Array
-
-func populateParticles(particleContainer: Node3D):
-	_particleNodes = Array()
-	for scene in slippingParticleScenes:
-		var parts = scene.instantiate()
-		_particleNodes.append(parts)
-		particleContainer.add_child(parts)
+func sampleBumpNoise(normalizedTraveled):
+	if !bumpNoise: return 0.0
+	if !bumpNoiseImageValues:
+		print('no bump value yet')
+		var bumpNoiseImage = bumpNoise.get_image()
+		if bumpNoiseImage:
+			for i in range(bumpNoise.width):
+				var color = bumpNoiseImage.get_pixel(i, 0)
+				bumpNoiseImageValues.append( (color.r-0.5)*2.0 )
+		return 0.0
+	
+	return bumpNoiseImageValues[int(normalizedTraveled*bumpNoiseImageValues.size())]*bumpHeight
 
 func handleAudio(delta, rollingPlayer: AudioStreamPlayer3D, slippingPlayer: AudioStreamPlayer3D, localVelocity, radsPerSec, radius):
 	var relativeVelocity = getVelocity(localVelocity, radsPerSec, radius)
@@ -69,22 +70,6 @@ func handleAudio(delta, rollingPlayer: AudioStreamPlayer3D, slippingPlayer: Audi
 	slippingPlayer.volume_db = linear_to_db(currentVolume)
 	slippingPlayer.pitch_scale = clamp(slippingPitch, slipAudioMinimumPitch, slipAudioMaximumPitch)
  
-func handleParticles(delta,  localVelocity, radsPerSec, radius):
-	var relativeVelocity = getVelocity(localVelocity, radsPerSec, radius)
-	
-	"""
-	if slippingParticles.process_material != slippingParticleMaterial:
-		slippingParticles.process_material = slippingParticleMaterial
-	if rollingParticles.process_material != rollingParticleMaterial:
-		rollingParticles.process_material = rollingParticleMaterial
-	"""
-	#var rolling = localVelocity.z
-	
-	#slippingParticles.emitting = relativeVelocity.length() > slippingEmitThreshold
-	#rollingParticles.emitting = relativeVelocity.length() > rollingEmitThreshold
-	for parts in _particleNodes:
-		parts.emitting = relativeVelocity.length() > slippingEmitThreshold
-
 func getVelocity(localVelocity, radsPerSec, radius):
 	var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
 	var relativeZSpeed = (radsPerSec*radius)-localVelocity.z

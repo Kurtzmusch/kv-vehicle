@@ -11,6 +11,8 @@ class_name KVWheel
 @export var getRadiusFromMeshAABB = false
 @export var tireResponses: Array[TireResponse]
 var tireResponseDictionary: Dictionary
+@export var fidgetFix = true
+@export var rpsDeltaThreshold = 1.0
 
 @export_category('Steering')
 @export var steer = false
@@ -83,6 +85,11 @@ var suspensionForce = Vector3.ZERO
 var contactRelativeVelocity = Vector3.ZERO
 
 var tireResponse: TireResponse
+
+var targetRPS = 0.0
+
+var traveled = 0.0
+var maxTraveled = 32.0
 
 func findVehicle():
 	var parent = get_parent()
@@ -175,11 +182,18 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	
 	
 	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
+	traveled+=globalVelocity.length()*delta
+	traveled = fmod(traveled , maxTraveled)
 	if grounded:
+		
 		surfaceMaterial = StringName('tarmac')
 		if collider.has_meta('material'):
 			var surfaceMaterialString = collider.get_meta('material')
 			surfaceMaterial = surfaceMaterialString
+		tireResponse = tireResponseDictionary[surfaceMaterial] 
+		var bumpStrength = tireResponse.sampleBumpNoise(traveled/maxTraveled)
+		globalCollisionPoint += collisionNormal*bumpStrength
+		debugString = str( snapped( bumpStrength, 0.01) )
 		contactTransform = Transform3D()
 		contactTransform.origin = globalCollisionPoint
 		contactTransform.basis.y = collisionNormal
@@ -190,7 +204,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		contactTransform.basis.x = basisX
 		
 		localVelocity = contactTransform.basis.inverse() * globalVelocity
-		
+		targetRPS = localVelocity.z/radius
 		var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
 		var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
 		contactRelativeVelocity = Vector3(localVelocity.x, 0.0, relativeZSpeed)
@@ -216,7 +230,6 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
 	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
 	
-	tireResponse = tireResponseDictionary[surfaceMaterial] 
 	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
 	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))
@@ -226,12 +239,13 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
 	var zFriction = min(abs(necessaryZFriction), coeficients.z*suspensionForceMagnitude)
+	#zFriction = coeficients.z*suspensionForceMagnitude
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
 	var frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1)
 	var frictionFraction = coeficients.x/tireResponse.gripMultiplier
-	debugString = str( snapped(frictionFraction, 0.1 ) )
+	#debugString = str( snapped(frictionFraction, 0.1 ) )
 	if coeficients.x < tireResponse.gripMultiplier:
 		frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
 	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
@@ -242,21 +256,24 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	
 	
 	tireResponse.handleAudio(delta, $RollingAudioStreamPlayer3D, $SlippingAudioStreamPlayer3D, localVelocity, radsPerSec, radius)
-	tireResponse.handleParticles(delta, localVelocity, radsPerSec, radius)
+	#tireResponse.handleParticles(delta, localVelocity, radsPerSec, radius)
 
-func animate(delta):
-	$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
-	applyTorqueFromFriction(delta)
+func animate(delta, oneByDelta):
+	if fidgetFix and ( abs(targetRPS-radsPerSec) < rpsDeltaThreshold):
+		$wheelSteerPivot/wheelRollPivot.rotation.x += targetRPS*delta
+	else:
+		$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
+	#applyTorqueFromFriction(delta, oneByDelta)
 
-func applyTorqueFromFriction(delta):
+func applyTorqueFromFriction(delta, oneByDelta):
 	if !grounded: return
-	var targetRPS = localVelocity.z/radius
+	#var targetRPS = localVelocity.z/radius
 	var prevRPS = radsPerSec
 	frictionTorque = -appliedZFriction*radius
 	#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
 	prevFrictionTorque = frictionTorque
 	#if !powered:
-	applyTorque(frictionTorque*0.9, delta)
+	applyTorque(frictionTorque*1.0, delta)
 	#debugString = str( snapped(frictionTorque, 0.1) )
 	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
 	

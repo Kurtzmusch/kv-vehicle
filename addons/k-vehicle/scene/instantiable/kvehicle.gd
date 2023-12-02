@@ -76,7 +76,8 @@ func _integrate_forces(state):
 			pass
 			#wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
 		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
-	
+		wheel.applyTorqueFromFriction(delta, oneByDelta)
+	#$drivetrain.clutch(delta, oneByDelta)
 	# there is room for improvement here
 	# perhaps feeding slopeResultingForce vector into each wheel as vehicle motion 
 	var gravityForce = Vector3.DOWN*globalGravity*gravity_scale*mass
@@ -90,8 +91,9 @@ func _integrate_forces(state):
 		applyCentralGlobalForceState(requiredZFriction,  state, Color.LIGHT_SKY_BLUE)
 	if abs(localLinearVelocity.x) < 0.125:
 		applyCentralGlobalForceState(requiredXFriction,  state, Color.LIGHT_PINK)
+	
 	for wheel in wheels:
-		wheel.animate(delta)
+		wheel.animate(delta, oneByDelta)
 	#$drivetrain.clutch(delta, oneByDelta)
 
 func accelerateYaw(delta, oneByDelta, acceleration):

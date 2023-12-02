@@ -5,7 +5,7 @@ class_name KVTireParticlesDebri
 @export var velocityMultiplier = Vector3.ONE
 @export var velocityY = 0.25
 
-var wheel: KWheel
+var wheel: KVWheel
 var processMaterial: ParticleProcessMaterial
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,7 +14,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if wheel.surfaceMaterial != name:
+	if wheel.surfaceMaterial != name or !wheel.grounded:
 		emitting = false
 		return
 	emitting = wheel.contactRelativeVelocity.length() > slippingEmitThreshold

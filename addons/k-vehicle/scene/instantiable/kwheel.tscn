@@ -44,6 +44,7 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
 mesh = ExtResource("3_fiy6t")
 
 [node name="contactTransform" type="MeshInstance3D" parent="."]
+visible = false
 material_override = SubResource("StandardMaterial3D_327r1")
 cast_shadow = 0
 mesh = SubResource("ImmediateMesh_ldieg")

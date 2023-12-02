@@ -68,12 +68,12 @@ func handleInput(delta):
 			vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 			vehicle.break2Input = Input.get_action_strength('acceleration-')
 		else:
-			vehicle.accelerationInput = -Input.get_action_strength('acceleration-')
+			vehicle.accelerationInput = Input.get_action_strength('acceleration-')
 			vehicle.break2Input = Input.get_action_strength('acceleration+')
 	else:
 		vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 	if steeringFunction == steerGpad:
-		vehicle.accelerationInput = -Input.get_action_strength('acceleration+')
+		vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 		vehicle.break2Input = Input.get_action_strength('acceleration-')
 	vehicle.breaking = (Input.get_action_strength("handbreak") > 0.9) or (vehicle.break2Input > 0.9)
 	

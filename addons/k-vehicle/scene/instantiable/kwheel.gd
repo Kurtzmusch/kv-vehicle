@@ -204,7 +204,8 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	else:
 		feedback = 0.0
 		$wheelSteerPivot.position.y = -maxExtension
-	
+		$RollingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
+		$SlippingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
 	previousGlobalPosition = global_position
 	
 
@@ -263,8 +264,8 @@ func applyTorqueFromFriction(delta):
 	if sign(newRelativeZspeed) != sign(relativeZSpeed):
 		#pass
 		if !powered:
-			
-			radsPerSec = targetRPS
+			pass
+			#radsPerSec = targetRPS
 	var signBefore = sign(radsPerSec)
 	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
 	var signAfter = sign(radsPerSec)

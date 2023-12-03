@@ -22,7 +22,7 @@ var localLinearVelocity = Vector3.ZERO
 
 var debugString: String
 
-var substeps = 1
+@export var substeps = 1
 
 func _ready():
 	
@@ -72,18 +72,22 @@ func _integrate_forces(state):
 		if wheel.grounded:
 			totalSuspensionForce += wheel.suspensionForce
 	
-	$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$breakRear._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-	$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	for i in range(substeps):
+		$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$breakRear._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		
+		for wheel in wheels:
+			wheel.applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution)
+			wheel.applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep)
 	
 	for wheel in wheels:
-		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
-		wheel.applyTorqueFromFriction(delta, oneByDelta)
+		wheel.applyAccumulatedFrictionForces(state)
 	#$drivetrain.clutch(delta, oneByDelta)
 	
 	# there is room for improvement here
@@ -94,11 +98,16 @@ func _integrate_forces(state):
 	var requiredXFriction = -(slopeResultingForce.project(global_transform.basis.x))
 	var requiredZFriction = -(slopeResultingForce.project(global_transform.basis.z))
 	#if abs(localLinearVelocity.z) < 0.125 and breaking:
-	if breaking and ((requiredZFriction.normalized().dot(linear_velocity.normalized())<0.0)\
-	or abs(localLinearVelocity.z) < 0.0625):
-		applyCentralGlobalForceState(requiredZFriction,  state, Color.LIGHT_SKY_BLUE)
-	if abs(localLinearVelocity.x) < 0.125:
-		applyCentralGlobalForceState(requiredXFriction,  state, Color.LIGHT_PINK)
+	var groundedWheels = 0
+	for wheel in wheels:
+		if wheel.grounded:
+			groundedWheels += 1
+	if groundedWheels >= 2:
+		if breaking and ((requiredZFriction.normalized().dot(linear_velocity.normalized())<0.0)\
+		or abs(localLinearVelocity.z) < 0.0625):
+			applyCentralGlobalForceState(requiredZFriction,  state, Color.LIGHT_SKY_BLUE)
+		if abs(localLinearVelocity.x) < 0.125:
+			applyCentralGlobalForceState(requiredXFriction,  state, Color.LIGHT_PINK)
 	
 	for wheel in wheels:
 		wheel.animate(delta, oneByDelta)

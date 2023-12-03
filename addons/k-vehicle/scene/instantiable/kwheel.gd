@@ -91,6 +91,12 @@ var targetRPS = 0.0
 var traveled = 0.0
 var maxTraveled = 32.0
 
+
+var xFrictionAccumulated = 0.0
+var zFrictionAccumulated = 0.0
+var frictionColor = Color.RED
+var substepZFriction = 0.0
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVVehicle):
@@ -221,11 +227,17 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		$RollingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
 		$SlippingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
 	previousGlobalPosition = global_position
-	
+	xFrictionAccumulated = 0.0
+	zFrictionAccumulated = 0.0
 
-func applyFrictionForces(state, delta, oneByDelta, contribution):
+func applyAccumulatedFrictionForces(state):
 	if !grounded: return
-	
+	vehicle.applyGlobalForceState(xFrictionAccumulated*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
+	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
+
+func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution):
+	if !grounded: return
+	var oneByModDelta = 1.0/modDelta
 	var necessaryXFriction = localVelocity.x*oneByDelta*massPerWheel*0.9
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
 	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
@@ -239,18 +251,21 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
 	var zFriction = min(abs(necessaryZFriction), coeficients.z*suspensionForceMagnitude)
-	#zFriction = coeficients.z*suspensionForceMagnitude
+	zFriction = coeficients.z*suspensionForceMagnitude
 	
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
-	var frictionColor = Color.RED
+	frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1)
 	var frictionFraction = coeficients.x/tireResponse.gripMultiplier
 	#debugString = str( snapped(frictionFraction, 0.1 ) )
 	if coeficients.x < tireResponse.gripMultiplier:
 		frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
-	vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
-	vehicle.applyGlobalForceState(zFriction*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
+	#vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
+	substepZFriction = zFriction*oneBySubstep
+	xFrictionAccumulated += xFriction*oneBySubstep
+	#vehicle.applyGlobalForceState(zFriction*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
+	zFrictionAccumulated += zFriction*oneBySubstep
 	#applyTorqueFromFriction(zFriction, delta, relativeZSpeed)
 	
 	appliedZFriction = zFriction
@@ -266,15 +281,16 @@ func animate(delta, oneByDelta):
 		$wheelSteerPivot/wheelRollPivot.rotation.x += radsPerSec*delta
 	#applyTorqueFromFriction(delta, oneByDelta)
 
-func applyTorqueFromFriction(delta, oneByDelta):
+func applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep):
 	if !grounded: return
+	appliedZFriction = substepZFriction
 	#var targetRPS = localVelocity.z/radius
 	var prevRPS = radsPerSec
 	frictionTorque = -appliedZFriction*radius
 	#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
 	prevFrictionTorque = frictionTorque
 	#if !powered:
-	applyTorque(frictionTorque*1.0, delta)
+	applyTorque(frictionTorque*1.0, modDelta)
 	#debugString = str( snapped(frictionTorque, 0.1) )
 	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
 	
@@ -285,7 +301,7 @@ func applyTorqueFromFriction(delta, oneByDelta):
 			pass
 			#radsPerSec = targetRPS
 	var signBefore = sign(radsPerSec)
-	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
+	applyTorque(abs(breakTorque)*-sign(radsPerSec), modDelta)
 	var signAfter = sign(radsPerSec)
 	if (signBefore != signAfter):
 		radsPerSec = 0.0

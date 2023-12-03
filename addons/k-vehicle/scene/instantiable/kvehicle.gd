@@ -63,8 +63,15 @@ func _integrate_forces(state):
 		modDelta /= substeps
 	
 	$debugVectors.clear()
-	#apply_central_force(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0)
-	#applyGlobalForceState(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0, to_global(Vector3.DOWN*0.5), state, Color.AQUA)
+	
+	for wheel in wheels:
+		wheel.updateCasts(state, delta, oneByDelta, contribution)
+	var totalSuspensionForce = Vector3.ZERO
+	for wheel in wheels:
+		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
+		if wheel.grounded:
+			totalSuspensionForce += wheel.suspensionForce
+	
 	$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 	$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 	$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
@@ -73,20 +80,12 @@ func _integrate_forces(state):
 	$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 	$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 	$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	
 	for wheel in wheels:
-		#wheel.force_update_transform()
-		wheel.updateCasts(state, delta, oneByDelta, contribution)
-	var totalSuspensionForce = Vector3.ZERO
-	for wheel in wheels:
-		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
-		if wheel.grounded:
-			totalSuspensionForce += wheel.suspensionForce
-		if !wheel.steer:
-			pass
-			#wheel.applyTorque(Input.get_axis("acceleration+", "acceleration-")*1200.0,delta)
 		wheel.applyFrictionForces(state, delta, oneByDelta, contribution)
 		wheel.applyTorqueFromFriction(delta, oneByDelta)
 	#$drivetrain.clutch(delta, oneByDelta)
+	
 	# there is room for improvement here
 	# perhaps feeding slopeResultingForce vector into each wheel as vehicle motion 
 	var gravityForce = Vector3.DOWN*globalGravity*gravity_scale*mass

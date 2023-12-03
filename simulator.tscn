@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmmq53i4bdyki"]
+
+[ext_resource type="Script" path="res://substep.gd" id="1_ujrp8"]
+
+[sub_resource type="Curve" id="Curve_ousia"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
+point_count = 2
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_ujrp8")
+tireResponse = SubResource("Curve_ousia")
+
+[node name="dforce" type="Line2D" parent="."]
+width = 1.0
+default_color = Color(1, 0, 0.8, 1)
+
+[node name="rpsDelta" type="Line2D" parent="."]
+width = 1.0
+default_color = Color(0.909804, 0.435294, 0, 1)
+
+[node name="zero" type="Line2D" parent="."]
+width = 2.0

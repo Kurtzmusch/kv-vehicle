@@ -13,12 +13,16 @@ var clutchInput = 0.0
 
 var wheels = []
 
+var teleportDelta = Vector3.ZERO
+
 var speedMS = 0.0
 var globalGravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 # Called when the node enters the scene tree for the first time.
 var localLinearVelocity = Vector3.ZERO
 
 var debugString: String
+
+var substeps = 1
 
 func _ready():
 	
@@ -53,17 +57,22 @@ func _integrate_forces(state):
 	var contribution = 1.0/wheels.size()
 	var delta = state.step
 	var oneByDelta = 1.0/delta
+	var oneBySubstep = 1.0/substeps
+	var modDelta = delta
+	if substeps > 1:
+		modDelta /= substeps
+	
 	$debugVectors.clear()
 	#apply_central_force(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0)
 	#applyGlobalForceState(Input.get_axis("acceleration+", "acceleration-")*mass*global_transform.basis.z*4.0, to_global(Vector3.DOWN*0.5), state, Color.AQUA)
-	$engine._integrate(delta, oneByDelta)
-	$handbreak._integrate(delta, oneByDelta)
-	$breakFront._integrate(delta, oneByDelta)
-	$breakRear._integrate(delta, oneByDelta)
-	$lsd._integrate(delta, oneByDelta)
-	$drivetrain._integrate(delta, oneByDelta)
-	$"k-swayBarFront"._integrate(delta, oneByDelta)
-	$"k-swayBarRear"._integrate(delta, oneByDelta)
+	$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$breakRear._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+	$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 	for wheel in wheels:
 		#wheel.force_update_transform()
 		wheel.updateCasts(state, delta, oneByDelta, contribution)

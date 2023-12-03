@@ -11,7 +11,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func _integrate(delta, oneByDelta):
+func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	var str = vehicle.break2Input
 	for wheel in wheels:
-		wheel.applyBreakTorque(strength*str, delta)
+		wheel.applyBreakTorque(strength*str, modDelta)

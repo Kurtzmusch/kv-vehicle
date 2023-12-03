@@ -12,7 +12,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func _integrate(delta, oneByDelta):
+func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	var highestRPSWheel = wheels[0]
 	var otherWheel = wheels[1]
 	if abs(wheels[1].radsPerSec) > abs(wheels[0].radsPerSec):

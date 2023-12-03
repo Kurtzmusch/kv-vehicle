@@ -41,7 +41,7 @@ func applyTorque(torque, delta):
 	radsPerSec += torque/momentOfInertia*delta
 	radsPerSec = max(radsPerSec, idleRadsPerSec)
 
-func _integrate(delta, oneByDelta):
+func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	revsPerMinute = radsPerSec/TAU*60.0
 	var samplePosition = revsPerMinute/maxRevsPerMinute
 	var torque = vehicle.accelerationInput*torqueCurve.sample_baked(samplePosition)*peakTorque
@@ -50,6 +50,6 @@ func _integrate(delta, oneByDelta):
 	var bT = -breakTorque*(1.0-sign(abs(vehicle.accelerationInput)))
 	if radsPerSec > maxRadsPerSec:
 		torque = -peakTorque*limmiterCounterTorqueRatio
-	applyTorque(bT, delta)
+	applyTorque(bT, modDelta)
 	prevRPS = radsPerSec
-	applyTorque(torque, delta)
+	applyTorque(torque, modDelta)

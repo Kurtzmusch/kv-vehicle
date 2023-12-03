@@ -181,7 +181,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	#var collider = $RayCast3D.get_collider()
 	
 	
-	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition)
+	var globalVelocity = oneByDelta*(global_position-previousGlobalPosition+vehicle.teleportDelta)
 	traveled+=globalVelocity.length()*delta
 	traveled = fmod(traveled , maxTraveled)
 	if grounded:
@@ -240,6 +240,7 @@ func applyFrictionForces(state, delta, oneByDelta, contribution):
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
 	var zFriction = min(abs(necessaryZFriction), coeficients.z*suspensionForceMagnitude)
 	#zFriction = coeficients.z*suspensionForceMagnitude
+	
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
 	var frictionColor = Color.RED

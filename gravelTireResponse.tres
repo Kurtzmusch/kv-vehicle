@@ -36,6 +36,7 @@ slipAngleEnd = 10.0
 gripZCurve = SubResource("Curve_4p6nj")
 relativeZSpeedBegin = 0.5
 relativeZSpeedEnd = 4.0
+useSlipRatio = false
 feedbackCurve = SubResource("Curve_oooal")
 slippingStream = ExtResource("3_fdui6")
 slipAudioMinimumVelocity = 5.0

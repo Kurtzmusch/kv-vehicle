@@ -12,6 +12,7 @@ class_name TireResponse
 @export var gripZCurve: Curve
 @export var relativeZSpeedBegin: float
 @export var relativeZSpeedEnd: float
+@export var useSlipRatio = true
 @export var feedbackCurve: Curve
 
 @export_category('Audio')
@@ -142,7 +143,13 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 	
 	samplePosition = -0.1 + relativeVelocity.length()*0.25
 	var x = gripXCurve.sample_baked(samplePosition)
-	var z = gripZCurve.sample_baked(samplePosition)
+	zSamplePosition = samplePosition
+	if useSlipRatio:
+		var slipRatio = 0.01
+		if not localVelocity.z == 0:
+			slipRatio = relativeVelocity.z / abs(localVelocity.z)
+		zSamplePosition = slipRatio
+	var z = gripZCurve.sample_baked(zSamplePosition)
 	if abs(relativeZSpeed) < relativeZSpeedBegin:
 		#z = ease(lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) ),0.8 )
 		z = lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) )

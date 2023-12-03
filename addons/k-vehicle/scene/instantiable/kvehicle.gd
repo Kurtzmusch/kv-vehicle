@@ -100,7 +100,7 @@ func _integrate_forces(state):
 		$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		$breakRear._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)

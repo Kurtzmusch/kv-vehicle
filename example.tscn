@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=50 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://worldShifter.gd" id="1_aekg0"]
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/k-vehicle/scene/instantiable/k_sway_bar.tscn" id="25_117a2"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
+[ext_resource type="PackedScene" uid="uid://foegnmr6avup" path="res://vehicles/big-foot.tscn" id="28_ctkhe"]
 
 [sub_resource type="Environment" id="Environment_b44jp"]
 
@@ -223,7 +224,7 @@ top_level = true
 current = true
 script = ExtResource("3_jhh6f")
 distance = 4.0
-target = NodePath("../kvehicle")
+target = NodePath("../bigFoot")
 orbitSpeed = Vector3(1, 1, 1)
 
 [node name="kvehicle" parent="world" instance=ExtResource("3_xt81q")]
@@ -460,6 +461,9 @@ wheels = [NodePath("../RR"), NodePath("../RL")]
 [node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="world/kvehicle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
+
+[node name="bigFoot" parent="world" instance=ExtResource("28_ctkhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 2.57205, 0)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

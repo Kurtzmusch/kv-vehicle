@@ -33,6 +33,11 @@ var tireResponseDictionary: Dictionary
 ## usefull for smoothing sidewalk physics response
 @export var normalDirectionLimit = 0.6
 
+## When false, the suspension can apply a force 'downwards'.
+## This is unrealistic and can cause the vehicle to 'stick' more to the terrain
+## instead of jumping naturally
+@export var clampSuspensionForce = true
+
 var debugString: String
 
 var vehicle: KVVehicle
@@ -345,7 +350,8 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	damp *= compressionDelta*vehicle.mass*wheelContribution
 	suspensionForceMagnitude = compression*normalForceAtRest
 	suspensionForceMagnitude += damp
-	suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
+	if clampSuspensionForce:
+		suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
 	
 	suspensionForce = suspensionForceMagnitude*contactTransform.basis.y
 	

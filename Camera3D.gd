@@ -8,6 +8,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if get_parent().freeze: return
 	if Input.is_key_pressed(KEY_2):
 		current = true
 	var direction = vehicle.linear_velocity.normalized().slerp(-vehicle.global_transform.basis.z, 0.125)

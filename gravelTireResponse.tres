@@ -46,3 +46,4 @@ slipAudioMaximumPitch = 1.4
 audioVolumeEase = 0.25
 bumpHeight = 0.05
 bumpNoise = SubResource("NoiseTexture2D_4q38q")
+bumpVisualBias = 0.0

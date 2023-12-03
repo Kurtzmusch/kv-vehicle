@@ -105,6 +105,8 @@ var substepZFriction = 0.0
 
 var _steerInverse = 1.0
 
+
+var wheelVisualPositionYOffset = 0.0
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVVehicle):
@@ -210,7 +212,8 @@ func updateCasts(state, delta, oneByDelta, contribution):
 			surfaceMaterial = surfaceMaterialString
 		tireResponse = tireResponseDictionary[surfaceMaterial] 
 		var bumpStrength = tireResponse.sampleBumpNoise(traveled/maxTraveled)
-		globalCollisionPoint += collisionNormal*bumpStrength
+		globalCollisionPoint += collisionNormal*bumpStrength*(1.0-tireResponse.bumpVisualBias)
+		wheelVisualPositionYOffset = bumpStrength*tireResponse.bumpVisualBias
 		debugString = str( snapped( bumpStrength, 0.01) )
 		contactTransform = Transform3D()
 		contactTransform.origin = globalCollisionPoint
@@ -368,5 +371,5 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	
 	vehicle.applyGlobalForceState(suspensionForce, contactTransform.origin, state, Color.GREEN)
 	
-	$wheelSteerPivot.position.y = wheelPivotPositionY
+	$wheelSteerPivot.position.y = wheelPivotPositionY+wheelVisualPositionYOffset
 	previousCompression = compression

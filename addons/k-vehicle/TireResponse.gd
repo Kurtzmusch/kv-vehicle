@@ -28,6 +28,7 @@ class_name TireResponse
 
 @export var bumpHeight = 0.0
 @export var bumpNoise: NoiseTexture2D
+@export var bumpVisualBias = 0.0
 var bumpNoiseImageValues: PackedFloat32Array
 
 

@@ -223,7 +223,7 @@ top_level = true
 current = true
 script = ExtResource("3_jhh6f")
 distance = 4.0
-target = NodePath("../bigFoot")
+target = NodePath("../kvehicle")
 orbitSpeed = Vector3(1, 1, 1)
 
 [node name="kvehicle" parent="world" instance=ExtResource("3_xt81q")]
@@ -231,7 +231,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27154, 2, 247.012)
 top_level = true
 continuous_cd = true
 can_sleep = false
-freeze = true
 substeps = 4
 
 [node name="kackerman" parent="world/kvehicle" node_paths=PackedStringArray("steeringPair", "staticPair") instance=ExtResource("5_o7bjy")]
@@ -458,6 +457,7 @@ size = Vector3(2.2, 1, 3.3)
 
 [node name="bigFoot" parent="world" instance=ExtResource("28_ctkhe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 3.57205, 0)
+freeze = true
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

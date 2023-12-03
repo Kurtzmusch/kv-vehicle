@@ -249,7 +249,6 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 
 [node name="FR" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
-momentOfInertia = 6.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 rpsDeltaThreshold = 0.1
@@ -281,7 +280,6 @@ mesh = SubResource("ImmediateMesh_weifp")
 
 [node name="FL" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
-momentOfInertia = 6.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 rpsDeltaThreshold = 0.1
@@ -313,7 +311,6 @@ mesh = SubResource("ImmediateMesh_8tqy8")
 
 [node name="RR" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
-momentOfInertia = 6.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 rpsDeltaThreshold = 0.1
@@ -343,7 +340,6 @@ mesh = SubResource("ImmediateMesh_s2ldo")
 
 [node name="RL" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
-momentOfInertia = 3.0
 getRadiusFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 rpsDeltaThreshold = 0.1
@@ -422,8 +418,9 @@ script = ExtResource("17_mo8j4")
 
 [node name="engine" parent="world/kvehicle" instance=ExtResource("19_5wjw3")]
 torqueCurve = SubResource("Curve_j6yyq")
-peakTorque = 200.0
+peakTorque = 250.0
 internalFrictionTorque = 20.0
+breakTorque = 50.0
 limmiterCounterTorqueRatio = 4.0
 momentOfInertia = 0.2
 

@@ -1,28 +1,51 @@
 extends RigidBody3D
 
+## rigid body for ground vehicles
 class_name KVVehicle
 
-## if true, creates a cilinder collider for each wheel
+## creates a cilinder collider for each wheel at
+## their position (where the suspension is under maximum compression)
 @export var createWheelMinimumColliders = true
+## substeps for the friction torque feedback calculations.
+## [br][br]
+## it improves engine and wheel fidgeting/oscilations without needing to increase the engine physics ticks/second
+@export var substeps = 1
 
+## read by wheels that steer.
+## [br]
+## steering assisters or custom input methods should set this variable
 var normalizedSteering = 0.0
 var break2Input = 0.0
 var accelerationInput = 0.0
+## true when any break input is > 0.0
+## [br]
+## used for anti-slide system on slopes
 var breaking = false
+## input is read by child nodes.
+## [br]
+## custom input methods should set this variable
 var clutchInput = 0.0
 
+## array containing the wheels. it gets populated by children wheels when they _enter_tree
 var wheels = []
 
+## if the vehicle gets teleported, this delta must be set
+## [br]
+## wheels will read this when they _integrate
 var teleportDelta = Vector3.ZERO
 
+## speed in meters/second
 var speedMS = 0.0
-var globalGravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+## read at initialization from project settings 'physics/3d/default_gravity'
+var globalGravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 # Called when the node enters the scene tree for the first time.
+
+## linear velocity in meter/second in local space
 var localLinearVelocity = Vector3.ZERO
 
+## will be read by a 3DLabel every frame. can be set to anything to help with debugging
 var debugString: String
-
-@export var substeps = 1
 
 func _ready():
 	

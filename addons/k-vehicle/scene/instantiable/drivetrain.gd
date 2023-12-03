@@ -36,6 +36,14 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed('shift-'):
 		currentGearIndex -= 1
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+	
+	
+	var samplePosition = engine.revsPerMinute/engine.maxRevsPerMinute
+	var t = vehicle.accelerationInput*engine.torqueCurve.sample_baked(samplePosition)*engine.peakTorque
+	t /= gearRatio
+	var f = t/vehicle.wheels[0].radius
+
+	vehicle.debugString = str((int(f)))
 
 func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var oneByModDelta = 1.0/modDelta

@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 
 @export var torqueCurve: Curve
 @export var peakTorque = 400.0

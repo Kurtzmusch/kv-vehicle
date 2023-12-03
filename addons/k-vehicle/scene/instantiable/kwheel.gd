@@ -235,6 +235,8 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.z, Color.SKY_BLUE)
 	else:
 		feedback = 0.0
+		normalizedCompression = 0.0
+		suspensionForceMagnitude = 0.0
 		$wheelSteerPivot.position.y = -maxExtension
 		$RollingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
 		$SlippingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
@@ -314,7 +316,6 @@ func applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep):
 				#radsPerSec = targetRPS
 	_breakTorque(delta, oneByDelta, modDelta, oneBySubstep)
 	
-	#radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.1 )/60*TAU
 	#debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
 
 func _breakTorque(delta, oneByDelta, modDelta, oneBySubstep):

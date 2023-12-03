@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=49 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://worldShifter.gd" id="1_aekg0"]
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
@@ -25,7 +25,6 @@
 [ext_resource type="AudioStream" uid="uid://bva43nfkmlxx1" path="res://snd/fx/engine-crawler/crawler4000.wav" id="20_u6nvn"]
 [ext_resource type="PackedScene" uid="uid://cmtcpbwh5t3lc" path="res://addons/k-vehicle/scene/instantiable/drivetrain.tscn" id="22_00gv8"]
 [ext_resource type="Script" path="res://engineRPM.gd" id="22_dcf3h"]
-[ext_resource type="Script" path="res://Label3D.gd" id="22_o4s4e"]
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/k-vehicle/scene/instantiable/k-breaks.tscn" id="24_dqj00"]
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/k-vehicle/scene/instantiable/k_sway_bar.tscn" id="25_117a2"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
@@ -232,6 +231,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27154, 2, 247.012)
 top_level = true
 continuous_cd = true
 can_sleep = false
+freeze = true
 substeps = 4
 
 [node name="kackerman" parent="world/kvehicle" node_paths=PackedStringArray("steeringPair", "staticPair") instance=ExtResource("5_o7bjy")]
@@ -417,6 +417,13 @@ limit = 2.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358006, 0.671878, -0.233562)
 script = ExtResource("17_mo8j4")
 
+[node name="enginePitcherSFX" parent="world/kvehicle" node_paths=PackedStringArray("engine") instance=ExtResource("20_ehgk5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -1.39999)
+stream = ExtResource("20_u6nvn")
+autoplay = true
+streamRevsPerMinute = 4000.0
+engine = NodePath("../engine")
+
 [node name="engine" parent="world/kvehicle" instance=ExtResource("19_5wjw3")]
 torqueCurve = SubResource("Curve_j6yyq")
 peakTorque = 250.0
@@ -424,19 +431,6 @@ internalFrictionTorque = 20.0
 breakTorque = 50.0
 limmiterCounterTorqueRatio = 4.0
 momentOfInertia = 0.2
-
-[node name="enginePitcherSFX" parent="world/kvehicle/engine" instance=ExtResource("20_ehgk5")]
-stream = ExtResource("20_u6nvn")
-autoplay = true
-streamRevsPerMinute = 4000.0
-
-[node name="Label3D" type="Label3D" parent="world/kvehicle/engine"]
-pixel_size = 0.002
-billboard = 1
-double_sided = false
-no_depth_test = true
-fixed_size = true
-script = ExtResource("22_o4s4e")
 
 [node name="drivetrain" parent="world/kvehicle" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("22_00gv8")]
 poweredWheels = [NodePath("../RR"), NodePath("../RL")]
@@ -464,7 +458,6 @@ size = Vector3(2.2, 1, 3.3)
 
 [node name="bigFoot" parent="world" instance=ExtResource("28_ctkhe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 3.57205, 0)
-gravity_scale = 0.0
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

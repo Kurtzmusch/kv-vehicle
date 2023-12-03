@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/engine.gd" id="1_bocld"]
 
-[node name="engine" type="Node3D"]
+[node name="engine" type="Node"]
 script = ExtResource("1_bocld")

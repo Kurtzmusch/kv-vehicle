@@ -463,7 +463,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
 
 [node name="bigFoot" parent="world" instance=ExtResource("28_ctkhe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 2.57205, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 3.57205, 0)
+gravity_scale = 0.0
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

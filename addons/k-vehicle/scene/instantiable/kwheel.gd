@@ -294,33 +294,36 @@ func animate(delta, oneByDelta):
 	#applyTorqueFromFriction(delta, oneByDelta)
 
 func applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep):
-	if !grounded: return
-	appliedZFriction = substepZFriction
-	#var targetRPS = localVelocity.z/radius
-	var prevRPS = radsPerSec
-	frictionTorque = -appliedZFriction*radius
-	#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
-	prevFrictionTorque = frictionTorque
-	#if !powered:
-	applyTorque(frictionTorque*1.0, delta)
-	#debugString = str( snapped(frictionTorque, 0.1) )
-	var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
+	if grounded:
+		appliedZFriction = substepZFriction
+		#var targetRPS = localVelocity.z/radius
+		var prevRPS = radsPerSec
+		frictionTorque = -appliedZFriction*radius
+		#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
+		prevFrictionTorque = frictionTorque
+		#if !powered:
+		applyTorque(frictionTorque*1.0, delta)
+		#debugString = str( snapped(frictionTorque, 0.1) )
+		var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
+		
+		#if !is_zero_approx(prevRPS):
+		if sign(newRelativeZspeed) != sign(relativeZSpeed):
+			#pass
+			if !powered:
+				pass
+				#radsPerSec = targetRPS
+	_breakTorque(delta, oneByDelta, modDelta, oneBySubstep)
 	
-	#if !is_zero_approx(prevRPS):
-	if sign(newRelativeZspeed) != sign(relativeZSpeed):
-		#pass
-		if !powered:
-			pass
-			#radsPerSec = targetRPS
+	#radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.1 )/60*TAU
+	#debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
+
+func _breakTorque(delta, oneByDelta, modDelta, oneBySubstep):
 	var signBefore = sign(radsPerSec)
 	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
 	var signAfter = sign(radsPerSec)
 	if (signBefore != signAfter):
 		radsPerSec = 0.0
-	#FIXME break torque must be applied even if there is no contact
 	breakTorque = 0.0
-	#radsPerSec = sign(radsPerSec) * min( abs(radsPerSec)/TAU*60, 6000*0.1 )/60*TAU
-	#debugString = str(snapped(radsPerSec, 1))+'/'+str(snapped(targetRPS, 1))
 
 func applyBreakTorque(torque, delta):
 	"""

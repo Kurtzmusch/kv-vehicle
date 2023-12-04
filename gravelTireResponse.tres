@@ -20,7 +20,7 @@ fractal_lacunarity = 3.305
 generate_mipmaps = false
 seamless = true
 as_normal_map = true
-bump_strength = 4.0
+bump_strength = 16.0
 noise = SubResource("FastNoiseLite_hc8kl")
 
 [sub_resource type="Curve" id="Curve_oooal"]
@@ -56,7 +56,7 @@ slipAudioMinimumPitch = 1.0
 slipAudioMaximumVelocity = 100.0
 slipAudioMaximumPitch = 1.4
 audioVolumeEase = 0.25
-bumpHeight = 0.05
+bumpHeight = 0.0
 bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
 bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
 bumpVisualBias = 0.0

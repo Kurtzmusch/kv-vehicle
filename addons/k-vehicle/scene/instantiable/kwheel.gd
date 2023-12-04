@@ -16,7 +16,8 @@ var tireResponseDictionary: Dictionary
 
 @export_category('Steering')
 @export var steer = false
-@export var inverseSteering = false
+
+#@export var inverseSteering = false
 @export var maxSteerAngle = PI/3.0
 @export var useAckermanSteering = true
 
@@ -103,9 +104,6 @@ var zFrictionAccumulated = 0.0
 var frictionColor = Color.RED
 var substepZFriction = 0.0
 
-var _steerInverse = 1.0
-
-
 var wheelVisualPositionYOffset = 0.0
 func findVehicle():
 	var parent = get_parent()
@@ -155,10 +153,6 @@ func updateMaxSteering():
 	ackermanSide = sign(position.x)
 	ackerman = ackermanRatio*ackermanSide
 	maxSteerAngleActual = -ackerman*maxSteerAngle
-	if inverseSteering:
-		_steerInverse = -1.0
-	else:
-		_steerInverse = 1.0
 
 func _physics_process(delta):
 	if steer:
@@ -168,7 +162,7 @@ func _physics_process(delta):
 		var ackermanActual = lerp(1.0, ackermanRatio,abs(vehicle.normalizedSteering) )
 		if is_equal_approx( sign(vehicle.normalizedSteering), ackermanSide):
 			steerAngleActual = ackermanActual*maxSteerAngle
-		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual*_steerInverse
+		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual
 	$shapecastPivot/ShapeCast3D.target_position = (Vector3.DOWN*abs(maxExtension))*$shapecastPivot/ShapeCast3D.global_transform.basis
 
 func updateCasts(state, delta, oneByDelta, contribution):

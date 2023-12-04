@@ -31,6 +31,7 @@ func _ready():
 		_totalWheelMomentOfInertia += wheel.momentOfInertia
 
 func _physics_process(delta):
+	if vehicle.freeze: return
 	if Input.is_action_just_pressed('shift+'):
 		currentGearIndex += 1 
 	if Input.is_action_just_pressed('shift-'):

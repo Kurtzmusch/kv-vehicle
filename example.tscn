@@ -1,5 +1,6 @@
 [gd_scene load_steps=51 format=3 uid="uid://5daiwjyh4ocx"]
 
+[ext_resource type="Script" path="res://example.gd" id="1_53f3a"]
 [ext_resource type="Script" path="res://worldShifter.gd" id="1_aekg0"]
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
@@ -12,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://5i7leg7uek4d" path="res://addons/k-vehicle/scene/instantiable/kInputHandler.tscn" id="7_hv87p"]
 [ext_resource type="Resource" uid="uid://h7ppi1emxgji" path="res://tarmacTireResponse.tres" id="7_xd3oq"]
 [ext_resource type="Resource" uid="uid://bm5v24h1pg6wn" path="res://gravelTireResponse.tres" id="8_ig8kl"]
-[ext_resource type="Script" path="res://speedMonitor.gd" id="8_rxotk"]
 [ext_resource type="PackedScene" uid="uid://b2gbcjjc1sqdp" path="res://addons/k-vehicle/scene/instantiable/kCenterOfMass.tscn" id="9_bv31a"]
 [ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="10_navyo"]
 [ext_resource type="Texture2D" uid="uid://de5j2rxr5g5fk" path="res://godot-icon-white.png" id="10_xhvi2"]
@@ -25,12 +25,12 @@
 [ext_resource type="PackedScene" uid="uid://nqf277e8w6vf" path="res://addons/k-vehicle/scene/instantiable/engine_pitcher_sfx.tscn" id="20_ehgk5"]
 [ext_resource type="AudioStream" uid="uid://bva43nfkmlxx1" path="res://snd/fx/engine-crawler/crawler4000.wav" id="20_u6nvn"]
 [ext_resource type="PackedScene" uid="uid://cmtcpbwh5t3lc" path="res://addons/k-vehicle/scene/instantiable/drivetrain.tscn" id="22_00gv8"]
-[ext_resource type="Script" path="res://engineRPM.gd" id="22_dcf3h"]
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/k-vehicle/scene/instantiable/k-breaks.tscn" id="24_dqj00"]
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/k-vehicle/scene/instantiable/k_sway_bar.tscn" id="25_117a2"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
 [ext_resource type="PackedScene" uid="uid://foegnmr6avup" path="res://vehicles/big-foot.tscn" id="28_ctkhe"]
+[ext_resource type="Script" path="res://vehicle-ui.gd" id="29_7vj0l"]
 
 [sub_resource type="Environment" id="Environment_b44jp"]
 
@@ -116,6 +116,7 @@ point_count = 4
 
 [node name="environment" type="WorldEnvironment"]
 environment = SubResource("Environment_b44jp")
+script = ExtResource("1_53f3a")
 
 [node name="world" type="Node3D" parent="." node_paths=PackedStringArray("targetNode")]
 script = ExtResource("1_aekg0")
@@ -537,16 +538,6 @@ mesh = SubResource("ImmediateMesh_oshuu")
 [node name="kInputHandler" parent="world/kvehicle" node_paths=PackedStringArray("transmission") instance=ExtResource("7_hv87p")]
 transmission = NodePath("../drivetrain")
 
-[node name="LabelSpeed" type="Label" parent="world/kvehicle"]
-offset_left = 205.0
-offset_top = 138.0
-offset_right = 245.0
-offset_bottom = 164.0
-text = "tt
-"
-script = ExtResource("8_rxotk")
-unit = "kmh"
-
 [node name="centerOfMass" parent="world/kvehicle" instance=ExtResource("9_bv31a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.129, 0)
 
@@ -635,8 +626,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+script = ExtResource("29_7vj0l")
 
-[node name="engineRPM" type="ProgressBar" parent="UI" node_paths=PackedStringArray("engine", "drivetrain")]
+[node name="bar" type="ProgressBar" parent="UI"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -648,11 +640,8 @@ grow_vertical = 0
 max_value = 1.0
 step = 0.001
 show_percentage = false
-script = ExtResource("22_dcf3h")
-engine = NodePath("../../world/kvehicle/engine")
-drivetrain = NodePath("../../world/kvehicle/drivetrain")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/engineRPM"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/bar"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -665,15 +654,15 @@ offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="LabelGear" type="Label" parent="UI/engineRPM/HBoxContainer"]
+[node name="LabelGear" type="Label" parent="UI/bar/HBoxContainer"]
 layout_mode = 2
 text = "gear: "
 
-[node name="LabelGearValue" type="Label" parent="UI/engineRPM/HBoxContainer"]
+[node name="LabelGearValue" type="Label" parent="UI/bar/HBoxContainer"]
 layout_mode = 2
 text = "gear: "
 
-[node name="Sprite2D" type="TextureRect" parent="UI" node_paths=PackedStringArray("vehicle")]
+[node name="FeedbackIndicator" type="TextureRect" parent="UI" node_paths=PackedStringArray("vehicle")]
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 0
 scale = Vector2(0.125, 0.125)
@@ -682,6 +671,15 @@ texture = ExtResource("26_g7xvv")
 expand_mode = 1
 script = ExtResource("27_pjwq2")
 vehicle = NodePath("../../world/kvehicle")
+
+[node name="LabelSpeed" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 205.0
+offset_top = 138.0
+offset_right = 245.0
+offset_bottom = 164.0
+text = "tt
+"
 
 [editable path="world/kvehicle/FR"]
 [editable path="world/kvehicle/FL"]

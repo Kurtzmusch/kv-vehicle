@@ -8,6 +8,7 @@ extends Camera3D
 
 @export var vehicles: Array[Node]
 
+var vehicleUI
 var vehicleIdx = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,6 +18,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+func setUI(node):
+	vehicleUI = node
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -29,6 +33,7 @@ func _unhandled_input(event):
 		target = vehicles[vehicleIdx]
 		target.freeze = false
 		target.lock_rotation = false
+		vehicleUI.setVehicle(target)
 
 func _physics_process(delta):
 	if Input.is_key_pressed(KEY_1): current = true

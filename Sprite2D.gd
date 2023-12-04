@@ -4,13 +4,13 @@ extends TextureRect
 var steerWheels = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if vehicle:
-		for wheel in vehicle.wheels:
-			if wheel.steer:
-				steerWheels.append(wheel)
+	return
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	steerWheels.clear()
+	for wheel in vehicle.wheels:
+		if wheel.steer:
+			steerWheels.append(wheel)
 	position.x = get_viewport_rect().size.x*0.5
 	position.y = (get_viewport().get_mouse_position()).y
 	var avgFeedback = 0.0

@@ -1,38 +1,74 @@
 @icon("res://addons/k-vehicle/car-wheel.svg")
-extends Node3D
 
+
+extends Node3D
+## implements a vehicle wheel and its suspension.
+## 
+## must be a direct child of a [KVVehicle]. variables get updated in the [KVVehicle]'s _integrate_forces() method
 class_name KVWheel
 
-
-@export_category('Wheel and Tire')
+#@export_category('Wheel and Tire')
+## wheel radius can be calculated automatically from the mesh AABB if [b]getRadiusFromMeshAABB[/b] is enabled
 @export var radius = 0.27
+## wheel width, can be calculated automatically from the mesh AABB if [b]getRadiusFromMeshAABB[/b] is enabled
 @export var width = 0.17
-@export var momentOfInertia = 1.0
-## overwrites [b]radius[/b] from the computed mesh bounding box
-@export var getRadiusFromMeshAABB = false
-@export var tireResponses: Array[TireResponse]
-var tireResponseDictionary: Dictionary
-@export var fidgetFix = true
-@export var rpsDeltaThreshold = 1.0
 
-@export_category('Steering')
+## momentOfInertia is how diffcult an object is to rotate.
+## [br]the angular acceleration of the wheel is appliedTorque/momentOfInerta
+## [br]approximation for a solid cilinder: 0.5*wheelMass*radius^2
+## [br]because the tire forces are a feeback system, the moment of inertia influences the accuracy of the simulation,
+## increasing it can massively reduce engine and wheel oscilation
+## [br]for drifting cars it's good to stick to realistic values, otherwise
+## 1% of the vehicle mass seems to work well
+@export var momentOfInertia = 1.0
+
+## overwrites [b]radius[/b] and [b]width[/b] from the computed mesh bounding box
+@export var getDimensionsFromMeshAABB = false
+
+## [TireResponse] resources for surfaces, see [TireResponse] 
+@export var tireResponses: Array[TireResponse]
+
+## dictionary built from the [TireResponse]s array. idexed by their material
+var tireResponseDictionary: Dictionary
+
+#@export_category('Steering')
+
+## enables steering for this wheel. can be toggled at runtime
 @export var steer = false
 
 #@export var inverseSteering = false
-@export var maxSteerAngle = PI/3.0
-@export var useAckermanSteering = true
 
-@export_category('Suspension')
+## maximum steering angle, use negative value if you need to reverse steering, like for off-road vehicles that steer the rear wheels
+## [br] see [KVA
+@export var maxSteerAngle = PI/3.0
+
+#@export var useAckermanSteering = true
+
+## [url=https://en.wikipedia.org/wiki/Ackermann_steering_geometry]ackerman steering[/url] ratio, see [KVAckerman] to calculate automatically.
+@export var ackermanRatio = 1.0
+
+#@export_category('Suspension')
+
+## suspension stiffness: maximum force applied as a coeficient of vehicle mass*gravity/wheelCount
 @export var stiffness = 4.0
-@export_range(0.0,1.0) var compressionDamp = 0.5
+
+## damp when the suspension is compressing
+@export_range(0.0,1.0) var compressionDamp = 0.1
+
+## damp when the suspension is relaxing
 @export_range(0.0,1.0) var relaxationDamp = 0.9
 
 
-@export_category('Physics Tweaking')
+#@export_category('Physics Tweaking')
+
+## reduces wheel fidgeting/oscilating
+@export var fidgetFix = true
+## threshold for the fidget fix in radinas/second
+@export var rpsDeltaThreshold = 1.0
 
 ## additional fricion/grip coeficient multiplier to be used on the tires.
 ## can be used to modify a tire response under arbitrary circumstances without
-## the need to create additional TireResponse. Y component is not used.
+## the need to create additional [TireResponse]. Y component is not used.
 ## [br] x: sideways
 ## [br] z: longitudinal
 @export var gripMultiplier = Vector3.ONE
@@ -57,7 +93,6 @@ var debugString: String
 var vehicle: KVVehicle
 
 var ackermanSide = 1.0
-var ackermanRatio = 1.0
 var ackerman = 1.0
 var maxSteerAngleActual = 0.0
 
@@ -72,44 +107,62 @@ var maxExtension = 0.0
 var restRatio = 1.0
 
 var normalForceAtRest = 0.0
+
+## update every frame
 var suspensionForceMagnitude = 0.0
+## ratio of 1.0/totalWheels
 var wheelContribution = 0.25
+
+## vehicle mass/totalWheels
 var massPerWheel = 0.0
 
+## tire force feedback on the steering wheel
 var feedback = 0.0
 
 var globalGravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+## transform representing the tire contact patch position and orientation in global space
 var contactTransform
+
+## linearVelocity in local space
 var localVelocity = Vector3.ZERO
 
+## wheel angular velocity in radians per second
 var radsPerSec = 0.0
 
 var relativeZSpeed = 0.0
 
+## total break torque for a physics tick, gets applied after other torques and set to 0
 var breakTorque = 0.0
 
+## the wheel is powered by a drivetrain
 var powered = false
+
 
 var frictionTorque = 0.0
 var prevFrictionTorque = 0.0
 var appliedZFriction = 0.0
 
+## the name of the contact surface, taken by doing a get_meta('material') on the collider
 var surfaceMaterial: StringName = 'tarmac'
 
 var normalizedCompression = 0.0
 
+## force applied by the suspension, updated every tick
 var suspensionForce = Vector3.ZERO
 
+## relative velocity of the contact patch to the ground in the contact patch local space(contactTransform)
 var contactRelativeVelocity = Vector3.ZERO
 
+## current [TireResponse]
 var tireResponse: TireResponse
 
+## the angularVelocity(radians/second) this wheel should have if were rolling without longitudinal slip
 var targetRPS = 0.0
+
 
 var traveled = 0.0
 var maxTraveled = 8.0
-
 
 var xFrictionAccumulated = 0.0
 var zFrictionAccumulated = 0.0
@@ -117,6 +170,8 @@ var frictionColor = Color.RED
 var substepZFriction = 0.0
 
 var wheelVisualPositionYOffset = 0.0
+
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVVehicle):
@@ -137,7 +192,7 @@ func _enter_tree():
 	$RayCast3D.add_exception(vehicle)
 	$shapecastPivot/ShapeCast3D.add_exception(vehicle)
 	
-	if getRadiusFromMeshAABB:
+	if getDimensionsFromMeshAABB:
 		var aabb = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb()
 		radius = aabb.size.y*0.5
 		width = aabb.size.x
@@ -264,7 +319,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		var bumpHeight = tireResponse.sampleBumpHeight(traveled/maxTraveled)
 		var bumpNormal = tireResponse.sampleBumpNormal(traveled/maxTraveled)
 		var newNormal = bumpNormal*preContactTransform.basis.inverse()
-		
+		bumpHeight = 0.0
 		globalCollisionPoint += lerp( bumpHeight, 0.0, tireResponse.bumpVisualBias )*collisionNormal
 		collisionNormal = collisionNormal.slerp(newNormal, 1.0-tireResponse.bumpVisualBias)
 		#wheelVisualPositionYOffset = bumpStrength*tireResponse.bumpVisualBias

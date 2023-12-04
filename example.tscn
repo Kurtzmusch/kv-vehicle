@@ -418,14 +418,15 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 
 [node name="FR" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
-getRadiusFromMeshAABB = true
+radius = 0.5
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
-rpsDeltaThreshold = 0.1
 steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
+rpsDeltaThreshold = 0.1
 
 [node name="shapecastPivot" parent="world/kvehicle/FR" index="1"]
 transform = Transform3D(0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0, 0, 1, 0, 0, 0)
@@ -440,6 +441,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_8u1g1")
 surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 
 [node name="contactTransform" parent="world/kvehicle/FR" index="3"]
+visible = true
 mesh = SubResource("ImmediateMesh_weifp")
 
 [node name="tarmac" parent="world/kvehicle/FR/Particles" index="0" instance=ExtResource("10_navyo")]
@@ -448,17 +450,15 @@ mesh = SubResource("ImmediateMesh_weifp")
 
 [node name="FL" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
-getRadiusFromMeshAABB = true
+radius = 0.5
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
-rpsDeltaThreshold = 0.1
 steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
-
-[node name="RayCast3D" parent="world/kvehicle/FL" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.7, 0)
+rpsDeltaThreshold = 0.1
 
 [node name="shapecastPivot" parent="world/kvehicle/FL" index="1"]
 transform = Transform3D(0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0, 0, 1, 0, 0, 0)
@@ -482,13 +482,14 @@ mesh = SubResource("ImmediateMesh_8tqy8")
 
 [node name="RR" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
-getRadiusFromMeshAABB = true
+radius = 0.5
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
-rpsDeltaThreshold = 0.1
 maxSteerAngle = 0.0
 stiffness = 3.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
+rpsDeltaThreshold = 0.1
 
 [node name="shapecastPivot" parent="world/kvehicle/RR" index="1"]
 transform = Transform3D(0.999848, -0.0174524, 0, 0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
@@ -503,6 +504,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_8u1g1")
 surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 
 [node name="contactTransform" parent="world/kvehicle/RR" index="3"]
+visible = true
 mesh = SubResource("ImmediateMesh_s2ldo")
 
 [node name="tarmac" parent="world/kvehicle/RR/Particles" index="0" instance=ExtResource("10_navyo")]
@@ -511,13 +513,14 @@ mesh = SubResource("ImmediateMesh_s2ldo")
 
 [node name="RL" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
-getRadiusFromMeshAABB = true
+radius = 0.5
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
-rpsDeltaThreshold = 0.1
 maxSteerAngle = 0.0
 stiffness = 3.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
+rpsDeltaThreshold = 0.1
 
 [node name="shapecastPivot" parent="world/kvehicle/RL" index="1"]
 transform = Transform3D(0.999848, 0.0174524, 0, -0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
@@ -533,6 +536,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_8u1g1")
 surface_material_override/1 = SubResource("StandardMaterial3D_fbd4v")
 
 [node name="contactTransform" parent="world/kvehicle/RL" index="3"]
+visible = true
 mesh = SubResource("ImmediateMesh_oshuu")
 
 [node name="tarmac" parent="world/kvehicle/RL/Particles" index="0" instance=ExtResource("10_navyo")]
@@ -564,7 +568,7 @@ upper_fade = 1e-05
 lower_fade = 7.32422e-05
 
 [node name="sideCamera" type="Camera3D" parent="world/kvehicle"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4, 0.580353, -1.74846e-07)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.3359, 0.0191476, 0.945084)
 script = ExtResource("15_w3hgf")
 
 [node name="handbreak" parent="world/kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("12_d82ic")]
@@ -631,6 +635,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("29_7vj0l")
+unit = "kmh"
 
 [node name="bar" type="ProgressBar" parent="UI"]
 layout_mode = 1

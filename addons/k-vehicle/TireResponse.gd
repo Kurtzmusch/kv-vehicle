@@ -1,11 +1,17 @@
 extends Resource
 
+## defines a tire response to be used by a vehicle wheel
+## handles friction and audio responses for when a wheel is in contact with a material
 class_name TireResponse
 
+## the name of the material.
+## the response is used when a [CollisionObject3D]s 'material' meta matches the materialName
 @export var materialName: String
 
 @export_category('Friction')
+## coeficient of friction for this material
 @export var gripMultiplier: float
+
 @export var gripXCurve: Curve
 @export var slipAngleBegin: float
 @export var slipAngleEnd: float
@@ -16,6 +22,7 @@ class_name TireResponse
 @export var feedbackCurve: Curve
 
 @export_category('Audio')
+## [AudioStream] to be used when the tire is slipping
 @export var slippingStream: AudioStream
 @export var slipAudioMinimumVelocity = 30.0/3.6
 @export var slipAudioMinimumPitch = 1.0
@@ -24,6 +31,7 @@ class_name TireResponse
 
 ## slipping volume transition in seconds
 @export var audioVolumeEase = 0.5
+## [AudioStream] to be used when the tire is rolling
 @export var rollingStream: AudioStream
 
 @export var bumpHeight = 0.0

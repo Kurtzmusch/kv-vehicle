@@ -1,4 +1,6 @@
 extends Node
+## computes and updates the ackermanRatio of [KVWheel]s
+class_name KVAckerman
 
 @export var steeringPair: Array[KVWheel]
 @export var staticPair: Array[KVWheel]

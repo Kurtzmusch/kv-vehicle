@@ -84,7 +84,6 @@ maxSteerAngle = 0.785
 compressionDamp = 0.1
 relaxationDamp = 0.95
 useShapecastForPhysics = true
-normalDirectionLimit = 0.0
 
 [node name="shapecastPivot" parent="FR" index="1"]
 transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
@@ -114,7 +113,6 @@ maxSteerAngle = 0.785
 compressionDamp = 0.1
 relaxationDamp = 0.95
 useShapecastForPhysics = true
-normalDirectionLimit = 0.0
 
 [node name="shapecastPivot" parent="FL" index="1"]
 transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
@@ -143,7 +141,6 @@ maxSteerAngle = -0.785
 compressionDamp = 0.1
 relaxationDamp = 0.95
 useShapecastForPhysics = true
-normalDirectionLimit = 0.0
 
 [node name="shapecastPivot" parent="RR" index="1"]
 transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
@@ -171,7 +168,6 @@ maxSteerAngle = -0.785
 compressionDamp = 0.1
 relaxationDamp = 0.95
 useShapecastForPhysics = true
-normalDirectionLimit = 0.0
 
 [node name="shapecastPivot" parent="RL" index="1"]
 transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)

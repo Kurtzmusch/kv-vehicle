@@ -29,12 +29,23 @@ var tireResponseDictionary: Dictionary
 
 
 @export_category('Physics Tweaking')
+
+## additional fricion/grip coeficient multiplier to be used on the tires.
+## can be used to modify a tire response under arbitrary circumstances without
+## the need to create additional TireResponse. Y component is not used.
+## [br] x: sideways
+## [br] z: longitudinal
+@export var gripMultiplier = Vector3.ONE
+
 ## if true, use shapecast collision data for physics.[br]
 ## shapcasting is currently broken in godot
 @export var useShapecastForPhysics = false
 
-## usefull for smoothing sidewalk physics response
-@export var normalDirectionLimit = 0.6
+## usefull for smoothing abrubt changes in normal collision, for example, going up a sidewalk.
+## [br]
+## 0.0: no bias [br]
+## 1.0: collision normal always points to suspension local UP
+@export_range(0.0, 1.0) var normalDirectionBias = 0.0
 
 ## When false, the suspension can apply a force 'downwards'.
 ## This is unrealistic and can cause the vehicle to 'stick' more to the terrain
@@ -197,9 +208,12 @@ func updateCasts(state, delta, oneByDelta, contribution):
 			collisionNormal = $shapecastPivot/ShapeCast3D.get_collision_normal(0)
 			globalCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
 	
+	
+	"""
 	if collisionNormal.dot(global_transform.basis.y) < normalDirectionLimit:
 		collisionNormal = collisionNormal.slerp(global_transform.basis.y, 0.9)
-	
+	"""
+	collisionNormal = collisionNormal.slerp(global_transform.basis.y, normalDirectionBias)
 	#var collider = $RayCast3D.get_collider()
 	
 	
@@ -282,9 +296,9 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	feedback = coeficients.y
 	
-	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
-	var zFriction = min(abs(necessaryZFriction), coeficients.z*suspensionForceMagnitude)
-	zFriction = coeficients.z*suspensionForceMagnitude
+	var xFriction = min(abs(necessaryXFriction), coeficients.x*gripMultiplier.x*suspensionForceMagnitude)
+	var zFriction = min(abs(necessaryZFriction), coeficients.z*gripMultiplier.z*suspensionForceMagnitude)
+	#zFriction = coeficients.z*gripMultiplier.x*suspensionForceMagnitude
 	#xFriction = coeficients.x*suspensionForceMagnitude
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)

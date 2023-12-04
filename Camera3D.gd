@@ -12,6 +12,8 @@ func _process(delta):
 	if Input.is_key_pressed(KEY_2):
 		current = true
 	var direction = vehicle.linear_velocity.normalized().slerp(-vehicle.global_transform.basis.z, 0.125)
+	if vehicle.linear_velocity.length() < 0.1:
+		direction = -vehicle.global_transform.basis.z
 	var bas = global_transform.basis
 	look_at( global_position + direction )
 	global_transform.basis = bas.slerp(global_transform.basis, 0.125)

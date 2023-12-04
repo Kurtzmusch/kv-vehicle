@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=52 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://example.gd" id="1_53f3a"]
 [ext_resource type="Script" path="res://worldShifter.gd" id="1_aekg0"]
@@ -31,6 +31,7 @@
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
 [ext_resource type="PackedScene" uid="uid://foegnmr6avup" path="res://vehicles/big-foot.tscn" id="28_ctkhe"]
 [ext_resource type="Script" path="res://vehicle-ui.gd" id="29_7vj0l"]
+[ext_resource type="Script" path="res://ControlsUI.gd" id="32_pf806"]
 
 [sub_resource type="Environment" id="Environment_b44jp"]
 
@@ -680,6 +681,177 @@ offset_right = 245.0
 offset_bottom = 164.0
 text = "tt
 "
+
+[node name="ControlsUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("32_pf806")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ControlsUI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="ControlsUI/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+text = "show/hide controls"
+
+[node name="PanelContainer" type="PanelContainer" parent="ControlsUI/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ControlsUI/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "action"
+
+[node name="HSeparator" type="HSeparator" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "gas"
+
+[node name="Label3" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "break"
+
+[node name="Label4" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "handbreak"
+
+[node name="Label5" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "clutch"
+
+[node name="Label6" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "shift up"
+
+[node name="Label7" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "shift down"
+
+[node name="Label8" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "steering"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "keyboard"
+
+[node name="HSeparator" type="HSeparator" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "w"
+
+[node name="Label3" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "s"
+
+[node name="Label4" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "space"
+
+[node name="Label5" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "alt"
+
+[node name="Label6" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "shift"
+
+[node name="Label7" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "ctrl"
+
+[node name="Label8" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "a, d / mouse"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "gpad"
+
+[node name="HSeparator" type="HSeparator" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "RT
+"
+
+[node name="Label3" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "LT"
+
+[node name="Label4" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "RAction"
+
+[node name="Label5" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "BAction"
+
+[node name="Label6" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "RShoulder"
+
+[node name="Label7" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "BShoulder"
+
+[node name="Label8" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "LStick"
+
+[node name="HSeparator" type="HSeparator" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="VBoxContainer" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Enable GPad: R3/L3"
+
+[node name="Label5" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "toggle mouse steering:  m"
+
+[node name="Label2" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "change vehicle: tab"
+
+[node name="Label3" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "orbit camera: LMouse Drag"
+
+[node name="Label4" type="Label" parent="ControlsUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "change camera: 1-3"
+
+[connection signal="toggled" from="ControlsUI/VBoxContainer/Button" to="ControlsUI" method="_on_button_toggled"]
 
 [editable path="world/kvehicle/FR"]
 [editable path="world/kvehicle/FL"]

@@ -39,7 +39,7 @@ func steerMouse(delta):
 
 func steerKeyboard(delta):
 	vehicle.normalizedSteering += Input.get_axis('steer-', 'steer+')*delta*steeringSensitivity#*inverseSpeed
-	vehicle.normalizedSteering += Input.get_axis('throtle-increase', 'throtle-decrease')*delta*steeringSensitivity*3.0
+	#vehicle.normalizedSteering += Input.get_axis('throtle-increase', 'throtle-decrease')*delta*steeringSensitivity*3.0
 	vehicle.normalizedSteering = move_toward(vehicle.normalizedSteering, 0.0, delta*steeringDecay)#*inverseSpeed)
 	vehicle.normalizedSteering = clamp(vehicle.normalizedSteering, -1.0, 1.0)
 	
@@ -58,7 +58,11 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_pressed('enable-gpad'):
 		steeringFunction = steeringMethod.Gpad
-
+	if Input.is_action_just_pressed('toggle-mouse-steering'):
+		if steeringMethod == steeringMethods.Keyboard:
+			steeringMethod = steeringMethods.Mouse
+		if steeringMethod == steeringMethods.Mouse:
+			steeringMethod = steeringMethods.Keyboard
 func _physics_process(delta):
 	handleInput(delta)
 

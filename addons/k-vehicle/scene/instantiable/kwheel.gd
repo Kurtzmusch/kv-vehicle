@@ -5,7 +5,8 @@ class_name KVWheel
 
 
 @export_category('Wheel and Tire')
-@export var radius = 0.2
+@export var radius = 0.27
+@export var width = 0.17
 @export var momentOfInertia = 1.0
 ## overwrites [b]radius[/b] from the computed mesh bounding box
 @export var getRadiusFromMeshAABB = false
@@ -128,9 +129,16 @@ func _enter_tree():
 	if getRadiusFromMeshAABB:
 		var aabb = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb()
 		radius = aabb.size.y*0.5
-		$shapecastPivot/ShapeCast3D.shape.radius = radius
-		$shapecastPivot/ShapeCast3D.shape.height = aabb.size.x
+		width = aabb.size.x
 	
+	createShapecastShape()
+
+func createShapecastShape():
+	var shape = CylinderShape3D.new()
+	shape.radius = radius
+	shape.height = width
+	$shapecastPivot/ShapeCast3D.shape = shape
+
 func updateAckerman(newRatio):
 	ackermanRatio = newRatio
 	updateMaxSteering()

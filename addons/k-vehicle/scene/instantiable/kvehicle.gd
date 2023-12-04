@@ -51,6 +51,7 @@ var debugString: String
 
 func _ready():
 	
+	#TODO maybe use same shape resource as shapecaster
 	if createWheelMinimumColliders:
 		for wheel in wheels:
 			var collisionShape = CollisionShape3D.new()

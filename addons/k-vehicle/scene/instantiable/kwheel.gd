@@ -95,7 +95,7 @@ var tireResponse: TireResponse
 var targetRPS = 0.0
 
 var traveled = 0.0
-var maxTraveled = 32.0
+var maxTraveled = 8.0
 
 
 var xFrictionAccumulated = 0.0
@@ -205,24 +205,38 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	traveled+=globalVelocity.length()*delta
 	traveled = fmod(traveled , maxTraveled)
 	if grounded:
+		var preContactTransform = Transform3D()
+		preContactTransform.basis.y = collisionNormal
+		#var basisZ = collisionNormal.cross($wheelSteerPivot.global_transform.basis.x).normalized()
+		var preContactTransformBasisZ = $wheelSteerPivot.global_transform.basis.x.cross(collisionNormal).normalized()
+		var preContactTransformBasisX = collisionNormal.cross(preContactTransformBasisZ)
+		preContactTransform.basis.z = preContactTransformBasisZ
+		preContactTransform.basis.x = preContactTransformBasisX
+		preContactTransform.origin = globalCollisionPoint
 		
 		surfaceMaterial = StringName('tarmac')
 		if collider.has_meta('material'):
 			var surfaceMaterialString = collider.get_meta('material')
 			surfaceMaterial = surfaceMaterialString
 		tireResponse = tireResponseDictionary[surfaceMaterial] 
-		var bumpStrength = tireResponse.sampleBumpNoise(traveled/maxTraveled)
-		globalCollisionPoint += collisionNormal*bumpStrength*(1.0-tireResponse.bumpVisualBias)
-		wheelVisualPositionYOffset = bumpStrength*tireResponse.bumpVisualBias
-		debugString = str( snapped( bumpStrength, 0.01) )
+		var bumpHeight = tireResponse.sampleBumpHeight(traveled/maxTraveled)
+		var bumpNormal = tireResponse.sampleBumpNormal(traveled/maxTraveled)
+		var newNormal = bumpNormal*preContactTransform.basis
+		
+		globalCollisionPoint += lerp( bumpHeight, 0.0, tireResponse.bumpVisualBias )*collisionNormal
+		collisionNormal = collisionNormal.slerp(newNormal, 1.0-tireResponse.bumpVisualBias)
+		#wheelVisualPositionYOffset = bumpStrength*tireResponse.bumpVisualBias
+		wheelVisualPositionYOffset = bumpHeight
+		#debugString = str( snapped( bumpStrength, 0.01) )
 		contactTransform = Transform3D()
-		contactTransform.origin = globalCollisionPoint
+		
 		contactTransform.basis.y = collisionNormal
 		#var basisZ = collisionNormal.cross($wheelSteerPivot.global_transform.basis.x).normalized()
 		var basisZ = $wheelSteerPivot.global_transform.basis.x.cross(collisionNormal).normalized()
 		var basisX = collisionNormal.cross(basisZ)
 		contactTransform.basis.z = basisZ
 		contactTransform.basis.x = basisX
+		contactTransform.origin = globalCollisionPoint
 		
 		localVelocity = contactTransform.basis.inverse() * globalVelocity
 		targetRPS = localVelocity.z/radius

@@ -27,23 +27,42 @@ class_name TireResponse
 @export var rollingStream: AudioStream
 
 @export var bumpHeight = 0.0
-@export var bumpNoise: NoiseTexture2D
+@export var bumpNoiseHeight: NoiseTexture2D
+@export var bumpNoiseNormal: NoiseTexture2D
 @export var bumpVisualBias = 0.0
-var bumpNoiseImageValues: PackedFloat32Array
+var bumpNoiseHeightValues: PackedFloat32Array
+var bumpNoiseNormalValues: PackedColorArray
 
+func sampleBumpNormal(normalizedTraveled):
+	if !bumpNoiseNormal: return Vector3.UP
+	if !bumpNoiseNormalValues:
+		var bumpNoiseNormalImage = bumpNoiseNormal.get_image()
+		if bumpNoiseNormalImage:
+			for i in range(bumpNoiseNormal.width):
+				var color = bumpNoiseNormalImage.get_pixel(i, 0)
+				bumpNoiseNormalValues.append( color )
+		return Vector3.UP
+	
+	var sampleIdx = int(normalizedTraveled*bumpNoiseNormalValues.size())
+	var color = bumpNoiseNormalValues[sampleIdx]
+	var normal = Vector3( (2.0*color.r)-1.0,\
+	(2.0*color.b)-1.0,\
+	(2.0*color.g)-1.0 )
+	return normal
 
-func sampleBumpNoise(normalizedTraveled):
-	if !bumpNoise: return 0.0
-	if !bumpNoiseImageValues:
-		print('no bump value yet')
-		var bumpNoiseImage = bumpNoise.get_image()
+func sampleBumpHeight(normalizedTraveled):
+	if !bumpNoiseHeight: return 0.0
+	if !bumpNoiseHeightValues:
+		var bumpNoiseImage = bumpNoiseHeight.get_image()
 		if bumpNoiseImage:
-			for i in range(bumpNoise.width):
+			for i in range(bumpNoiseHeight.width):
 				var color = bumpNoiseImage.get_pixel(i, 0)
-				bumpNoiseImageValues.append( (color.r-0.5)*2.0 )
+				bumpNoiseHeightValues.append( (color.r-0.5)*2.0 )
 		return 0.0
 	
-	return bumpNoiseImageValues[int(normalizedTraveled*bumpNoiseImageValues.size())]*bumpHeight
+	var sampleIdx = int(normalizedTraveled*bumpNoiseHeightValues.size())
+	
+	return bumpNoiseHeightValues[sampleIdx]*bumpHeight
 
 func handleAudio(delta, rollingPlayer: AudioStreamPlayer3D, slippingPlayer: AudioStreamPlayer3D, localVelocity, radsPerSec, radius):
 	var relativeVelocity = getVelocity(localVelocity, radsPerSec, radius)

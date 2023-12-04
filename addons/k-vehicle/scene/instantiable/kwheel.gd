@@ -221,7 +221,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		tireResponse = tireResponseDictionary[surfaceMaterial] 
 		var bumpHeight = tireResponse.sampleBumpHeight(traveled/maxTraveled)
 		var bumpNormal = tireResponse.sampleBumpNormal(traveled/maxTraveled)
-		var newNormal = bumpNormal*preContactTransform.basis
+		var newNormal = bumpNormal*preContactTransform.basis.inverse()
 		
 		globalCollisionPoint += lerp( bumpHeight, 0.0, tireResponse.bumpVisualBias )*collisionNormal
 		collisionNormal = collisionNormal.slerp(newNormal, 1.0-tireResponse.bumpVisualBias)

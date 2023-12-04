@@ -20,6 +20,7 @@ fractal_lacunarity = 3.305
 generate_mipmaps = false
 seamless = true
 as_normal_map = true
+bump_strength = 4.0
 noise = SubResource("FastNoiseLite_hc8kl")
 
 [sub_resource type="Curve" id="Curve_oooal"]

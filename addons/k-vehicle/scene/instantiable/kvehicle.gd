@@ -79,7 +79,8 @@ func _integrate_forces(state):
 	localLinearVelocity = state.linear_velocity*global_transform.basis
 	localAngularVelocity = state.angular_velocity*global_transform.basis
 	debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )
-	inertia = state.inverse_inertia.inverse()
+	if inertia.is_equal_approx(Vector3.ZERO):
+		inertia = state.inverse_inertia.inverse()
 	var contribution = 1.0/wheels.size()
 	var delta = state.step
 	var oneByDelta = 1.0/delta

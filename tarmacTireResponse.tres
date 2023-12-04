@@ -37,3 +37,4 @@ slipAudioMaximumVelocity = 100.0
 slipAudioMaximumPitch = 1.0
 audioVolumeEase = 0.25
 bumpHeight = 0.0
+bumpVisualBias = 0.0

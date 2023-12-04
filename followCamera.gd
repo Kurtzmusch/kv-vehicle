@@ -6,6 +6,9 @@ extends Camera3D
 @export var target: Node
 @export var orbitSpeed = Vector3.ONE*1.0/1024.0
 
+@export var vehicles: Array[Node]
+
+var vehicleIdx = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -19,6 +22,13 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			translate_object_local(Vector3(-event.velocity.x, event.velocity.y, 0.0)*orbitSpeed*0.001)
+	if event.is_action_pressed('swap-vehicle'):
+		vehicleIdx += 1
+		vehicleIdx %= vehicles.size()
+		target.freeze = true
+		target = vehicles[vehicleIdx]
+		target.freeze = false
+		target.lock_rotation = false
 
 func _physics_process(delta):
 	if Input.is_key_pressed(KEY_1): current = true

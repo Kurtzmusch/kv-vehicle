@@ -44,6 +44,8 @@ var globalGravity: float = ProjectSettings.get_setting("physics/3d/default_gravi
 ## linear velocity in meter/second in local space
 var localLinearVelocity = Vector3.ZERO
 
+var localAngularVelocity = Vector3.ZERO
+
 ## will be read by a 3DLabel every frame. can be set to anything to help with debugging
 var debugString: String
 
@@ -53,7 +55,7 @@ func _ready():
 		for wheel in wheels:
 			var collisionShape = CollisionShape3D.new()
 			var shape = CylinderShape3D.new()
-			shape.radius = wheel.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.y*0.5-0.001
+			shape.radius = wheel.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.y*0.5+0.05
 			shape.height = wheel.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.x
 			collisionShape.shape = shape
 			#FIXME wheel.position assumes wheel is a direct child
@@ -74,7 +76,8 @@ func _physics_process(delta):
 func _integrate_forces(state):
 	# state.transform.origin == global_position
 	# state.center_of_mass == center_of_mass
-	var localLinearVelocity = state.linear_velocity*global_transform.basis
+	localLinearVelocity = state.linear_velocity*global_transform.basis
+	localAngularVelocity = state.angular_velocity*global_transform.basis
 	debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )
 	inertia = state.inverse_inertia.inverse()
 	var contribution = 1.0/wheels.size()
@@ -148,7 +151,7 @@ func acceleratePitch(delta, oneByDelta, acceleration):
 func applyPitchTorque(torqueMagnitude):
 	apply_torque(global_transform.basis.x*torqueMagnitude)
 
-func accelerateRoll(delta, oneByDelta, acceleration):
+func accelerateRoll(acceleration):
 	applyRollTorque(acceleration*inertia.z)
 
 func applyRollTorque(torqueMagnitude):

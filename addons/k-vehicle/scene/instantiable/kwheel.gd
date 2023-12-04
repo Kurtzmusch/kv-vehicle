@@ -148,7 +148,7 @@ func _ready():
 	massPerWheel = wheelContribution*vehicle.mass
 	normalForceAtRest = vehicle.mass*vehicle.gravity_scale*globalGravity*wheelContribution
 	$RayCast3D.target_position.y = -maxExtension-radius
-	$shapecastPivot/ShapeCast3D.target_position.z = -maxExtension
+	#$shapecastPivot/ShapeCast3D.target_position.z = -maxExtension
 	$shapecastPivot/ShapeCast3D.add_exception(get_parent())
 
 func updateMaxSteering():
@@ -169,7 +169,7 @@ func _physics_process(delta):
 		if is_equal_approx( sign(vehicle.normalizedSteering), ackermanSide):
 			steerAngleActual = ackermanActual*maxSteerAngle
 		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual*_steerInverse
-	$shapecastPivot/ShapeCast3D.target_position = (Vector3.DOWN*abs(maxExtension+radius))*$shapecastPivot/ShapeCast3D.global_transform.basis
+	$shapecastPivot/ShapeCast3D.target_position = (Vector3.DOWN*abs(maxExtension))*$shapecastPivot/ShapeCast3D.global_transform.basis
 
 func updateCasts(state, delta, oneByDelta, contribution):
 	contactTransform = null
@@ -188,7 +188,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 			globalCollisionPoint = $RayCast3D.get_collision_point()
 			collisionNormal = $RayCast3D.get_collision_normal()
 	else:
-		$shapecastPivot/ShapeCast3D.force_shapecast_update()
+		#$shapecastPivot/ShapeCast3D.force_shapecast_update()
 		grounded = $shapecastPivot/ShapeCast3D.is_colliding()
 		if grounded:
 			collider = $shapecastPivot/ShapeCast3D.get_collider(0)
@@ -269,7 +269,7 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*suspensionForceMagnitude)
 	var zFriction = min(abs(necessaryZFriction), coeficients.z*suspensionForceMagnitude)
 	zFriction = coeficients.z*suspensionForceMagnitude
-	
+	#xFriction = coeficients.x*suspensionForceMagnitude
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
 	frictionColor = Color.RED
@@ -345,8 +345,14 @@ func applyTorque(torque, delta):
 
 func applySuspensionForce(state, delta, oneByDelta, contribution):
 	if !grounded: return
-	
-	var wheelPivotPositionY = to_local(contactTransform.origin).y+radius
+	var fsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_safe_fraction()
+	var funsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_unsafe_fraction()
+	var fraction = (fsafe+funsafe)*0.5
+	var wheelPivotPositionY
+	if useShapecastForPhysics:
+		wheelPivotPositionY = -fraction*maxExtension#-radius
+	else:
+		wheelPivotPositionY = to_local(contactTransform.origin).y+radius
 	wheelPivotPositionY = min(wheelPivotPositionY, 0.0)
 	normalizedCompression = 1.0-abs(wheelPivotPositionY)/maxExtension
 	var compression = remap(normalizedCompression,\

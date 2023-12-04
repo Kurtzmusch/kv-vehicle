@@ -28,7 +28,6 @@ enabled = false
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="shapecastPivot"]
 transform = Transform3D(-2.79397e-08, -1, -1.49012e-08, 1, -2.04891e-08, 0, 7.45058e-09, 0, 1, 0, 0, 0)
-enabled = false
 shape = SubResource("CylinderShape3D_5vg7i")
 target_position = Vector3(-1, 0, 0)
 

@@ -55,6 +55,7 @@ _data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0
 point_count = 4
 
 [node name="kvehicle" instance=ExtResource("1_eaoch")]
+can_sleep = false
 substeps = 4
 
 [node name="debugVectors" parent="." index="0"]
@@ -62,6 +63,7 @@ mesh = SubResource("ImmediateMesh_w6lhn")
 
 [node name="chassi" type="MeshInstance3D" parent="." index="2"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+layers = 129
 mesh = ExtResource("3_x8x3b")
 surface_material_override/0 = SubResource("StandardMaterial3D_x8gk2")
 surface_material_override/1 = SubResource("StandardMaterial3D_eir23")
@@ -78,17 +80,16 @@ tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtRe
 rpsDeltaThreshold = 0.1
 steer = true
 maxSteerAngle = 0.785
-stiffness = 6.0
-compressionDamp = 0.2
-relaxationDamp = 0.8
+compressionDamp = 0.1
+relaxationDamp = 0.95
 useShapecastForPhysics = true
 normalDirectionLimit = 0.8
 
 [node name="shapecastPivot" parent="FR" index="1"]
-transform = Transform3D(0.999848, -0.0174524, 0, 0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="FR" index="2"]
-transform = Transform3D(0.999848, -0.0174524, 0, 0.0174524, 0.999848, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -109,16 +110,15 @@ tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtRe
 rpsDeltaThreshold = 0.1
 steer = true
 maxSteerAngle = 0.785
-stiffness = 6.0
-compressionDamp = 0.2
-relaxationDamp = 0.8
+compressionDamp = 0.1
+relaxationDamp = 0.95
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="FL" index="1"]
-transform = Transform3D(0.999848, 0.0174524, 0, -0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="FL" index="2"]
-transform = Transform3D(0.999848, 0.0174524, 0, -0.0174524, 0.999848, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -139,16 +139,15 @@ tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtRe
 rpsDeltaThreshold = 0.1
 inverseSteering = true
 maxSteerAngle = 0.785
-stiffness = 6.0
-compressionDamp = 0.2
-relaxationDamp = 0.8
+compressionDamp = 0.1
+relaxationDamp = 0.95
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="RR" index="1"]
-transform = Transform3D(0.999848, -0.0174524, 0, 0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="RR" index="2"]
-transform = Transform3D(0.999848, -0.0174524, 0, 0.0174524, 0.999848, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -168,16 +167,15 @@ tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtRe
 rpsDeltaThreshold = 0.1
 inverseSteering = true
 maxSteerAngle = 0.785
-stiffness = 6.0
-compressionDamp = 0.2
-relaxationDamp = 0.8
+compressionDamp = 0.1
+relaxationDamp = 0.95
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="RL" index="1"]
-transform = Transform3D(0.999848, 0.0174524, 0, -0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="RL" index="2"]
-transform = Transform3D(0.999848, 0.0174524, 0, -0.0174524, 0.999848, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -209,6 +207,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.341436, 0)
 
 [node name="Decal" type="Decal" parent="." index="11"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.26241, -1.33013)
+layers = 128
 size = Vector3(1.082, 1.082, 1.082)
 texture_albedo = ExtResource("10_6yeyn")
 modulate = Color(1, 0.121569, 0.133333, 1)
@@ -217,6 +216,7 @@ lower_fade = 4.20666e-05
 
 [node name="Decal2" type="Decal" parent="." index="12"]
 transform = Transform3D(-1, 0, -8.74228e-08, 8.74228e-08, -4.37114e-08, -1, -3.82137e-15, -1, 4.37114e-08, 0, 0.26241, 1.81877)
+layers = 128
 size = Vector3(0.9, 0.9, 0.9)
 texture_albedo = ExtResource("10_6yeyn")
 modulate = Color(1, 0.121569, 0.133333, 1)

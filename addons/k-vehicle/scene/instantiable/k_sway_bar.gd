@@ -23,4 +23,4 @@ func _process(delta):
 func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	var compressionDelta = w1.normalizedCompression-w2.normalizedCompression
 	compressionDelta = pow( abs(compressionDelta), exponent ) * sign(compressionDelta)
-	vehicle.accelerateRoll(delta, oneByDelta, compressionDelta*stiffness)
+	vehicle.accelerateRoll(compressionDelta*stiffness)

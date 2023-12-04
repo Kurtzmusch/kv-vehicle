@@ -424,7 +424,6 @@ maxSteerAngle = 0.785
 stiffness = 3.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
-normalDirectionLimit = 0.8
 
 [node name="shapecastPivot" parent="world/kvehicle/FR" index="1"]
 transform = Transform3D(0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0, 0, 1, 0, 0, 0)
@@ -537,7 +536,6 @@ mesh = SubResource("ImmediateMesh_oshuu")
 
 [node name="kInputHandler" parent="world/kvehicle" node_paths=PackedStringArray("transmission") instance=ExtResource("7_hv87p")]
 transmission = NodePath("../drivetrain")
-steeringFunctionIndex = 0
 
 [node name="LabelSpeed" type="Label" parent="world/kvehicle"]
 offset_left = 205.0

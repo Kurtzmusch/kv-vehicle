@@ -192,7 +192,6 @@ mesh = SubResource("ImmediateMesh_l63an")
 
 [node name="kInputHandler" parent="." index="8" node_paths=PackedStringArray("transmission") instance=ExtResource("7_de01d")]
 transmission = NodePath("../drivetrain")
-steeringFunctionIndex = 0
 
 [node name="LabelSpeed" type="Label" parent="." index="9"]
 offset_left = 205.0

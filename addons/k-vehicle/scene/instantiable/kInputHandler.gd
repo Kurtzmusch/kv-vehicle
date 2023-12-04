@@ -13,11 +13,12 @@ extends Node
 @export var skiddingCounterSteer = 1.0
 @export var antiDrift = 1.0
 @export var inverseSpeedScale = 0.04
-
-## 0: mouse
-## 1: keyboard
-## 2: gpad
-@export var steeringFunctionIndex = 1
+enum steeringMethods {
+	Mouse,
+	Keyboard,
+	Gpad
+}
+@export var steeringMethod = steeringMethods.Mouse
 
 var steeringFunctions = [
 	steerMouse,
@@ -40,7 +41,8 @@ func steerKeyboard(delta):
 	vehicle.normalizedSteering += Input.get_axis('steer-', 'steer+')*delta*steeringSensitivity#*inverseSpeed
 	vehicle.normalizedSteering += Input.get_axis('throtle-increase', 'throtle-decrease')*delta*steeringSensitivity*3.0
 	vehicle.normalizedSteering = move_toward(vehicle.normalizedSteering, 0.0, delta*steeringDecay)#*inverseSpeed)
-
+	vehicle.normalizedSteering = clamp(vehicle.normalizedSteering, -1.0, 1.0)
+	
 func steerGpad(delta):
 	var steeringInput = Input.get_axis('steer-', 'steer+')
 	steeringInput = sign(steeringInput) * pow(abs(steeringInput), gPadSteerNonLinearity)
@@ -55,14 +57,14 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_just_pressed('enable-gpad'):
-		steeringFunctionIndex = 2
+		steeringFunction = steeringMethod.Gpad
 
 func _physics_process(delta):
 	handleInput(delta)
 
 func handleInput(delta):
 	if vehicle.freeze: return
-	steeringFunction = steeringFunctions[steeringFunctionIndex]
+	steeringFunction = steeringFunctions[steeringMethod]
 	if transmission:
 		if sign( transmission.getGearRatio() ) >= 0:
 			vehicle.accelerationInput = Input.get_action_strength('acceleration+')
@@ -75,6 +77,7 @@ func handleInput(delta):
 	if steeringFunction == steerGpad:
 		vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 		vehicle.break2Input = Input.get_action_strength('acceleration-')
+	
 	vehicle.breaking = (Input.get_action_strength("handbreak") > 0.9) or (vehicle.break2Input > 0.9)
 	
 	steeringFunction.call(delta)

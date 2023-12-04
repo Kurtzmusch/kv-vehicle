@@ -58,9 +58,10 @@ func _ready():
 			shape.radius = wheel.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.y*0.5+0.05
 			shape.height = wheel.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.x
 			collisionShape.shape = shape
+			
 			#FIXME wheel.position assumes wheel is a direct child
 			collisionShape.position = wheel.position
-			collisionShape.rotation.z = PI*0.5
+			collisionShape.rotation.z = PI*0.5 + wheel.get_node('wheelSteerPivot').rotation.z
 			call_deferred("add_child", collisionShape)
 
 func _process(delta):

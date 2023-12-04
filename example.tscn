@@ -457,6 +457,9 @@ stiffness = 3.0
 compressionDamp = 0.06
 relaxationDamp = 0.5
 
+[node name="RayCast3D" parent="world/kvehicle/FL" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.7, 0)
+
 [node name="shapecastPivot" parent="world/kvehicle/FL" index="1"]
 transform = Transform3D(0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0, 0, 1, 0, 0, 0)
 

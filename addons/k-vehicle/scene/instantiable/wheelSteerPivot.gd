@@ -6,7 +6,9 @@ extends Node3D
 ## sets current Y position as max extension
 @export var setMax = false: set = doSetPositionAsMaximumExtension
 
+## y position of the wheel when the vehicle is resting on the ground
 @export var restExtension = 0.0
+## y position of the wheel when the vehicle is jumping or suspended in the air
 @export var maxExtension = 0.0
 
 func _ready():

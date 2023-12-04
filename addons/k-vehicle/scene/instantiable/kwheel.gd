@@ -154,8 +154,34 @@ func updateAckerman(newRatio):
 	ackermanRatio = newRatio
 	updateMaxSteering()
 
+func validateSubTree():
+	if !OS.has_feature("editor"): return
+	assert($wheelSteerPivot/wheelRollPivot.rotation.is_equal_approx(Vector3.ZERO),\
+	"wheelRollPivot rotation must be 0. change wheelSteerPivot.rotation.z to adjust camber" )
+	assert(is_zero_approx($wheelSteerPivot.rotation.y) and is_zero_approx($wheelSteerPivot.rotation.x), "wheelSteerPivot rotation x and y must be 0. only change rotation.z to adjust camber")
+	assert($wheelSteerPivot/wheelRollPivot.position.is_equal_approx(Vector3.ZERO), "wheelRollPivot position must be 0")
+	if !is_zero_approx($wheelSteerPivot.position.x) or !is_zero_approx($wheelSteerPivot.position.z):
+		push_error('wheelSteerPivot.position will be ignored')
+		$wheelSteerPivot.position.x = 0.0
+		$wheelSteerPivot.position.y = 0.0
+	if !$RayCast3D.position.is_zero_approx():
+		print_rich('[color=orange] Raycast3D.position is not meant to be changed and will be ignored [/color]')
+		$RayCast3D.position = Vector3.ZERO
+	if !$shapecastPivot.position.is_zero_approx():
+		print_rich('[color=orange] shapecastPivot.position is not meant to be changed and will be  will be ignored  [/color]')
+		$shapecastPivot.position = Vector3.ZERO
+	if !$shapecastPivot/ShapeCast3D.position.is_zero_approx():
+		print_rich('[color=orange] ShapeCast3D.position is not meant to be changed and will be  will be ignored  [/color]')
+		$shapecastPivot/ShapeCast3D.position = Vector3.ZERO
+	if !$wheelSteerPivot/wheelRollPivot/wheelMesh.position.is_zero_approx():
+		print_rich('[color=orange] wheelMesh.position is not meant to be changed and will be  will be ignored  [/color]')
+		$wheelSteerPivot/wheelRollPivot/wheelMesh.position = Vector3.ZERO
+
 func _ready():
+	validateSubTree()
 	updateMaxSteering()
+	
+	$shapecastPivot/ShapeCast3D.enabled = useShapecastForPhysics
 	
 	previousGlobalPosition = global_position
 	restExtension = abs($wheelSteerPivot.restExtension)#+.2

@@ -10,7 +10,7 @@ class_name KVDrivetrain
 ## engine that powers this drivetrain
 @export var engine: Node
 ## maximum torque of the clutch, use 0.0 for infinite torque. should be generally higher then the engine torque
-@export var clutchMaxTorque = 800.0
+@export var clutchMaxTorque = 0.0
 
 ## the gear ratios of the gearbox, example: 0.1, 0.0, 0.15, 0.3, 0.5
 ## [br]use negative ratios for reverse and 0.0 for neutral
@@ -84,6 +84,10 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	
 	torque = ((engineMoment*wheelMoment*wheelAngular)-(engineMoment*wheelMoment*engineAngular))/(engineMoment+wheelMoment)
 	
+	if clutchMaxTorque > 0.0:
+		var maxTorqueActual = clutchMaxTorque*clutchInput
+		if abs(torque) > maxTorqueActual: print(abs(torque) - maxTorqueActual)
+		torque = sign(torque) * min(abs(torque), maxTorqueActual)
 	torque*=oneByModDelta
 	var torqueEngine = torque#*ratio#*sign(rpsDelta)
 	#print(torqueEngine)
@@ -131,6 +135,9 @@ func getGearRatio():
 func getFastestWheel():
 	#FIXME, consider car going back, reving and releasing the clutch
 	var fastestWheel = poweredWheels[0]
-	if abs(poweredWheels[1].radsPerSec) > abs(fastestWheel.radsPerSec):
-		fastestWheel = poweredWheels[1]
+	for wheel in poweredWheels:
+		var wheelRelativeAV = wheel.radsPerSec*sign(gearRatio)-engine.radsPerSec
+		var fastestWheelrelativeAV = fastestWheel.radsPerSec*sign(gearRatio)-engine.radsPerSec
+		if wheelRelativeAV > fastestWheelrelativeAV:
+			fastestWheel = wheel
 	return fastestWheel

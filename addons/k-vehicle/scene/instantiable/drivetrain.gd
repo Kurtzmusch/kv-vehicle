@@ -59,7 +59,7 @@ func _physics_process(delta):
 	t /= gearRatio
 	var f = t/vehicle.wheels[0].radius
 
-	vehicle.debugString = str((int(f)))
+	#vehicle.debugString = str((int(f)))
 
 func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var oneByModDelta = 1.0/modDelta
@@ -84,11 +84,12 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	
 	torque = ((engineMoment*wheelMoment*wheelAngular)-(engineMoment*wheelMoment*engineAngular))/(engineMoment+wheelMoment)
 	
+	
+	torque*=oneByModDelta
 	if clutchMaxTorque > 0.0:
 		var maxTorqueActual = clutchMaxTorque*clutchInput
-		if abs(torque) > maxTorqueActual: print(abs(torque) - maxTorqueActual)
+		vehicle.debugString = str( snapped(abs(torque)/maxTorqueActual, 0.01) )
 		torque = sign(torque) * min(abs(torque), maxTorqueActual)
-	torque*=oneByModDelta
 	var torqueEngine = torque#*ratio#*sign(rpsDelta)
 	#print(torqueEngine)
 	engine.applyTorque(torqueEngine, modDelta)

@@ -55,7 +55,7 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 
 [node name="hatchback" instance=ExtResource("1_r7ucc")]
-substeps = 4
+substeps = 8
 
 [node name="debugVectors" parent="." index="0"]
 mesh = SubResource("ImmediateMesh_widss")
@@ -129,32 +129,36 @@ momentOfInertia = 0.2
 [node name="drivetrain" parent="." index="14" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("13_5s550")]
 poweredWheels = [NodePath("../FR"), NodePath("../FL"), NodePath("../RR"), NodePath("../RL")]
 engine = NodePath("../engine")
-clutchMaxTorque = 25.0
+clutchMaxTorque = 400.0
 gearRatios = Array[float]([-0.1, 0.0, 0.12, 0.3, 0.5, 0.7, 1.0, 1.2])
 finalRatio = 0.28
 
-[node name="lsd" parent="." index="15" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
+[node name="lsdRear" parent="." index="15" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="breakFront" parent="." index="16" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
+[node name="lsdFront" parent="." index="16" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
+wheels = [NodePath("../FR"), NodePath("../FL")]
+limit = 15.0
+
+[node name="breakFront" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 strength = 700.0
 
-[node name="breakRear" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
+[node name="breakRear" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 strength = 150.0
 
-[node name="k-swayBarFront" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
+[node name="k-swayBarFront" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 
-[node name="k-swayBarRear" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
+[node name="k-swayBarRear" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="20"]
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="21"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
 
-[node name="vehicleHint" type="Label" parent="." index="21" node_paths=PackedStringArray("frontWheels", "drivetrain")]
+[node name="vehicleHint" type="Label" parent="." index="22" node_paths=PackedStringArray("frontWheels", "drivetrain")]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -168,7 +172,7 @@ script = ExtResource("17_4lo8p")
 frontWheels = [NodePath("../FR"), NodePath("../FL")]
 drivetrain = NodePath("../drivetrain")
 
-[node name="FR" parent="." index="22" instance=ExtResource("18_y8sih")]
+[node name="FR" parent="." index="23" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
@@ -195,7 +199,7 @@ mesh = SubResource("ImmediateMesh_466e8")
 
 [node name="gravel" parent="FR/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="FL" parent="." index="23" instance=ExtResource("18_y8sih")]
+[node name="FL" parent="." index="24" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, -1.194)
 momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
@@ -223,7 +227,7 @@ mesh = SubResource("ImmediateMesh_t1flb")
 
 [node name="gravel" parent="FL/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="RR" parent="." index="24" instance=ExtResource("18_y8sih")]
+[node name="RR" parent="." index="25" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
@@ -245,7 +249,7 @@ mesh = SubResource("ImmediateMesh_eek5i")
 
 [node name="gravel" parent="RR/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="RL" parent="." index="25" instance=ExtResource("18_y8sih")]
+[node name="RL" parent="." index="26" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, 1.356)
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])

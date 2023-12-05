@@ -418,7 +418,7 @@ func applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep):
 		#frictionTorque = (frictionTorque+prevFrictionTorque)*0.5
 		prevFrictionTorque = frictionTorque
 		#if !powered:
-		applyTorque(frictionTorque*1.0, delta)
+		applyTorque(frictionTorque*1.0, delta) #delta because already using the substep torque
 		#debugString = str( snapped(frictionTorque, 0.1) )
 		var newRelativeZspeed = (radsPerSec*radius)-(localVelocity.z)
 		

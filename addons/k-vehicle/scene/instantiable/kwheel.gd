@@ -74,7 +74,9 @@ var tireResponseDictionary: Dictionary
 @export var gripMultiplier = Vector3.ONE
 
 ## if true, use shapecast collision data for physics. raycasting is used otherwise.[br]
-## [b]shapcasting is currently unstable in godot[/b]: shapecasting will sometimes not report collisions or penetrate other objects. it also suffers extremely from lack of precision when far from the world origin. this can be mitigated by keeping the vehicle close to the origin while shifting the world.
+## [b]shapcasting is currently unstable in godot[/b]:
+## shapecasting will sometimes not report collisions or penetrate other objects. it also suffers extremely from lack of precision when far from the world origin. this can be mitigated by keeping the vehicle close to the origin while shifting the world.
+## see [@property KVVehicle.teleportDelta]
 @export var useShapecastForPhysics = false
 
 ## usefull for smoothing abrubt changes in normal collision, for example, going up a sidewalk.

@@ -44,6 +44,7 @@ var wheels = []
 ## if the vehicle gets teleported, this delta must be set
 ## [br]
 ## wheels will read this when they _integrate
+## gets reset to Vector3.ZERO at the end of _integrate_forces
 var teleportDelta = Vector3.ZERO
 
 ## speed in meters/second
@@ -160,6 +161,7 @@ func _integrate_forces(state):
 	for wheel in wheels:
 		wheel.animate(delta, oneByDelta)
 	#$drivetrain.clutch(delta, oneByDelta)
+	teleportDelta = Vector3.ZERO
 
 func accelerateYaw(delta, oneByDelta, acceleration):
 	applyYawTorque(acceleration*inertia.y)

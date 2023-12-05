@@ -13,7 +13,6 @@ func _process(delta):
 
 func _unhandled_input(event):
 	if event.is_action_pressed('toggle-rear-steering'):
-		print(mode)
 		mode += 1
 		mode %= 2
 		if mode == 1:

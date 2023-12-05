@@ -55,7 +55,7 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 
 [node name="hatchback" instance=ExtResource("1_r7ucc")]
-substeps = 16
+substeps = 4
 
 [node name="debugVectors" parent="." index="0"]
 mesh = SubResource("ImmediateMesh_widss")
@@ -138,7 +138,7 @@ wheels = [NodePath("../RR"), NodePath("../RL")]
 
 [node name="breakFront" parent="." index="16" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
-strength = 300.0
+strength = 700.0
 
 [node name="breakRear" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]

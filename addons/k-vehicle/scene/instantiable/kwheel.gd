@@ -434,7 +434,7 @@ func applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep):
 
 func _breakTorque(delta, oneByDelta, modDelta, oneBySubstep):
 	var signBefore = sign(radsPerSec)
-	applyTorque(abs(breakTorque)*-sign(radsPerSec), delta)
+	applyTorque(abs(breakTorque)*-sign(radsPerSec), modDelta)
 	var signAfter = sign(radsPerSec)
 	if (signBefore != signAfter):
 		radsPerSec = 0.0

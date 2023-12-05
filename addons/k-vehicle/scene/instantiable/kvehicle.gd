@@ -128,7 +128,7 @@ func _integrate_forces(state):
 		#$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		#$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		#$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		#$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$"k-swayBarRear"._integrate(delta, onebByDelta, modDelta, oneBySubstep)
 		
 		for wheel in wheels:
 			wheel.applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution)

@@ -15,13 +15,14 @@ point_count = 3
 
 [sub_resource type="Curve" id="Curve_4p6nj"]
 bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
 point_count = 2
 
 [resource]
 script = ExtResource("1_cqm8x")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
 gripXCurve = SubResource("Curve_ahlfm")
 slipAngleBegin = 8.0
 slipAngleEnd = 10.0

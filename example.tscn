@@ -446,7 +446,7 @@ text = "t - toggle rear steering
 "
 
 [node name="hatchback" parent="world" instance=ExtResource("30_nwsrf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96.6535, 2.26714, -10.8293)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96.6535, 2.26714, 3.0707)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

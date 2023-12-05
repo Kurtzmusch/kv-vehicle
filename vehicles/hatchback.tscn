@@ -173,6 +173,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
+defaultTireResponse = ExtResource("19_x5hqt")
 steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
@@ -199,6 +200,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, -1.194)
 momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
+defaultTireResponse = ExtResource("19_x5hqt")
 steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
@@ -225,6 +227,7 @@ mesh = SubResource("ImmediateMesh_t1flb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
+defaultTireResponse = ExtResource("19_x5hqt")
 
 [node name="wheelSteerPivot" parent="RR" index="2"]
 restExtension = -0.098
@@ -246,6 +249,7 @@ mesh = SubResource("ImmediateMesh_eek5i")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, 1.356)
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
+defaultTireResponse = ExtResource("19_x5hqt")
 
 [node name="wheelSteerPivot" parent="RL" index="2"]
 restExtension = -0.098

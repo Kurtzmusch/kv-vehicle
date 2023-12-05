@@ -28,6 +28,9 @@ class_name KVWheel
 ## [TireResponse] resources for surfaces, see [TireResponse] 
 @export var tireResponses: Array[TireResponse]
 
+## tire response to be used if the collider has no 'material' meta set
+@export var defaultTireResponse: TireResponse
+
 ## dictionary built from the [TireResponse]s array. idexed by their material
 var tireResponseDictionary: Dictionary
 
@@ -316,19 +319,22 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		preContactTransform.basis.x = preContactTransformBasisX
 		preContactTransform.origin = globalCollisionPoint
 		
-		surfaceMaterial = StringName('tarmac')
+		surfaceMaterial = StringName('none')
 		if collider.has_meta('material'):
 			var surfaceMaterialString = collider.get_meta('material')
 			surfaceMaterial = surfaceMaterialString
-		tireResponse = tireResponseDictionary[surfaceMaterial] 
-		var bumpHeight = tireResponse.sampleBumpHeight(traveled/maxTraveled)
-		var bumpNormal = tireResponse.sampleBumpNormal(traveled/maxTraveled)
-		var newNormal = bumpNormal*preContactTransform.basis.inverse()
-		bumpHeight = 0.0
-		globalCollisionPoint += lerp( bumpHeight, 0.0, tireResponse.bumpVisualBias )*collisionNormal
-		collisionNormal = collisionNormal.slerp(newNormal, 1.0-tireResponse.bumpVisualBias)
+		
+		tireResponse = tireResponseDictionary.get(surfaceMaterial, defaultTireResponse)
+		wheelVisualPositionYOffset = 0.0
+		if tireResponse:
+			var bumpHeight = tireResponse.sampleBumpHeight(traveled/maxTraveled)
+			var bumpNormal = tireResponse.sampleBumpNormal(traveled/maxTraveled)
+			var newNormal = bumpNormal*preContactTransform.basis.inverse()
+			bumpHeight = 0.0
+			globalCollisionPoint += lerp( bumpHeight, 0.0, tireResponse.bumpVisualBias )*collisionNormal
+			collisionNormal = collisionNormal.slerp(newNormal, 1.0-tireResponse.bumpVisualBias)
 		#wheelVisualPositionYOffset = bumpStrength*tireResponse.bumpVisualBias
-		wheelVisualPositionYOffset = bumpHeight
+			wheelVisualPositionYOffset = bumpHeight
 		#debugString = str( snapped( bumpStrength, 0.01) )
 		contactTransform = Transform3D()
 		
@@ -353,6 +359,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.x, Color.INDIAN_RED)
 		$contactTransform.addVector(contactTransform.origin, contactTransform.basis.z, Color.SKY_BLUE)
 	else:
+		tireResponse = null
 		feedback = 0.0
 		normalizedCompression = 0.0
 		suspensionForceMagnitude = 0.0
@@ -365,11 +372,13 @@ func updateCasts(state, delta, oneByDelta, contribution):
 
 func applyAccumulatedFrictionForces(state):
 	if !grounded: return
+	
 	vehicle.applyGlobalForceState(xFrictionAccumulated*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
 
 func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution):
 	if !grounded: return
+	if !tireResponse: return
 	var oneByModDelta = 1.0/modDelta
 	var necessaryXFriction = localVelocity.x*oneByDelta*massPerWheel*0.9
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
@@ -378,7 +387,7 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
 	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))
-	var stream = tireResponse.slippingStream
+	#var stream = tireResponse.slippingStream
 	
 	feedback = coeficients.y
 	
@@ -394,10 +403,11 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	xFriction *= sign(necessaryXFriction)
 	frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1)
-	var frictionFraction = coeficients.x/tireResponse.coeficientOfFriction
-	#debugString = str( snapped(frictionFraction, 0.1 ) )
-	if coeficients.x < tireResponse.coeficientOfFriction:
-		frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
+	if tireResponse.coeficientOfFriction > 0.0:
+		var frictionFraction = coeficients.x/tireResponse.coeficientOfFriction
+		#debugString = str( snapped(frictionFraction, 0.1 ) )
+		if coeficients.x < tireResponse.coeficientOfFriction:
+			frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
 	#vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	substepZFriction = zFriction*oneBySubstep
 	xFrictionAccumulated += xFriction*oneBySubstep
@@ -419,7 +429,7 @@ func animate(delta, oneByDelta):
 	#applyTorqueFromFriction(delta, oneByDelta)
 
 func applyTorqueFromFriction(delta, oneByDelta, modDelta, oneBySubstep):
-	if grounded:
+	if grounded and tireResponse:
 		appliedZFriction = substepZFriction
 		#var targetRPS = localVelocity.z/radius
 		var prevRPS = radsPerSec

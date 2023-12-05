@@ -14,7 +14,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if wheel.surfaceMaterial != name or !wheel.grounded:
+	if !wheel.tireResponse: return
+	if wheel.tireResponse.materialName != name or !wheel.grounded:
 		emitting = false
 		return
 	emitting = wheel.contactRelativeVelocity.length() > slippingEmitThreshold

@@ -10,14 +10,14 @@ class_name TireResponse
 
 @export_category('Friction')
 ## coeficient of friction for this material
-@export var coeficientOfFriction: float
+@export var coeficientOfFriction = 1.0
 
 ## curve that multiplies the coeficientOfFriction, depending on slip angle
 @export var gripXCurve: Curve
 ## slip angle that maps to the beginning of the curve
-@export var slipAngleBegin: float
+@export var slipAngleBegin = 8.0
 ## slip angle that maps to the end of the curve
-@export var slipAngleEnd: float
+@export var slipAngleEnd  = 12.0
 
 
 ## curve that multiplies the coeficientOfFriction, depending on relative longitudinal speed of the contact patch or slip ratio of the contact patch

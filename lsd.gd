@@ -1,4 +1,10 @@
-extends Node
+extends KVComponent
+## infinite torque limited slip differential
+##
+## differentials allow wheels on an exle to spin at different rates.
+## to prevent loss of traction, a limited slip differential can be used.
+## [br] this differential also helps with drifting
+class_name KVLimitedSlipDifferential
 
 @export var wheels: Array[KVWheel]
 ## angular velocity limit (radians/second)
@@ -28,4 +34,3 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 		
 		highestRPSWheel.radsPerSec -= overLimit*0.5*weight*sign(radsPerSecDelta)
 		otherWheel.radsPerSec += overLimit*0.5*weight*sign(radsPerSecDelta)
-		

@@ -37,6 +37,10 @@ func _ready():
 			break 
 	currentGearIndex = neutralGearIndex
 	vehicle = get_parent()
+	updatePoweredWheels()
+
+func updatePoweredWheels():
+	_totalWheelMomentOfInertia = 0.0
 	for wheel in poweredWheels:
 		wheel.powered = true
 		_totalWheelMomentOfInertia += wheel.momentOfInertia

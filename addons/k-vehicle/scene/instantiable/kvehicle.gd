@@ -95,7 +95,6 @@ func register(funcRef):
 func _integrate_forces(state):
 	# state.transform.origin == global_position
 	# state.center_of_mass == center_of_mass
-	print(state.get_constant_torque())
 	localLinearVelocity = state.linear_velocity*global_transform.basis
 	localAngularVelocity = state.angular_velocity*global_transform.basis
 	debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )

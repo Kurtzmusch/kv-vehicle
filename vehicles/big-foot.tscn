@@ -1,10 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://foegnmr6avup"]
+[gd_scene load_steps=30 format=3 uid="uid://foegnmr6avup"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/k-vehicle/scene/instantiable/kvehicle.tscn" id="1_eaoch"]
 [ext_resource type="ArrayMesh" uid="uid://cqkqh0h585ai2" path="res://mesh/hatchback.obj" id="3_x8x3b"]
 [ext_resource type="PackedScene" uid="uid://bj233wg0k5djo" path="res://addons/k-vehicle/scene/instantiable/kwheel.tscn" id="4_iu7n1"]
 [ext_resource type="Resource" uid="uid://h7ppi1emxgji" path="res://tarmacTireResponse.tres" id="5_e2jpq"]
 [ext_resource type="Resource" uid="uid://bm5v24h1pg6wn" path="res://gravelTireResponse.tres" id="6_6q0yn"]
+[ext_resource type="PackedScene" uid="uid://bfqa1bfvsj6hl" path="res://particles-gravel.tscn" id="7_1hgqb"]
 [ext_resource type="ArrayMesh" uid="uid://crc1qrvoteqb1" path="res://mesh/buggie-wf.obj" id="7_3qy82"]
 [ext_resource type="PackedScene" uid="uid://5i7leg7uek4d" path="res://addons/k-vehicle/scene/instantiable/kInputHandler.tscn" id="7_de01d"]
 [ext_resource type="PackedScene" uid="uid://b2gbcjjc1sqdp" path="res://addons/k-vehicle/scene/instantiable/kCenterOfMass.tscn" id="9_41sye"]
@@ -68,13 +69,12 @@ surface_material_override/1 = SubResource("StandardMaterial3D_eir23")
 [node name="FR" parent="." index="3" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, -0.10862, -1.19449)
 momentOfInertia = 40.0
-getRadiusFromMeshAABB = true
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("5_e2jpq"), ExtResource("6_6q0yn")])
-rpsDeltaThreshold = 0.1
 steer = true
 maxSteerAngle = 0.785
-compressionDamp = 0.1
 relaxationDamp = 0.95
+rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="FR" index="1"]
@@ -94,16 +94,17 @@ surface_material_override/1 = SubResource("StandardMaterial3D_x8gk2")
 [node name="contactTransform" parent="FR" index="3"]
 mesh = SubResource("ImmediateMesh_0rs1n")
 
+[node name="gravel" parent="FR/Particles" index="0" instance=ExtResource("7_1hgqb")]
+
 [node name="FL" parent="." index="4" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, -0.10862, -1.194)
 momentOfInertia = 40.0
-getRadiusFromMeshAABB = true
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("5_e2jpq"), ExtResource("6_6q0yn")])
-rpsDeltaThreshold = 0.1
 steer = true
 maxSteerAngle = 0.785
-compressionDamp = 0.1
 relaxationDamp = 0.95
+rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="FL" index="1"]
@@ -123,15 +124,16 @@ surface_material_override/1 = SubResource("StandardMaterial3D_x8gk2")
 [node name="contactTransform" parent="FL" index="3"]
 mesh = SubResource("ImmediateMesh_x7p7y")
 
+[node name="gravel" parent="FL/Particles" index="0" instance=ExtResource("7_1hgqb")]
+
 [node name="RR" parent="." index="5" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, -0.10862, 1.356)
 momentOfInertia = 40.0
-getRadiusFromMeshAABB = true
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("5_e2jpq"), ExtResource("6_6q0yn")])
-rpsDeltaThreshold = 0.1
 maxSteerAngle = -0.785
-compressionDamp = 0.1
 relaxationDamp = 0.95
+rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="RR" index="1"]
@@ -150,15 +152,16 @@ surface_material_override/1 = SubResource("StandardMaterial3D_x8gk2")
 [node name="contactTransform" parent="RR" index="3"]
 mesh = SubResource("ImmediateMesh_dntca")
 
+[node name="gravel" parent="RR/Particles" index="0" instance=ExtResource("7_1hgqb")]
+
 [node name="RL" parent="." index="6" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, -0.108121, 1.35631)
 momentOfInertia = 40.0
-getRadiusFromMeshAABB = true
+getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("5_e2jpq"), ExtResource("6_6q0yn")])
-rpsDeltaThreshold = 0.1
 maxSteerAngle = -0.785
-compressionDamp = 0.1
 relaxationDamp = 0.95
+rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="RL" index="1"]
@@ -177,6 +180,8 @@ surface_material_override/1 = SubResource("StandardMaterial3D_x8gk2")
 
 [node name="contactTransform" parent="RL" index="3"]
 mesh = SubResource("ImmediateMesh_l63an")
+
+[node name="gravel" parent="RL/Particles" index="0" instance=ExtResource("7_1hgqb")]
 
 [node name="kInputHandler" parent="." index="7" node_paths=PackedStringArray("transmission") instance=ExtResource("7_de01d")]
 transmission = NodePath("../drivetrain")

@@ -21,6 +21,7 @@ func _process(delta):
 
 func setUI(node):
 	vehicleUI = node
+	target.get_node('vehicleHint').visible = true
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -30,9 +31,10 @@ func _unhandled_input(event):
 		vehicleIdx += 1
 		vehicleIdx %= vehicles.size()
 		target.freeze = true
+		target.get_node('vehicleHint').visible = false
 		target = vehicles[vehicleIdx]
 		target.freeze = false
-		target.lock_rotation = false
+		target.get_node('vehicleHint').visible = true
 		vehicleUI.setVehicle(target)
 
 func _physics_process(delta):

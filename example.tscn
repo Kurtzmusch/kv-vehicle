@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=53 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://example.gd" id="1_53f3a"]
 [ext_resource type="Script" path="res://worldShifter.gd" id="1_aekg0"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/k-vehicle/scene/instantiable/k_sway_bar.tscn" id="25_117a2"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
+[ext_resource type="Script" path="res://hatchback.gd" id="28_3antg"]
 [ext_resource type="PackedScene" uid="uid://foegnmr6avup" path="res://vehicles/big-foot.tscn" id="28_ctkhe"]
 [ext_resource type="Script" path="res://vehicle-ui.gd" id="29_7vj0l"]
 [ext_resource type="Script" path="res://ControlsUI.gd" id="32_pf806"]
@@ -625,10 +626,35 @@ wheels = [NodePath("../RR"), NodePath("../RL")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
 
+[node name="vehicleHint" type="Label" parent="world/kvehicle" node_paths=PackedStringArray("frontWheels", "drivetrain")]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -26.0
+offset_right = 136.0
+grow_vertical = 0
+text = "t - toggle awd/rwd
+
+"
+script = ExtResource("28_3antg")
+frontWheels = [NodePath("../FR"), NodePath("../FL")]
+drivetrain = NodePath("../drivetrain")
+
 [node name="bigFoot" parent="world" instance=ExtResource("28_ctkhe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 1.97935, -16.5786)
-can_sleep = true
 freeze = true
+
+[node name="vehicleHint" type="Label" parent="world/bigFoot"]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+offset_right = 167.0
+grow_vertical = 0
+text = "t - toggle rear steering
+
+"
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

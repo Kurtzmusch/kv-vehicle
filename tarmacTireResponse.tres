@@ -21,7 +21,7 @@ point_count = 2
 [resource]
 script = ExtResource("1_cqm8x")
 materialName = "tarmac"
-gripMultiplier = 1.0
+coeficientOfFriction = 1.0
 gripXCurve = SubResource("Curve_ahlfm")
 slipAngleBegin = 8.0
 slipAngleEnd = 10.0

@@ -49,6 +49,8 @@ var localAngularVelocity = Vector3.ZERO
 ## will be read by a 3DLabel every frame. can be set to anything to help with debugging
 var debugString: String
 
+var componentIntegrateFunctions = []
+
 func _ready():
 	
 	#TODO maybe use same shape resource as shapecaster
@@ -75,9 +77,13 @@ func _physics_process(delta):
 	else:
 		Engine.time_scale = 1.0
 
+func register(funcRef):
+	componentIntegrateFunctions.append(funcRef)
+
 func _integrate_forces(state):
 	# state.transform.origin == global_position
 	# state.center_of_mass == center_of_mass
+	print(state.get_constant_torque())
 	localLinearVelocity = state.linear_velocity*global_transform.basis
 	localAngularVelocity = state.angular_velocity*global_transform.basis
 	debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )
@@ -102,14 +108,16 @@ func _integrate_forces(state):
 			totalSuspensionForce += wheel.suspensionForce
 	
 	for i in range(substeps):
-		$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$breakRear._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		for f in componentIntegrateFunctions:
+			f.call(delta, oneByDelta, modDelta, oneBySubstep)
+		#$breakFront._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$breakRear._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		#$lsd._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
-		$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$drivetrain._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$"k-swayBarFront"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
+		#$"k-swayBarRear"._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		
 		for wheel in wheels:
 			wheel.applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution)

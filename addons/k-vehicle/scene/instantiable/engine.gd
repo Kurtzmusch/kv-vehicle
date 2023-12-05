@@ -1,4 +1,4 @@
-extends Node
+extends KVComponent
 
 @export var torqueCurve: Curve
 @export var peakTorque = 400.0

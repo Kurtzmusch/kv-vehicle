@@ -1,4 +1,4 @@
-extends Node
+extends KVComponent
 class_name KVSwayBar
 @export var wheels: Array[KVWheel]
 @export var stiffness = 4.0

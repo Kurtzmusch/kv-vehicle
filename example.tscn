@@ -419,6 +419,7 @@ shape = SubResource("ConvexPolygonShape3D_t6ymc")
 [node name="FR" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 radius = 0.5
+momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 steer = true
@@ -451,6 +452,7 @@ mesh = SubResource("ImmediateMesh_weifp")
 [node name="FL" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.10862, -1.194)
 radius = 0.5
+momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 steer = true
@@ -483,6 +485,7 @@ mesh = SubResource("ImmediateMesh_8tqy8")
 [node name="RR" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 radius = 0.5
+momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 maxSteerAngle = 0.0
@@ -514,6 +517,7 @@ mesh = SubResource("ImmediateMesh_s2ldo")
 [node name="RL" parent="world/kvehicle" instance=ExtResource("5_iknt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.108121, 1.35631)
 radius = 0.5
+momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("7_xd3oq"), ExtResource("8_ig8kl")])
 maxSteerAngle = 0.0
@@ -574,10 +578,6 @@ script = ExtResource("15_w3hgf")
 [node name="handbreak" parent="world/kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("12_d82ic")]
 wheels = [NodePath("../RL"), NodePath("../RR")]
 
-[node name="lsd" parent="world/kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("16_gycjp")]
-wheels = [NodePath("../RR"), NodePath("../RL")]
-limit = 2.0
-
 [node name="Camera3D" type="Camera3D" parent="world/kvehicle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358006, 0.671878, -0.233562)
 script = ExtResource("17_mo8j4")
@@ -602,6 +602,10 @@ poweredWheels = [NodePath("../RR"), NodePath("../RL")]
 engine = NodePath("../engine")
 gearRatios = Array[float]([-0.1, 0.0, 0.12, 0.3, 0.5, 0.7, 1.0, 1.2])
 finalRatio = 0.28
+
+[node name="lsd" parent="world/kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("16_gycjp")]
+wheels = [NodePath("../RR"), NodePath("../RL")]
+limit = 2.0
 
 [node name="breakFront" parent="world/kvehicle" node_paths=PackedStringArray("wheels") instance=ExtResource("24_dqj00")]
 wheels = [NodePath("../FL"), NodePath("../FR")]

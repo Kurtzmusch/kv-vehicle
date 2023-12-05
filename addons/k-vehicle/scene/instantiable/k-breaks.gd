@@ -1,4 +1,4 @@
-extends Node
+extends KVComponent
 class_name KVBreak
 
 @export var wheels: Array[KVWheel]

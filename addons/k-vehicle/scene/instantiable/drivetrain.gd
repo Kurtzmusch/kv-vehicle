@@ -1,4 +1,4 @@
-extends Node
+extends KVComponent
 class_name KVDrivetrain
 @export var poweredWheels: Array[KVWheel]
 @export var engine: Node

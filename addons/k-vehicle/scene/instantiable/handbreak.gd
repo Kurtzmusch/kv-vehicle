@@ -1,6 +1,10 @@
 extends KVComponent
+class_name KVHandbreak
+## break that automatically presses the clutch
 
 @export var wheels: Array[KVWheel]
+
+## make it very strong on the rear wheels to help initiate a spin or drift
 @export var strength = 20000.0
 
 var vehicle

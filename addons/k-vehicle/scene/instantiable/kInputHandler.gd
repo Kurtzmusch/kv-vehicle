@@ -1,18 +1,24 @@
 extends Node
 
 @export var vehicle: Node
-@export var transmission: Node
-@export var mouseSteering = true
 
+## transmission or drivetrain node
+@export var transmission: Node
+
+## sensitivity curve. higher values make low inputs even lower
 @export var mouseSteerNonLinearity = 1.25
+## sensitivity curve. higher values make low inputs even lower
 @export var gPadSteerNonLinearity = 1.25
 
+## decay rate of steering when using keyboard steering
 @export var steeringDecay = 2.0
+## steer speed when using keyboard steering
 @export var steeringSensitivity = 3.0
 
 @export var skiddingCounterSteer = 1.0
 @export var antiDrift = 1.0
 @export var inverseSpeedScale = 0.04
+
 enum steeringMethods {
 	Mouse,
 	Keyboard,

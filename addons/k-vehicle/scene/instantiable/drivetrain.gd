@@ -1,11 +1,22 @@
 extends KVComponent
+
+## implements a drivetrain with clutch and gearbox
+##
+## angular velocity is transfered from the engine to the powered wheels using a clutch
+## that applies opossite torque on both sides
 class_name KVDrivetrain
+## wheels to be powered by this drivetrain
 @export var poweredWheels: Array[KVWheel]
+## engine that powers this drivetrain
 @export var engine: Node
+## maximum torque of the clutch, use 0.0 for infinite torque. should be generally higher then the engine torque
 @export var clutchMaxTorque = 800.0
 
-@export var gearRatios: Array[float]
-@export var finalRatio = 1.0
+## the gear ratios of the gearbox, example: 0.1, 0.0, 0.15, 0.3, 0.5
+## [br]use negative ratios for reverse and 0.0 for neutral
+@export var gearRatios: Array[float] = [-0.15, 0.0, 0.25, 0.5]
+## final ratio that gets multiplied by gear ratio from the gearbox: 0.3
+@export var finalRatio = 0.3
 
 var currentGearIndex = 0
 var gearRatio = 0.0

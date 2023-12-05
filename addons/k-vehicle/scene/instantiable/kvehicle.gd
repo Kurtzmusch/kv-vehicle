@@ -1,6 +1,18 @@
 extends RigidBody3D
 
 ## rigid body for ground vehicles
+##
+## you can add KVComponent nodes as child of this node to extend its behaviour.
+## [br][b]_integrate_forces loop:[/b]
+## [codeblock]
+## update [KVWheel]s with this tick relevant data like normal load, local velocity, etc
+## repeat for substeps:
+##     call _integrate on [KVComponents] like engine, drivetrain, breaks, etc
+##     accumulate friction and reaction torques to [KVWheel]s
+## apply accumulated fricion and torques to wheels
+## animate wheels
+## [/codeblock]
+## [br]see [KVComponent] for writing custom components that receive the _integrate callback
 class_name KVVehicle
 
 ## creates a cilinder collider for each wheel at

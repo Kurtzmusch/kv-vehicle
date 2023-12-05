@@ -10,23 +10,37 @@ class_name TireResponse
 
 @export_category('Friction')
 ## coeficient of friction for this material
-@export var gripMultiplier: float
+@export var coeficientOfFriction: float
 
+## curve that multiplies the coeficientOfFriction, depending on slip angle
 @export var gripXCurve: Curve
+## slip angle that maps to the beginning of the curve
 @export var slipAngleBegin: float
+## slip angle that maps to the end of the curve
 @export var slipAngleEnd: float
+
+
+## curve that multiplies the coeficientOfFriction, depending on relative longitudinal speed of the contact patch or slip ratio of the contact patch
 @export var gripZCurve: Curve
+## relative longitudinal speed(between ground and contact patch) that maps to the beginning of the curve
 @export var relativeZSpeedBegin: float
+## relative longitudinal speed(between ground and contact patch) that maps to the end of the curve
 @export var relativeZSpeedEnd: float
+
+## use slip ratio instead of relative longitudinal velocity
 @export var useSlipRatio = true
 @export var feedbackCurve: Curve
 
 @export_category('Audio')
 ## [AudioStream] to be used when the tire is slipping
 @export var slippingStream: AudioStream
+## velocity (meters/second) of the contact patch relative to ground to start playing the audio
 @export var slipAudioMinimumVelocity = 30.0/3.6
+## audio pitch when the contact patch is at minimum velocity
 @export var slipAudioMinimumPitch = 1.0
+## velocity (meters/second) of the contact patch relative to ground to use maximum pitch
 @export var slipAudioMaximumVelocity = 100.0/3.6
+## audio pitch at maximum velocity
 @export var slipAudioMaximumPitch = 1.0
 
 ## slipping volume transition in seconds
@@ -34,9 +48,15 @@ class_name TireResponse
 ## [AudioStream] to be used when the tire is rolling
 @export var rollingStream: AudioStream
 
+## height (meters) of ground bumps
 @export var bumpHeight = 0.0
+## noise image to sample the bump height
 @export var bumpNoiseHeight: NoiseTexture2D
+## noise image to sample the bump normal
 @export var bumpNoiseNormal: NoiseTexture2D
+## how much the bump influences the physics:
+## [br]1.0: bumps are only visual on the wheel
+## [br]0.0: bumps are visual and have full influence on the suspension
 @export var bumpVisualBias = 0.0
 var bumpNoiseHeightValues: PackedFloat32Array
 var bumpNoiseNormalValues: PackedColorArray
@@ -186,4 +206,4 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 	var feedbackSamplePosition = clamp( abs(slipAngleDeg), 0.0, slipAngleEnd )
 	var feedback = feedbackCurve.sample_baked(feedbackSamplePosition/feedbackRange)
 	
-	return Vector3(x*gripMultiplier, feedback, z*gripMultiplier)
+	return Vector3(x*coeficientOfFriction, feedback, z*coeficientOfFriction)

@@ -73,8 +73,8 @@ var tireResponseDictionary: Dictionary
 ## [br] z: longitudinal
 @export var gripMultiplier = Vector3.ONE
 
-## if true, use shapecast collision data for physics.[br]
-## shapcasting is currently broken in godot
+## if true, use shapecast collision data for physics. raycasting is used otherwise.[br]
+## [b]shapcasting is currently unstable in godot[/b]: shapecasting will sometimes not report collisions or penetrate other objects. it also suffers extremely from lack of precision when far from the world origin. this can be mitigated by keeping the vehicle close to the origin while shifting the world.
 @export var useShapecastForPhysics = false
 
 ## usefull for smoothing abrubt changes in normal collision, for example, going up a sidewalk.
@@ -385,9 +385,9 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	xFriction *= sign(necessaryXFriction)
 	frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1)
-	var frictionFraction = coeficients.x/tireResponse.gripMultiplier
+	var frictionFraction = coeficients.x/tireResponse.coeficientOfFriction
 	#debugString = str( snapped(frictionFraction, 0.1 ) )
-	if coeficients.x < tireResponse.gripMultiplier:
+	if coeficients.x < tireResponse.coeficientOfFriction:
 		frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
 	#vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	substepZFriction = zFriction*oneBySubstep

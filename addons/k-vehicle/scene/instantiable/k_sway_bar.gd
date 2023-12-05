@@ -1,7 +1,16 @@
 extends KVComponent
+## sway bars are used to prevent rolling
+##
+## applies a torque to the vehicle that is proportional to the delta in suspension load.
+## can be also be used to prevent excessive pitch
 class_name KVSwayBar
 @export var wheels: Array[KVWheel]
+
+## stiffness as a coeficient, final torque is proportional to vehicle mass. lower values allow the vehicle to roll more
 @export var stiffness = 4.0
+
+## controls the resonse curve. higher values allow the vehicle to roll more.
+## 1.0: linear
 @export var exponent = 1.0
 
 var w1: KVWheel

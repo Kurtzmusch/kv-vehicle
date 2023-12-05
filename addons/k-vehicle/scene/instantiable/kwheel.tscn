@@ -17,7 +17,6 @@ resource_local_to_scene = true
 script = ExtResource("1_2oa8d")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
-enabled = false
 
 [node name="shapecastPivot" type="Node3D" parent="."]
 

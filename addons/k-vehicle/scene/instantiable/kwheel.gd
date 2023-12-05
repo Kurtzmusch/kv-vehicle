@@ -201,9 +201,10 @@ func _enter_tree():
 	$shapecastPivot/ShapeCast3D.add_exception(vehicle)
 	
 	if getDimensionsFromMeshAABB:
-		var aabb = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb()
-		radius = aabb.size.y*0.5
-		width = aabb.size.x
+		if $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh:
+			var aabb = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb()
+			radius = aabb.size.y*0.5
+			width = aabb.size.x
 	
 	createShapecastShape()
 
@@ -283,7 +284,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	#var shapecastCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
 	var collider
 	if !useShapecastForPhysics:
-		$RayCast3D.force_raycast_update()
+		#$RayCast3D.force_raycast_update()
 		grounded = $RayCast3D.is_colliding()
 		if grounded:
 			collider = $RayCast3D.get_collider()

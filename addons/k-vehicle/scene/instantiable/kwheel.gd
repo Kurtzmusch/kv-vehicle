@@ -73,10 +73,13 @@ var tireResponseDictionary: Dictionary
 ## [br] z: longitudinal
 @export var gripMultiplier = Vector3.ONE
 
+## multiplies with the [member TireResponse.maxNormalLoadCoeficient]
+@export var maxNormalLoadCoeficientMultiplier = 1.0
+
 ## if true, use shapecast collision data for physics. raycasting is used otherwise.[br]
 ## [b]shapcasting is currently unstable in godot[/b]:
 ## shapecasting will sometimes not report collisions or penetrate other objects. it also suffers extremely from lack of precision when far from the world origin. this can be mitigated by keeping the vehicle close to the origin while shifting the world.
-## see [@property KVVehicle.teleportDelta]
+## see [member KVVehicle.teleportDelta]
 @export var useShapecastForPhysics = false
 
 ## usefull for smoothing abrubt changes in normal collision, for example, going up a sidewalk.
@@ -379,8 +382,12 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	feedback = coeficients.y
 	
-	var xFriction = min(abs(necessaryXFriction), coeficients.x*gripMultiplier.x*suspensionForceMagnitude)
-	var zFriction = min(abs(necessaryZFriction), coeficients.z*gripMultiplier.z*suspensionForceMagnitude)
+	var maxedMagnitude = tireResponse.maxNormalLoadCoeficient\
+		*maxNormalLoadCoeficientMultiplier*(normalForceAtRest)
+	var maxedSuspensionForce = min(suspensionForceMagnitude, maxedMagnitude)
+	
+	var xFriction = min(abs(necessaryXFriction), coeficients.x*gripMultiplier.x*maxedSuspensionForce)
+	var zFriction = min(abs(necessaryZFriction), coeficients.z*gripMultiplier.z*maxedSuspensionForce)
 	#zFriction = coeficients.z*gripMultiplier.x*suspensionForceMagnitude
 	#xFriction = coeficients.x*suspensionForceMagnitude
 	zFriction *= sign(necessaryZFriction)

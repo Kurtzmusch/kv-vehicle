@@ -12,6 +12,8 @@ class_name TireResponse
 ## coeficient of friction for this material
 @export var coeficientOfFriction = 1.0
 
+## [br] tire friction grows proportional to the normal load, but only up to a certain amount
+@export var maxNormalLoadCoeficient = 3.0
 ## curve that multiplies the coeficientOfFriction, depending on slip angle
 @export var gripXCurve: Curve
 ## slip angle that maps to the beginning of the curve

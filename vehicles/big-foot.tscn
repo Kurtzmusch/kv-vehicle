@@ -35,6 +35,9 @@ uv1_offset = Vector3(0.53, -0.6, 0)
 uv1_triplanar = true
 texture_repeat = false
 
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_olsup"]
+points = PackedVector3Array(-1.06351, 0.243368, 1.17088, 0.972053, 0.0714927, 1.50198, 1.03844, -0.375011, 1.60349, 0.7292, -0.313122, -1.91974, 0.54759, 0.806304, -1.45998, -0.939649, -0.251234, -1.7962, -1.06351, -0.375011, 1.60388, -0.569281, 0.858844, 0.219177, 1.03844, 0.552304, 0.552371, -0.518434, 0.808312, -1.46547, -0.182852, 0.302525, 1.75918, 1.03844, -0.189472, -1.73384, -1.06351, 0.181607, -1.48713, 0.544532, 0.859179, 0.219304, -1.00158, 0.614066, 0.552758, 0.580426, 0.125993, 1.89452, -0.602996, 0.303623, -1.83413, 1.03844, -0.375011, -0.992168, -0.815992, -0.313122, -1.85778, -0.657862, 0.186298, 1.81576, -0.31083, -0.233311, 1.90742, 1.03844, 0.181353, -1.54871, 0.719793, 0.414936, 1.46121, 0.636758, 0.421718, -1.77455, -1.06351, -0.375011, 0.676306, -0.690915, 0.415455, 1.4666, 0.54781, 0.862621, -0.563787, -1.06351, -0.313122, -0.992555, -0.549662, 0.065348, -1.91406, 0.677983, -0.330188, 1.78062, -0.570604, 0.860235, -0.505564, -0.547846, 0.125502, 1.9008)
+
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_0rs1n"]
 resource_local_to_scene = true
 
@@ -51,8 +54,6 @@ resource_local_to_scene = true
 _data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.980392, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.894737), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_glqgt"]
-
 [node name="kvehicle" instance=ExtResource("1_eaoch")]
 substeps = 4
 
@@ -66,7 +67,11 @@ mesh = ExtResource("3_x8x3b")
 surface_material_override/0 = SubResource("StandardMaterial3D_x8gk2")
 surface_material_override/1 = SubResource("StandardMaterial3D_eir23")
 
-[node name="FR" parent="." index="3" instance=ExtResource("4_iu7n1")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_olsup")
+
+[node name="FR" parent="." index="4" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, -0.10862, -1.19449)
 momentOfInertia = 40.0
 getDimensionsFromMeshAABB = true
@@ -96,7 +101,7 @@ mesh = SubResource("ImmediateMesh_0rs1n")
 
 [node name="gravel" parent="FR/Particles" index="0" instance=ExtResource("7_1hgqb")]
 
-[node name="FL" parent="." index="4" instance=ExtResource("4_iu7n1")]
+[node name="FL" parent="." index="5" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, -0.10862, -1.194)
 momentOfInertia = 40.0
 getDimensionsFromMeshAABB = true
@@ -126,7 +131,7 @@ mesh = SubResource("ImmediateMesh_x7p7y")
 
 [node name="gravel" parent="FL/Particles" index="0" instance=ExtResource("7_1hgqb")]
 
-[node name="RR" parent="." index="5" instance=ExtResource("4_iu7n1")]
+[node name="RR" parent="." index="6" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, -0.10862, 1.356)
 momentOfInertia = 40.0
 getDimensionsFromMeshAABB = true
@@ -154,7 +159,7 @@ mesh = SubResource("ImmediateMesh_dntca")
 
 [node name="gravel" parent="RR/Particles" index="0" instance=ExtResource("7_1hgqb")]
 
-[node name="RL" parent="." index="6" instance=ExtResource("4_iu7n1")]
+[node name="RL" parent="." index="7" instance=ExtResource("4_iu7n1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, -0.108121, 1.35631)
 momentOfInertia = 40.0
 getDimensionsFromMeshAABB = true
@@ -183,13 +188,13 @@ mesh = SubResource("ImmediateMesh_l63an")
 
 [node name="gravel" parent="RL/Particles" index="0" instance=ExtResource("7_1hgqb")]
 
-[node name="kInputHandler" parent="." index="7" node_paths=PackedStringArray("transmission") instance=ExtResource("7_de01d")]
+[node name="kInputHandler" parent="." index="8" node_paths=PackedStringArray("transmission") instance=ExtResource("7_de01d")]
 transmission = NodePath("../drivetrain")
 
-[node name="centerOfMass" parent="." index="8" instance=ExtResource("9_41sye")]
+[node name="centerOfMass" parent="." index="9" instance=ExtResource("9_41sye")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.341436, 0)
 
-[node name="Decal" type="Decal" parent="." index="9"]
+[node name="Decal" type="Decal" parent="." index="10"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.26241, -1.33013)
 layers = 128
 size = Vector3(1.082, 1.082, 1.082)
@@ -198,7 +203,7 @@ modulate = Color(1, 0.121569, 0.133333, 1)
 upper_fade = 1e-05
 lower_fade = 4.20666e-05
 
-[node name="Decal2" type="Decal" parent="." index="10"]
+[node name="Decal2" type="Decal" parent="." index="11"]
 transform = Transform3D(-1, 0, -8.74228e-08, 8.74228e-08, -4.37114e-08, -1, -3.82137e-15, -1, 4.37114e-08, 0, 0.26241, 1.81877)
 layers = 128
 size = Vector3(0.9, 0.9, 0.9)
@@ -207,24 +212,24 @@ modulate = Color(1, 0.121569, 0.133333, 1)
 upper_fade = 1e-05
 lower_fade = 7.32422e-05
 
-[node name="sideCamera" type="Camera3D" parent="." index="11"]
+[node name="sideCamera" type="Camera3D" parent="." index="12"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4, 0.580353, -1.74846e-07)
 script = ExtResource("11_vryrl")
 
-[node name="handbreak" parent="." index="12" node_paths=PackedStringArray("wheels") instance=ExtResource("12_d2lxh")]
+[node name="handbreak" parent="." index="13" node_paths=PackedStringArray("wheels") instance=ExtResource("12_d2lxh")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="Camera3D" type="Camera3D" parent="." index="13"]
+[node name="Camera3D" type="Camera3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358006, 0.671878, -0.233562)
 script = ExtResource("14_wevjt")
 
-[node name="enginePitcherSFX" parent="." index="14" node_paths=PackedStringArray("engine") instance=ExtResource("15_4jucn")]
+[node name="enginePitcherSFX" parent="." index="15" node_paths=PackedStringArray("engine") instance=ExtResource("15_4jucn")]
 stream = ExtResource("16_dmsf2")
 autoplay = true
 streamRevsPerMinute = 4000.0
 engine = NodePath("../engine")
 
-[node name="engine" parent="." index="15" instance=ExtResource("15_nhioj")]
+[node name="engine" parent="." index="16" instance=ExtResource("15_nhioj")]
 torqueCurve = SubResource("Curve_xpomo")
 peakTorque = 250.0
 internalFrictionTorque = 20.0
@@ -232,37 +237,33 @@ breakTorque = 50.0
 limmiterCounterTorqueRatio = 4.0
 momentOfInertia = 0.2
 
-[node name="drivetrain" parent="." index="16" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("16_o84qs")]
+[node name="drivetrain" parent="." index="17" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("16_o84qs")]
 poweredWheels = [NodePath("../FL"), NodePath("../FR"), NodePath("../RR"), NodePath("../RL")]
 engine = NodePath("../engine")
 gearRatios = Array[float]([-0.1, 0.0, 0.12, 0.3, 0.5, 0.7, 1.0, 1.2])
 finalRatio = 0.28
 
-[node name="breakFront" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("17_dodt1")]
+[node name="breakFront" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("17_dodt1")]
 wheels = [NodePath("../FL"), NodePath("../FR")]
 strength = 1200.0
 
-[node name="breakRear" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("17_dodt1")]
+[node name="breakRear" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("17_dodt1")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 strength = 250.0
 
-[node name="k-swayBarFront" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("18_pkrjl")]
+[node name="k-swayBarFront" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("18_pkrjl")]
 wheels = [NodePath("../FL"), NodePath("../FR")]
 
-[node name="k-swayBarRear" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("18_pkrjl")]
+[node name="k-swayBarRear" parent="." index="21" node_paths=PackedStringArray("wheels") instance=ExtResource("18_pkrjl")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="21"]
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="22"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
 
-[node name="input" type="Node" parent="." index="22" node_paths=PackedStringArray("rearWheels")]
+[node name="input" type="Node" parent="." index="23" node_paths=PackedStringArray("rearWheels")]
 script = ExtResource("20_2cn56")
 rearWheels = [NodePath("../RR"), NodePath("../RL")]
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="23"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_glqgt")
 
 [editable path="FR"]
 [editable path="FL"]

@@ -41,7 +41,7 @@ var clutchInput = 0.0
 ## array containing the wheels. it gets populated by children wheels when they _enter_tree
 var wheels = []
 
-## if the vehicle gets teleported, this delta must be set
+## if the vehicle gets teleported manually, this delta must be set
 ## [br]
 ## wheels will read this when they _integrate
 ## gets reset to Vector3.ZERO at the end of _integrate_forces

@@ -6,11 +6,13 @@ extends RigidBody3D
 ## [br][b]_integrate_forces loop:[/b]
 ## [codeblock]
 ## update [KVWheel]s with this tick relevant data like normal load, local velocity, etc
+## apply suspension force
+## call registered preSubstep functions
 ## repeat for substeps:
 ##     call _integrate on [KVComponents] like engine, drivetrain, breaks, etc
 ##     accumulate friction and reaction torques to [KVWheel]s
 ## apply accumulated fricion and torques to wheels
-## animate wheels
+## call registered postSubstep functions
 ## [/codeblock]
 ## [br]see [KVComponent] for writing custom components that receive the _integrate callback
 class_name KVVehicle
@@ -63,6 +65,8 @@ var localAngularVelocity = Vector3.ZERO
 var debugString: String
 
 var componentIntegrateFunctions = []
+var componentPreSubstepIntegrateFunctions = []
+var componentPostSubstepIntegrateFunctions = []
 
 func _ready():
 	
@@ -90,8 +94,22 @@ func _physics_process(delta):
 	else:
 		Engine.time_scale = 1.0
 
+
+## register a function to be run before the substeps.
+##[br] see [KVVehicle] _integrate_forces loop
 func register(funcRef):
 	componentIntegrateFunctions.append(funcRef)
+
+## register a function to be run on each substep
+## [br] [KVComponent]s automatically register their _integrate functions here
+##[br] see [KVVehicle] _integrate_forces loop
+func registerPreSubstep(funcRef):
+	componentPreSubstepIntegrateFunctions.addpend(funcRef)
+
+## register a function to be run after the substeps 
+##[br] see [KVVehicle] _integrate_forces loop
+func registerPostSubstep(funcRef):
+	componentPostSubstepIntegrateFunctions.addpend(funcRef)
 
 func _integrate_forces(state):
 	# state.transform.origin == global_position
@@ -117,8 +135,9 @@ func _integrate_forces(state):
 	for wheel in wheels:
 		wheel.applySuspensionForce(state, delta, oneByDelta, contribution)
 		if wheel.grounded:
-			totalSuspensionForce += wheel.suspensionForce
-	
+			totalSuspensionForce += wheel.suspensionForceApplied
+	for f in componentPreSubstepIntegrateFunctions:
+		f.call(delta, oneByDelta, modDelta, oneBySubstep)
 	for i in range(substeps):
 		#$engine._integrate(delta, oneByDelta, modDelta, oneBySubstep)
 		#$handbreak._integrate(delta, oneByDelta, modDelta, oneBySubstep)
@@ -138,6 +157,9 @@ func _integrate_forces(state):
 	for wheel in wheels:
 		wheel.applyAccumulatedFrictionForces(state)
 	#$drivetrain.clutch(delta, oneByDelta)
+	
+	for f in componentPostSubstepIntegrateFunctions:
+		f.call(delta, oneByDelta, modDelta, oneBySubstep)
 	
 	# there is room for improvement here
 	# perhaps feeding slopeResultingForce vector into each wheel as vehicle motion 

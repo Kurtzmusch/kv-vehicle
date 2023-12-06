@@ -100,6 +100,10 @@ var shapeCastAngleThreshold = deg_to_rad(5.0)
 ## instead of jumping naturally
 @export var clampSuspensionForce = true
 
+## multiplier for the suspension force, in vehicles local space.
+## can be used to disable or reduce some force component of the suspension force
+## [br]example: to disable the lateral force set to Vector3(0.0,1.0,1.0)
+@export var suspensionForceMult = Vector3.ONE
 
 ## angle (radians) between the direction the wheel is pointg and the direction it is moving 
 var slipAngle = 0.0
@@ -154,7 +158,6 @@ var breakTorque = 0.0
 ## the wheel is powered by a drivetrain
 var powered = false
 
-
 var frictionTorque = 0.0
 var prevFrictionTorque = 0.0
 var appliedZFriction = 0.0
@@ -164,8 +167,14 @@ var surfaceMaterial: StringName = 'tarmac'
 
 var normalizedCompression = 0.0
 
-## force applied by the suspension, updated every tick
+## force to be applied by the suspension
 var suspensionForce = Vector3.ZERO
+
+## suspensionForce in vehicles local space
+var localSuspensionForce = Vector3.ZERO
+
+## force applied by the suspension, after multiplying [member suspensionForceMult]
+var suspensionForceApplied = Vector3.ZERO
 
 ## relative velocity of the contact patch to the ground in the contact patch local space(contactTransform)
 var contactRelativeVelocity = Vector3.ZERO
@@ -545,8 +554,15 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 		suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
 	
 	suspensionForce = suspensionForceMagnitude*contactTransform.basis.y
+	suspensionForceApplied = suspensionForce
 	
-	vehicle.applyGlobalForceState(suspensionForce, contactTransform.origin, state, Color.GREEN)
+	localSuspensionForce = vehicle.global_transform.basis.inverse()*suspensionForce
+	
+	if suspensionForceMult != Vector3.ONE:
+		localSuspensionForce *= suspensionForceMult
+		suspensionForceApplied = vehicle.global_transform.basis*localSuspensionForce
+	
+	vehicle.applyGlobalForceState(suspensionForceApplied, contactTransform.origin, state, Color.GREEN)
 	
 	$wheelSteerPivot.position.y = wheelPivotPositionY+wheelVisualPositionYOffset
 	previousCompression = compression

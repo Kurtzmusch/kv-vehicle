@@ -96,6 +96,10 @@ var tireResponseDictionary: Dictionary
 ## instead of jumping naturally
 @export var clampSuspensionForce = true
 
+
+## angle (radians) between the direction the wheel is pointg and the direction it is moving 
+var slipAngle = 0.0
+
 var debugString: String
 
 var vehicle: KVVehicle
@@ -349,7 +353,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		
 		localVelocity = contactTransform.basis.inverse() * globalVelocity
 		targetRPS = localVelocity.z/radius
-		var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
+		#var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
 		var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
 		contactRelativeVelocity = Vector3(localVelocity.x, 0.0, relativeZSpeed)
 		
@@ -367,10 +371,14 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		$wheelSteerPivot.position.y = -maxExtension
 		$RollingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
 		$SlippingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
+		# for getting slip angle when jumping
+		localVelocity = global_transform.basis.inverse() * globalVelocity
+	
 	previousGlobalPosition = global_position
 	xFrictionAccumulated = 0.0
 	zFrictionAccumulated = 0.0
-
+	slipAngle = localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+	debugString = str( snapped(slipAngle, 0.1) )
 func applyAccumulatedFrictionForces(state):
 	if !grounded: return
 	

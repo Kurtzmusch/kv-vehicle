@@ -430,7 +430,7 @@ orbitSpeed = Vector3(1, 1, 1)
 vehicles = [NodePath("../hatchback"), NodePath("../bigFoot")]
 
 [node name="bigFoot" parent="world" instance=ExtResource("28_ctkhe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 2.27786, -16.5786)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 2.27786, 1.9214)
 freeze = true
 
 [node name="vehicleHint" type="Label" parent="world/bigFoot"]

@@ -85,6 +85,10 @@ var tireResponseDictionary: Dictionary
 ## see [member KVVehicle.teleportDelta]
 @export var useShapecastForPhysics = false
 
+## threshold angle(radians) for considering the shapecast collision to be in the center of the shape
+##[br] this is necessary because when near perpendicular to surfaces, shapecasts won't be able to accurately tell the collision point
+var shapeCastAngleThreshold = deg_to_rad(5.0)
+
 ## usefull for smoothing abrubt changes in normal collision, for example, going up a sidewalk.
 ## [br]
 ## 0.0: no bias [br]
@@ -261,6 +265,7 @@ func _ready():
 	$RayCast3D.target_position.y = -maxExtension-radius
 	#$shapecastPivot/ShapeCast3D.target_position.z = -maxExtension
 	$shapecastPivot/ShapeCast3D.add_exception(get_parent())
+	#$shapecastPivot/ShapeCast3D.rotation.z *= sign(position.x)
 
 func updateMaxSteering():
 	ackermanSide = sign(position.x)
@@ -277,6 +282,29 @@ func _physics_process(delta):
 			steerAngleActual = ackermanActual*maxSteerAngle
 		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual
 	$shapecastPivot/ShapeCast3D.target_position = (-global_transform.basis.y*abs(maxExtension))*$shapecastPivot/ShapeCast3D.global_transform.basis
+
+func biasShapecastCollision(preContactTransform):
+	var normal = preContactTransform.basis.y
+	var point = preContactTransform.origin
+	var shapecastUP = $shapecastPivot/ShapeCast3D.global_transform.basis.x
+
+	var angle = normal.angle_to(shapecastUP)
+	
+	"""
+	var dot = normal.dot(shapecastUP)
+	var s = 1/2.0
+	#dot = 1.0 - pow(dot*s-1.0*s, 2.0)
+	dot = pow(dot, 6.0)
+	dot = min(dot, 1.0)
+	"""
+	if angle < shapeCastAngleThreshold:
+		var anglePercent = (shapeCastAngleThreshold-angle)/shapeCastAngleThreshold
+		# $wheelSteerPivot will use position from previous frame at this point
+		var pointLocal = $wheelSteerPivot.to_local(point)
+		pointLocal.x = lerp(pointLocal.x, 0.0, anglePercent)
+		#pointLocal.x = 0.0
+		point =  $wheelSteerPivot.to_global(pointLocal)
+	return point
 
 func updateCasts(state, delta, oneByDelta, contribution):
 	contactTransform = null
@@ -301,7 +329,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 			collider = $shapecastPivot/ShapeCast3D.get_collider(0)
 			collisionNormal = $shapecastPivot/ShapeCast3D.get_collision_normal(0)
 			globalCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
-	
+			
 	
 	"""
 	if collisionNormal.dot(global_transform.basis.y) < normalDirectionLimit:
@@ -323,6 +351,10 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		preContactTransform.basis.z = preContactTransformBasisZ
 		preContactTransform.basis.x = preContactTransformBasisX
 		preContactTransform.origin = globalCollisionPoint
+		
+		if useShapecastForPhysics:
+			globalCollisionPoint = biasShapecastCollision( preContactTransform )
+		
 		
 		surfaceMaterial = StringName('none')
 		if collider.has_meta('material'):

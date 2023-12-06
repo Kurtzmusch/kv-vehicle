@@ -84,10 +84,13 @@ rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="FR" index="1"]
-transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="ShapeCast3D" parent="FR/shapecastPivot" index="0"]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, -7.45058e-09, 7.45058e-09, 5.62503e-16, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="FR" index="2"]
-transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -115,10 +118,10 @@ rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="FL" index="1"]
-transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="FL" index="2"]
-transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -145,10 +148,10 @@ rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="RR" index="1"]
-transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="RR" index="2"]
-transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 
@@ -174,10 +177,10 @@ rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
 
 [node name="shapecastPivot" parent="RL" index="1"]
-transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="wheelSteerPivot" parent="RL" index="2"]
-transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, -0.889435, 0)
+transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 0, -0.889435, 0)
 restExtension = -0.395652
 maxExtension = -0.889435
 

@@ -204,6 +204,8 @@ func findVehicle():
 	vehicle = parent
 
 func _enter_tree():
+	assert(scene_file_path == 'res://addons/k-vehicle/scene/instantiable/kwheel.tscn',\
+	'KVWheel is not meant to be instanced by itself. Use a KVWheelInstancer to create the correct node tree structure for the wheel.')
 	var newResponses = tireResponses.duplicate()
 	newResponses.clear()
 	for tireResponse in tireResponses:

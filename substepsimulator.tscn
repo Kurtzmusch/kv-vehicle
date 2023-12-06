@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bmmq53i4bdyki"]
 
-[ext_resource type="Script" path="res://substep.gd" id="1_ujrp8"]
+[ext_resource type="Script" path="res://substep.gd" id="1_vfa6f"]
 
 [sub_resource type="Curve" id="Curve_ousia"]
 bake_resolution = 128
@@ -8,7 +8,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.09112
 point_count = 2
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_ujrp8")
+script = ExtResource("1_vfa6f")
 tireResponse = SubResource("Curve_ousia")
 
 [node name="dforce" type="Line2D" parent="."]

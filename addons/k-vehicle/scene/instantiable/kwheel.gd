@@ -276,7 +276,7 @@ func _physics_process(delta):
 		if is_equal_approx( sign(vehicle.normalizedSteering), ackermanSide):
 			steerAngleActual = ackermanActual*maxSteerAngle
 		$wheelSteerPivot.rotation.y = -vehicle.normalizedSteering*steerAngleActual
-	$shapecastPivot/ShapeCast3D.target_position = (Vector3.DOWN*abs(maxExtension))*$shapecastPivot/ShapeCast3D.global_transform.basis
+	$shapecastPivot/ShapeCast3D.target_position = (-global_transform.basis.y*abs(maxExtension))*$shapecastPivot/ShapeCast3D.global_transform.basis
 
 func updateCasts(state, delta, oneByDelta, contribution):
 	contactTransform = null

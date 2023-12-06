@@ -71,7 +71,7 @@ func _ready():
 		for wheel in wheels:
 			var collisionShape = CollisionShape3D.new()
 			var shape = CylinderShape3D.new()
-			shape.radius = wheel.radius#.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.y*0.5+0.05
+			shape.radius = wheel.radius+wheel.radius*0.05#.get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.y*0.5+0.05
 			shape.height = wheel.width#get_node('wheelSteerPivot/wheelRollPivot/wheelMesh').mesh.get_aabb().size.x
 			collisionShape.shape = shape
 			

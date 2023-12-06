@@ -10,7 +10,8 @@ var processMaterial: ParticleProcessMaterial
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	wheel = get_parent().get_parent()
-	processMaterial = process_material
+	processMaterial = process_material.duplicate()
+	process_material = processMaterial
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):

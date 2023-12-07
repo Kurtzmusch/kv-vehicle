@@ -41,8 +41,8 @@ var tireResponseDictionary: Dictionary
 
 #@export var inverseSteering = false
 
-## maximum steering angle, use negative value if you need to reverse steering, like for off-road vehicles that steer the rear wheels
-## [br] see [KVA
+## maximum steering angle(radians), use negative value if you need to reverse steering, like for off-road vehicles that steer the rear wheels
+## [br] see [KVAckerman]
 @export var maxSteerAngle = PI/3.0
 
 #@export var useAckermanSteering = true
@@ -61,8 +61,13 @@ var tireResponseDictionary: Dictionary
 ## damp when the suspension is relaxing
 @export_range(0.0,1.0) var relaxationDamp = 0.9
 
-
 #@export_category('Physics Tweaking')
+
+## for the purposes of calculating friction, bias the normal load towards the load at rest.
+## [br] 0.0: no biasing, behaves physically
+## [br] 1.0: full biasing, fricting will be the same no matter how much compressed the suspension is
+## overall, makes the grip response to be more similar to a stiffer suspension/ strong sway bars
+@export_range(0.0, 1.0) var normalLoadRestBias = 0.0
 
 ## reduces wheel fidgeting/oscilating
 @export var fidgetFix = true
@@ -77,7 +82,7 @@ var tireResponseDictionary: Dictionary
 @export var gripMultiplier = Vector3.ONE
 
 ## multiplies with the [member TireResponse.maxNormalLoadCoeficient]
-@export var maxNormalLoadCoeficientMultiplier = 1.0
+@export_range(1.0, 10.0, 0.001, 'or_greater') var maxNormalLoadCoeficientMultiplier = 1.0
 
 ## if true, use shapecast collision data for physics. raycasting is used otherwise.[br]
 ## [b]shapcasting is currently unstable in godot[/b]:
@@ -445,7 +450,8 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	var maxedMagnitude = tireResponse.maxNormalLoadCoeficient\
 		*maxNormalLoadCoeficientMultiplier*(normalForceAtRest)
-	var maxedSuspensionForce = min(suspensionForceMagnitude, maxedMagnitude)
+	var biasedMagnitude = lerp(suspensionForceMagnitude, normalForceAtRest, normalLoadRestBias)
+	var maxedSuspensionForce = min(biasedMagnitude, maxedMagnitude)
 	
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*gripMultiplier.x*maxedSuspensionForce)
 	var zFriction = min(abs(necessaryZFriction), coeficients.z*gripMultiplier.z*maxedSuspensionForce)

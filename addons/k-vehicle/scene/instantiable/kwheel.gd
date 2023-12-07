@@ -201,6 +201,7 @@ var substepZFriction = 0.0
 
 var wheelVisualPositionYOffset = 0.0
 
+var collider = null
 
 func findVehicle():
 	var parent = get_parent()
@@ -330,7 +331,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	var globalCollisionPoint: Vector3
 	#var rayCollisionPoint = $RayCast3D.get_collision_point()
 	#var shapecastCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
-	var collider
+	collider = null
 	if !useShapecastForPhysics:
 		$RayCast3D.force_raycast_update()
 		grounded = $RayCast3D.is_colliding()

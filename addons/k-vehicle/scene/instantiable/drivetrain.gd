@@ -18,6 +18,10 @@ class_name KVDrivetrain
 ## final ratio that gets multiplied by gear ratio from the gearbox: 0.3
 @export var finalRatio = 0.3
 
+
+## overwrites the clutch input if engine angular velocity is below minimum
+@export var autoClutch = true
+
 var currentGearIndex = 0
 var gearRatio = 0.0
 var neutralGearIndex: int
@@ -113,8 +117,10 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	gearRatio = gearRatios[currentGearIndex]*finalRatio
 	clutchInput = max(0.0, 1.0-Input.get_action_strength('clutch')-vehicle.clutchInput)
-	if engine.radsPerSec < engine.idleRadsPerSec+1:
-		clutchInput = 0.0
+	var fastestWheelModAV = -getFastestWheel().radsPerSec/gearRatio
+	if autoClutch:
+		if (engine.radsPerSec < engine.idleRadsPerSec+1) and fastestWheelModAV < engine.idleRadsPerSec+1:
+			clutchInput = 0.0
 	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput):
 		for wheel in poweredWheels:
 			wheel.powered = false

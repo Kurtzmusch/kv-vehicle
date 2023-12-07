@@ -17,11 +17,13 @@ resource_local_to_scene = true
 script = ExtResource("1_2oa8d")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+enabled = false
 
 [node name="shapecastPivot" type="Node3D" parent="."]
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="shapecastPivot"]
 transform = Transform3D(-2.79397e-08, -1, -1.49012e-08, 1, -2.04891e-08, 0, 7.45058e-09, 0, 1, 0, 0, 0)
+enabled = false
 target_position = Vector3(-1, 0, 0)
 
 [node name="wheelSteerPivot" type="Node3D" parent="."]

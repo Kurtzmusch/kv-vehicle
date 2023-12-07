@@ -53,7 +53,7 @@ func steerMouse(delta):
 	vehicle.normalizedSteering = normalizedMouseX
 
 func steerKeyboard(delta):
-	var inverseSpeed = 1.0/1.0 + (abs(vehicle.localLinearVelocity.z)*inverseSpeedScale)
+	var inverseSpeed = 1.0/(1.0 + (abs(vehicle.localLinearVelocity.z)*inverseSpeedScale))
 	vehicle.normalizedSteering += Input.get_axis('steer-', 'steer+')*delta*steeringSensitivity*inverseSpeed
 	#vehicle.normalizedSteering += Input.get_axis('throtle-increase', 'throtle-decrease')*delta*steeringSensitivity*3.0
 	vehicle.normalizedSteering = move_toward(vehicle.normalizedSteering, 0.0, delta*steeringDecay)#*inverseSpeed)

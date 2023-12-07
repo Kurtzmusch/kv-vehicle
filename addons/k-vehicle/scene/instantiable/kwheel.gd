@@ -7,12 +7,12 @@ extends Node3D
 ## must be a direct child of a [KVVehicle]. variables get updated in the [KVVehicle]'s _integrate_forces() method
 class_name KVWheel
 
+
 #@export_category('Wheel and Tire')
 ## wheel radius can be calculated automatically from the mesh AABB if [b]getRadiusFromMeshAABB[/b] is enabled
 @export var radius = 0.27
 ## wheel width, can be calculated automatically from the mesh AABB if [b]getRadiusFromMeshAABB[/b] is enabled
 @export var width = 0.17
-
 ## momentOfInertia is how diffcult an object is to rotate.
 ## [br]the angular acceleration of the wheel is appliedTorque/momentOfInerta
 ## [br]approximation for a solid cilinder: 0.5*wheelMass*radius^2
@@ -327,14 +327,14 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	#var shapecastCollisionPoint = $shapecastPivot/ShapeCast3D.get_collision_point(0)
 	var collider
 	if !useShapecastForPhysics:
-		#$RayCast3D.force_raycast_update()
+		$RayCast3D.force_raycast_update()
 		grounded = $RayCast3D.is_colliding()
 		if grounded:
 			collider = $RayCast3D.get_collider()
 			globalCollisionPoint = $RayCast3D.get_collision_point()
 			collisionNormal = $RayCast3D.get_collision_normal()
 	else:
-		#$shapecastPivot/ShapeCast3D.force_shapecast_update()
+		$shapecastPivot/ShapeCast3D.force_shapecast_update()
 		grounded = $shapecastPivot/ShapeCast3D.is_colliding()
 		if grounded:
 			collider = $shapecastPivot/ShapeCast3D.get_collider(0)

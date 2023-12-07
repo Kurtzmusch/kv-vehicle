@@ -208,4 +208,4 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 	var feedbackSamplePosition = clamp( abs(slipAngleDeg), 0.0, slipAngleEnd )
 	var feedback = feedbackCurve.sample_baked(feedbackSamplePosition/feedbackRange)
 	
-	return Vector3(x*coeficientOfFriction, feedback, z*coeficientOfFriction)
+	return Vector3(x*coeficientOfFriction, feedback*sign(slipAngleDeg), z*coeficientOfFriction)

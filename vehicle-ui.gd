@@ -26,4 +26,6 @@ func _process(delta):
 		gearUINumber = 'N'
 	#$bar/HBoxContainer/LabelGearValue.text = str(drivetrain.gearRatio)
 	$bar/HBoxContainer/LabelGearValue.text = str(gearUINumber)
-	$LabelSpeed.text = str( vehicle.speedMS*convertionTable[unit] )
+	$LabelSpeed.text = str( snapped(vehicle.speedMS*convertionTable[unit], 0.1) )
+	$HBoxContainer/barAccelerator.value = vehicle.accelerationInput
+	$HBoxContainer/barBreak.value = vehicle.break2Input

@@ -10,6 +10,17 @@ extends Node
 ## sensitivity curve. higher values make low inputs even lower
 @export var gPadSteerNonLinearity = 1.25
 
+## decay rate of breaking when not using gpad
+@export var breakDecay = 10.0
+## break increase speed when not using gpad
+@export var breakSensitivity = 15.0
+
+## decay rate of the accelerator when not using gpad
+@export var acceleratorDecay = 0.25
+## accelerator increase speed when not using gpad
+@export var acceleratorSensitivity = 5.0
+
+
 ## decay rate of steering when using keyboard steering
 @export var steeringDecay = 2.0
 ## steer speed when using keyboard steering
@@ -93,15 +104,29 @@ func _physics_process(delta):
 func handleInput(delta):
 	if vehicle.freeze: return
 	steeringFunction = steeringFunctions[steeringMethod]
+	var targetBreak = 0.0
+	var targetAccelerator = 0.0
 	if transmission:
+		
 		if sign( transmission.getGearRatio() ) >= 0:
-			vehicle.accelerationInput = Input.get_action_strength('acceleration+')
-			vehicle.break2Input = Input.get_action_strength('acceleration-')
+			
+			targetAccelerator = Input.get_action_strength('acceleration+')
+			targetBreak = Input.get_action_strength('acceleration-')
 		else:
-			vehicle.accelerationInput = Input.get_action_strength('acceleration-')
-			vehicle.break2Input = Input.get_action_strength('acceleration+')
+			targetAccelerator = Input.get_action_strength('acceleration-')
+			targetBreak = Input.get_action_strength('acceleration+')
 	else:
-		vehicle.accelerationInput = Input.get_action_strength('acceleration+')
+		targetAccelerator = Input.get_action_strength('acceleration+')
+		targetBreak = Input.get_action_strength('acceleration-')
+	vehicle.break2Input = move_toward(vehicle.break2Input,\
+	0.0, delta*breakDecay)
+	vehicle.break2Input = move_toward(vehicle.break2Input,\
+	targetBreak, delta*breakSensitivity)
+	vehicle.accelerationInput = move_toward(vehicle.accelerationInput,\
+	0.0, delta*acceleratorDecay)
+	vehicle.accelerationInput = move_toward(vehicle.accelerationInput,\
+	targetAccelerator, delta*acceleratorSensitivity)
+	
 	if steeringFunction == steerGpad:
 		vehicle.accelerationInput = Input.get_action_strength('acceleration+')
 		vehicle.break2Input = Input.get_action_strength('acceleration-')

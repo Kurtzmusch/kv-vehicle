@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=29 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://example.gd" id="1_53f3a"]
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
@@ -88,6 +88,12 @@ uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true
 uv1_world_triplanar = true
 texture_filter = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4x1au"]
+bg_color = Color(1, 0.34902, 0.235294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4jm5"]
+bg_color = Color(0.278431, 1, 0.603922, 1)
 
 [node name="environment" type="WorldEnvironment"]
 environment = SubResource("Environment_b44jp")
@@ -509,6 +515,35 @@ offset_right = 245.0
 offset_bottom = 164.0
 text = "tt
 "
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="barBreak" type="ProgressBar" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_4x1au")
+max_value = 1.0
+step = 0.004
+show_percentage = false
+
+[node name="barAccelerator" type="ProgressBar" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_n4jm5")
+max_value = 1.0
+step = 0.004
+show_percentage = false
 
 [node name="ControlsUI" type="Control" parent="."]
 layout_mode = 3

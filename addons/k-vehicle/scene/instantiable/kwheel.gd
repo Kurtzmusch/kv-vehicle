@@ -110,6 +110,10 @@ var shapeCastAngleThreshold = deg_to_rad(5.0)
 ## [br]example: to disable the lateral force set to Vector3(0.0,1.0,1.0)
 @export var suspensionForceMult = Vector3.ONE
 
+## clamps the net friction instead of it's individual components
+##[br] more realistic, prevents breaking steering the vehicle in the opposite direction when using a lot of maxSteerAngle
+##[br] makes drifting easier
+@export var clampFricionAfterCombining = true
 ## angle (radians) between the direction the wheel is pointg and the direction it is moving 
 var slipAngle = 0.0
 
@@ -427,7 +431,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	xFrictionAccumulated = 0.0
 	zFrictionAccumulated = 0.0
 	slipAngle = localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-	debugString = str( snapped(slipAngle, 0.1) )
+	#debugString = str( snapped(slipAngle, 0.1) )
 func applyAccumulatedFrictionForces(state):
 	if !grounded: return
 	
@@ -440,8 +444,10 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	var oneByModDelta = 1.0/modDelta
 	var necessaryXFriction = localVelocity.x*oneByDelta*massPerWheel*0.9
 	relativeZSpeed = (radsPerSec*radius)-(localVelocity.z)
-	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
 	
+	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
+	#var necessaryZFriction = -localVelocity.z*oneByDelta*massPerWheel*0.9
+	debugString = str( snapped( relativeZSpeed, 0.1 ) )
 	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
 	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))
@@ -456,10 +462,19 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	var xFriction = min(abs(necessaryXFriction), coeficients.x*gripMultiplier.x*maxedSuspensionForce)
 	var zFriction = min(abs(necessaryZFriction), coeficients.z*gripMultiplier.z*maxedSuspensionForce)
-	#zFriction = coeficients.z*gripMultiplier.x*suspensionForceMagnitude
+	#zFriction = coeficients.z*gripMultiplier.x*maxedSuspensionForce
 	#xFriction = coeficients.x*suspensionForceMagnitude
 	zFriction *= sign(necessaryZFriction)
 	xFriction *= sign(necessaryXFriction)
+	
+	if clampFricionAfterCombining:
+		var desiredFricionVec = Vector3(necessaryXFriction, 0.0, necessaryZFriction)
+		var maxFricLen = max(coeficients.x*gripMultiplier.x, coeficients.z*gripMultiplier.z)*maxedSuspensionForce
+		if desiredFricionVec.length() > maxFricLen:
+			desiredFricionVec = desiredFricionVec.normalized()*maxFricLen
+		xFriction = desiredFricionVec.x
+		zFriction = desiredFricionVec.z
+	
 	frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1)
 	if tireResponse.coeficientOfFriction > 0.0:

@@ -17,9 +17,12 @@ extends RigidBody3D
 ## [br]see [KVComponent] for writing custom components that receive the _integrate callback
 class_name KVVehicle
 
-## creates a cilinder collider for each wheel at
+## [b]experimental[/b]
+##[br]creates a cilinder collider for each wheel at
 ## their position (where the suspension is under maximum compression)
-@export var createWheelMinimumColliders = true
+##[br]prevents the wheel from going inside the ground under extreme load,
+## but can cause odd collisions agains the ground under certain circumstances
+@export var createWheelMinimumColliders = false
 ## substeps for the friction torque feedback calculations.
 ## [br][br]
 ## it improves engine and wheel fidgeting/oscilations without needing to increase the engine physics ticks/second

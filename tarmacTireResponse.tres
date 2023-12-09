@@ -10,7 +10,7 @@ point_count = 3
 
 [sub_resource type="Curve" id="Curve_ahlfm"]
 bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.251381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.184874, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.715789), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_4p6nj"]
@@ -24,10 +24,10 @@ materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
 gripXCurve = SubResource("Curve_ahlfm")
-slipAngleBegin = 8.0
+slipAngleBegin = 6.0
 slipAngleEnd = 10.0
 gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 0.05
+relativeZSpeedBegin = 0.15
 relativeZSpeedEnd = 4.0
 useSlipRatio = false
 feedbackCurve = SubResource("Curve_oooal")

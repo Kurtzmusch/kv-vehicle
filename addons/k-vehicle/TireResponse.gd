@@ -203,9 +203,8 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 	if abs(relativeZSpeed) < relativeZSpeedBegin:
 		#z = ease(lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) ),0.8 )
 		z = lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) )
-	
+	#if z > x: z = x
 	var feedbackRange = slipAngleEnd
 	var feedbackSamplePosition = clamp( abs(slipAngleDeg), 0.0, slipAngleEnd )
 	var feedback = feedbackCurve.sample_baked(feedbackSamplePosition/feedbackRange)
-	
 	return Vector3(x*coeficientOfFriction, feedback*sign(slipAngleDeg), z*coeficientOfFriction)

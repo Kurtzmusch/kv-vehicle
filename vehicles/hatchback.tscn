@@ -145,7 +145,7 @@ limit = 15.0
 
 [node name="breakFront" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
-strength = 1200.0
+strength = 1000.0
 
 [node name="breakRear" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
@@ -232,6 +232,7 @@ mesh = SubResource("ImmediateMesh_t1flb")
 
 [node name="RR" parent="." index="25" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
+momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
 defaultTireResponse = ExtResource("19_x5hqt")
@@ -254,6 +255,7 @@ mesh = SubResource("ImmediateMesh_eek5i")
 
 [node name="RL" parent="." index="26" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, 1.356)
+momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[Resource("res://addons/k-vehicle/TireResponse.gd")]([ExtResource("19_x5hqt"), ExtResource("20_xdxax")])
 defaultTireResponse = ExtResource("19_x5hqt")

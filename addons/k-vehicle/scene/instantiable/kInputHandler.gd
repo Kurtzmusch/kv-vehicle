@@ -107,7 +107,7 @@ func handleInput(delta):
 		vehicle.break2Input = Input.get_action_strength('acceleration-')
 	
 	vehicle.breaking = (Input.get_action_strength("handbreak") > 0.9) or (vehicle.break2Input > 0.9)
-	
+	vehicle.clutchInput = Input.get_action_strength('clutch')
 	steeringFunction.call(delta)
 
 func updateSteeringWheels():

@@ -1,3 +1,4 @@
+@tool
 @icon("res://addons/k-vehicle/car-wheel.svg")
 
 
@@ -207,6 +208,11 @@ var wheelVisualPositionYOffset = 0.0
 
 var collider = null
 
+
+func _get_configuration_warnings():
+	if scene_file_path == '':
+		return['KVVehicle is meant to be instantiated as a child or inherited scene.']
+
 func findVehicle():
 	var parent = get_parent()
 	while !(parent is KVVehicle):
@@ -214,8 +220,11 @@ func findVehicle():
 	vehicle = parent
 
 func _enter_tree():
+	update_configuration_warnings()
+	
 	assert(scene_file_path == 'res://addons/k-vehicle/scene/instantiable/kwheel.tscn',\
 	'KVWheel is not meant to be instanced by itself. Use a KVWheelInstancer to create the correct node tree structure for the wheel.')
+	
 	var newResponses = tireResponses.duplicate()
 	newResponses.clear()
 	for tireResponse in tireResponses:
@@ -271,6 +280,12 @@ func validateSubTree():
 		$wheelSteerPivot/wheelRollPivot/wheelMesh.position = Vector3.ZERO
 
 func _ready():
+	if Engine.is_editor_hint():
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		set_process_unhandled_input(false)
+	get_parent().set_editable_instance(self, true)
 	validateSubTree()
 	updateMaxSteering()
 	

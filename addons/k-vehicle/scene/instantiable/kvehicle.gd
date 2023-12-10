@@ -1,3 +1,5 @@
+@tool
+
 extends RigidBody3D
 
 ## rigid body for ground vehicles
@@ -71,8 +73,28 @@ var componentIntegrateFunctions = []
 var componentPreSubstepIntegrateFunctions = []
 var componentPostSubstepIntegrateFunctions = []
 
+func _get_configuration_warnings():
+	if scene_file_path == '':
+		return['KVVehicle is meant to be instantiated as a child(Ctrl+Shift+A) or inherited(Ctrl+Shift+N) scene.']
+
+func _enter_tree():
+	if Engine.is_editor_hint():
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		set_process_unhandled_input(false)
+	if scene_file_path == '':
+		printerr('KVVehicle is meant to be instantiated as a child or inherited scene.')
+	update_configuration_warnings()
+
 func _ready():
 	
+	if Engine.is_editor_hint():
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		set_process_unhandled_input(false)
+	get_parent().set_editable_instance(self, true)
 	#TODO maybe use same shape resource as shapecaster
 	if createWheelMinimumColliders:
 		for wheel in wheels:

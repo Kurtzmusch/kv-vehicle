@@ -1,10 +1,13 @@
-[gd_scene load_steps=29 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=85 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://example.gd" id="1_53f3a"]
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
 [ext_resource type="Script" path="res://followCamera.gd" id="3_jhh6f"]
 [ext_resource type="ArrayMesh" uid="uid://xh8a5n6aeqs0" path="res://mesh/rock.obj" id="4_2aasw"]
+[ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="7_sssnk"]
+[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="8_y7cqf"]
+[ext_resource type="AudioStream" uid="uid://xsccdvjjl8c8" path="res://snd/fx/tire-slip-gravel.wav" id="9_4nbxb"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
 [ext_resource type="PackedScene" uid="uid://foegnmr6avup" path="res://vehicles/big-foot.tscn" id="28_ctkhe"]
@@ -88,6 +91,533 @@ uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true
 uv1_world_triplanar = true
 texture_filter = 4
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_tvslm"]
+resource_local_to_scene = true
+
+[sub_resource type="Curve" id="Curve_oooal"]
+min_value = -0.1
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_ahlfm"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.184874, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.715789), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_4p6nj"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_jo041"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_ahlfm")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_4p6nj")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_oooal")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xeasq"]
+fractal_octaves = 1
+fractal_lacunarity = 3.305
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kb1a1"]
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_xeasq")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hc8kl"]
+fractal_octaves = 1
+fractal_lacunarity = 3.305
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s4dsl"]
+generate_mipmaps = false
+seamless = true
+as_normal_map = true
+bump_strength = 16.0
+noise = SubResource("FastNoiseLite_hc8kl")
+
+[sub_resource type="Curve" id="Curve_irmtb"]
+min_value = -0.1
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_qo1vr"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.251381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_at0w4"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_h6qwe"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_qo1vr")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_at0w4")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_irmtb")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
+bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_hc0ug"]
+height = 0.523076
+radius = 0.64308
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_h70ea"]
+resource_local_to_scene = true
+
+[sub_resource type="Resource" id="Resource_2o4g7"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_ahlfm")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_4p6nj")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_oooal")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="Resource" id="Resource_rgoau"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_qo1vr")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_at0w4")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_irmtb")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
+bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_hacus"]
+height = 0.523076
+radius = 0.64308
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_x716l"]
+resource_local_to_scene = true
+
+[sub_resource type="Resource" id="Resource_pm7tn"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_ahlfm")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_4p6nj")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_oooal")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="Resource" id="Resource_tumhp"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_qo1vr")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_at0w4")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_irmtb")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
+bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fplox"]
+height = 0.523076
+radius = 0.64308
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_6k7hg"]
+resource_local_to_scene = true
+
+[sub_resource type="Resource" id="Resource_wuhxd"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_ahlfm")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_4p6nj")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_oooal")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="Resource" id="Resource_1f3bs"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_qo1vr")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_at0w4")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_irmtb")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
+bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wf6sq"]
+height = 0.523076
+radius = 0.64308
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_2rasg"]
+resource_local_to_scene = true
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_s3hs8"]
+resource_local_to_scene = true
+
+[sub_resource type="Curve" id="Curve_aw113"]
+min_value = -0.1
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_pku14"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.184874, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.715789), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_b2m6o"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_myf5t"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_pku14")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_b2m6o")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_aw113")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_khfdk"]
+fractal_octaves = 1
+fractal_lacunarity = 3.305
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bqbvk"]
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_khfdk")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_w67iq"]
+fractal_octaves = 1
+fractal_lacunarity = 3.305
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3suc1"]
+generate_mipmaps = false
+seamless = true
+as_normal_map = true
+bump_strength = 16.0
+noise = SubResource("FastNoiseLite_w67iq")
+
+[sub_resource type="Curve" id="Curve_hv4wa"]
+min_value = -0.1
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_lf7ie"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.251381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_6u3qo"]
+bake_resolution = 128
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_sgiik"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_lf7ie")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_6u3qo")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_hv4wa")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
+bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_b4ip5"]
+height = 0.244639
+radius = 0.303612
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_58yvu"]
+resource_local_to_scene = true
+
+[sub_resource type="Resource" id="Resource_4lvhu"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_pku14")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_b2m6o")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_aw113")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="Resource" id="Resource_vrkqx"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_lf7ie")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_6u3qo")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_hv4wa")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
+bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6ttuc"]
+height = 0.244639
+radius = 0.303612
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_t8mcs"]
+resource_local_to_scene = true
+
+[sub_resource type="Resource" id="Resource_n6wja"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_pku14")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_b2m6o")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_aw113")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="Resource" id="Resource_42daj"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_lf7ie")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_6u3qo")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_hv4wa")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
+bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f3cr1"]
+height = 0.244639
+radius = 0.303612
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_18y07"]
+resource_local_to_scene = true
+
+[sub_resource type="Resource" id="Resource_dukdw"]
+script = ExtResource("7_sssnk")
+materialName = "tarmac"
+coeficientOfFriction = 1.0
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_pku14")
+slipAngleBegin = 6.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_b2m6o")
+relativeZSpeedBegin = 0.15
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_aw113")
+slippingStream = ExtResource("8_y7cqf")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 0.7
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.0
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpVisualBias = 0.0
+
+[sub_resource type="Resource" id="Resource_8ip7y"]
+script = ExtResource("7_sssnk")
+materialName = "gravel"
+coeficientOfFriction = 0.8
+maxNormalLoadCoeficient = 3.0
+gripXCurve = SubResource("Curve_lf7ie")
+slipAngleBegin = 8.0
+slipAngleEnd = 10.0
+gripZCurve = SubResource("Curve_6u3qo")
+relativeZSpeedBegin = 0.5
+relativeZSpeedEnd = 4.0
+useSlipRatio = false
+feedbackCurve = SubResource("Curve_hv4wa")
+slippingStream = ExtResource("9_4nbxb")
+slipAudioMinimumVelocity = 5.0
+slipAudioMinimumPitch = 1.0
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.4
+audioVolumeEase = 0.25
+bumpHeight = 0.0
+bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
+bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
+bumpVisualBias = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dj3jw"]
+height = 0.244639
+radius = 0.303612
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4x1au"]
 bg_color = Color(1, 0.34902, 0.235294, 1)
@@ -437,6 +967,69 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04651, 2.27786, 1.9214)
 top_level = true
 freeze = true
 
+[node name="debugVectors" parent="world/bigFoot" index="0"]
+mesh = SubResource("ImmediateMesh_tvslm")
+
+[node name="FR" parent="world/bigFoot" index="4"]
+radius = 0.64308
+width = 0.523076
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_jo041"), SubResource("Resource_h6qwe")])
+
+[node name="RayCast3D" parent="world/bigFoot/FR" index="0"]
+target_position = Vector3(0, -1.53252, 0)
+
+[node name="ShapeCast3D" parent="world/bigFoot/FR/shapecastPivot" index="0"]
+enabled = true
+shape = SubResource("CylinderShape3D_hc0ug")
+
+[node name="contactTransform" parent="world/bigFoot/FR" index="3"]
+mesh = SubResource("ImmediateMesh_h70ea")
+
+[node name="FL" parent="world/bigFoot" index="5"]
+radius = 0.64308
+width = 0.523076
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_2o4g7"), SubResource("Resource_rgoau")])
+
+[node name="RayCast3D" parent="world/bigFoot/FL" index="0"]
+target_position = Vector3(0, -1.53252, 0)
+
+[node name="ShapeCast3D" parent="world/bigFoot/FL/shapecastPivot" index="0"]
+enabled = true
+shape = SubResource("CylinderShape3D_hacus")
+
+[node name="contactTransform" parent="world/bigFoot/FL" index="3"]
+mesh = SubResource("ImmediateMesh_x716l")
+
+[node name="RR" parent="world/bigFoot" index="6"]
+radius = 0.64308
+width = 0.523076
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_pm7tn"), SubResource("Resource_tumhp")])
+
+[node name="RayCast3D" parent="world/bigFoot/RR" index="0"]
+target_position = Vector3(0, -1.53252, 0)
+
+[node name="ShapeCast3D" parent="world/bigFoot/RR/shapecastPivot" index="0"]
+enabled = true
+shape = SubResource("CylinderShape3D_fplox")
+
+[node name="contactTransform" parent="world/bigFoot/RR" index="3"]
+mesh = SubResource("ImmediateMesh_6k7hg")
+
+[node name="RL" parent="world/bigFoot" index="7"]
+radius = 0.64308
+width = 0.523076
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_wuhxd"), SubResource("Resource_1f3bs")])
+
+[node name="RayCast3D" parent="world/bigFoot/RL" index="0"]
+target_position = Vector3(0, -1.53252, 0)
+
+[node name="ShapeCast3D" parent="world/bigFoot/RL/shapecastPivot" index="0"]
+enabled = true
+shape = SubResource("CylinderShape3D_wf6sq")
+
+[node name="contactTransform" parent="world/bigFoot/RL" index="3"]
+mesh = SubResource("ImmediateMesh_2rasg")
+
 [node name="vehicleHint" type="Label" parent="world/bigFoot"]
 visible = false
 anchors_preset = 2
@@ -452,6 +1045,45 @@ text = "t - toggle rear steering
 [node name="hatchback" parent="world" instance=ExtResource("30_nwsrf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96.6535, 2.26714, 3.0707)
 top_level = true
+
+[node name="debugVectors" parent="world/hatchback" index="0"]
+mesh = SubResource("ImmediateMesh_s3hs8")
+
+[node name="FR" parent="world/hatchback" index="23"]
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_myf5t"), SubResource("Resource_sgiik")])
+
+[node name="ShapeCast3D" parent="world/hatchback/FR/shapecastPivot" index="0"]
+shape = SubResource("CylinderShape3D_b4ip5")
+
+[node name="contactTransform" parent="world/hatchback/FR" index="3"]
+mesh = SubResource("ImmediateMesh_58yvu")
+
+[node name="FL" parent="world/hatchback" index="24"]
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_4lvhu"), SubResource("Resource_vrkqx")])
+
+[node name="ShapeCast3D" parent="world/hatchback/FL/shapecastPivot" index="0"]
+shape = SubResource("CylinderShape3D_6ttuc")
+
+[node name="contactTransform" parent="world/hatchback/FL" index="3"]
+mesh = SubResource("ImmediateMesh_t8mcs")
+
+[node name="RR" parent="world/hatchback" index="25"]
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_n6wja"), SubResource("Resource_42daj")])
+
+[node name="ShapeCast3D" parent="world/hatchback/RR/shapecastPivot" index="0"]
+shape = SubResource("CylinderShape3D_f3cr1")
+
+[node name="contactTransform" parent="world/hatchback/RR" index="3"]
+mesh = SubResource("ImmediateMesh_18y07")
+
+[node name="RL" parent="world/hatchback" index="26"]
+tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_dukdw"), SubResource("Resource_8ip7y")])
+
+[node name="ShapeCast3D" parent="world/hatchback/RL/shapecastPivot" index="0"]
+shape = SubResource("CylinderShape3D_dj3jw")
+
+[node name="contactTransform" parent="world/hatchback/RL" index="3"]
+mesh = SubResource("ImmediateMesh_18y07")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -715,3 +1347,15 @@ layout_mode = 2
 text = "change camera: 1-3"
 
 [connection signal="toggled" from="ControlsUI/VBoxContainer/Button" to="ControlsUI" method="_on_button_toggled"]
+
+[editable path="world/bigFoot"]
+[editable path="world/bigFoot/FR"]
+[editable path="world/bigFoot/FL"]
+[editable path="world/bigFoot/RR"]
+[editable path="world/bigFoot/RL"]
+[editable path="world/bigFoot/engine"]
+[editable path="world/hatchback"]
+[editable path="world/hatchback/FR"]
+[editable path="world/hatchback/FL"]
+[editable path="world/hatchback/RR"]
+[editable path="world/hatchback/RL"]

@@ -463,7 +463,7 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	var necessaryZFriction = relativeZSpeed*oneByDelta*massPerWheel*0.9
 	#var necessaryZFriction = -localVelocity.z*oneByDelta*massPerWheel*0.9
-	debugString = str( snapped( relativeZSpeed, 0.1 ) )
+	#debugString = str( snapped( relativeZSpeed, 0.1 ) )
 	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
 	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))

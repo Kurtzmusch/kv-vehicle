@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://csm6euds2015k"]
+[gd_scene load_steps=57 format=3 uid="uid://csm6euds2015k"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_r7ucc"]
 [ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/kv-vehicle/scene/instantiable/kv-ackerman.tscn" id="2_a2nxy"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://b0hama08v0ayv" path="res://addons/kv-vehicle/scene/instantiable/kv-engine.tscn" id="12_kd2ra"]
 [ext_resource type="PackedScene" uid="uid://cmtcpbwh5t3lc" path="res://addons/kv-vehicle/scene/instantiable/kv-drivetrain.tscn" id="13_5s550"]
 [ext_resource type="PackedScene" uid="uid://csbfypw6a2bh0" path="res://addons/kv-vehicle/scene/instantiable/kv-LSDifferential.tscn" id="14_uitsv"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-CentralLSDifferential.gd" id="15_wddpj"]
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/kv-vehicle/scene/instantiable/kv-breaks.tscn" id="15_x1rcs"]
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/kv-vehicle/scene/instantiable/kv-swayBar.tscn" id="16_hb30c"]
 [ext_resource type="Script" path="res://hatchback.gd" id="17_4lo8p"]
@@ -395,25 +396,30 @@ wheels = [NodePath("../RR"), NodePath("../RL")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 limit = 15.0
 
-[node name="breakFront" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
+[node name="KVCentralLSDifferential" type="Node" parent="." index="17" node_paths=PackedStringArray("lsds")]
+script = ExtResource("15_wddpj")
+lsds = [NodePath("../lsdRear"), NodePath("../lsdFront")]
+limit = 2.0
+
+[node name="breakFront" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 strength = 1000.0
 
-[node name="breakRear" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
+[node name="breakRear" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 strength = 150.0
 
-[node name="k-swayBarFront" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
+[node name="k-swayBarFront" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 
-[node name="k-swayBarRear" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
+[node name="k-swayBarRear" parent="." index="21" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="21"]
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="22"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
 
-[node name="vehicleHint" type="Label" parent="." index="22" node_paths=PackedStringArray("frontWheels", "drivetrain")]
+[node name="vehicleHint" type="Label" parent="." index="23" node_paths=PackedStringArray("frontWheels", "drivetrain", "centralLSD")]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -426,8 +432,9 @@ text = "t - toggle awd/rwd
 script = ExtResource("17_4lo8p")
 frontWheels = [NodePath("../FR"), NodePath("../FL")]
 drivetrain = NodePath("../drivetrain")
+centralLSD = NodePath("../KVCentralLSDifferential")
 
-[node name="FR" parent="." index="23" instance=ExtResource("18_y8sih")]
+[node name="FR" parent="." index="24" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 radius = 0.303612
 width = 0.244639
@@ -462,7 +469,7 @@ mesh = SubResource("ImmediateMesh_466e8")
 
 [node name="gravel" parent="FR/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="FL" parent="." index="24" instance=ExtResource("18_y8sih")]
+[node name="FL" parent="." index="25" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, -1.194)
 radius = 0.303612
 width = 0.244639
@@ -498,7 +505,7 @@ mesh = SubResource("ImmediateMesh_t1flb")
 
 [node name="gravel" parent="FL/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="RR" parent="." index="25" instance=ExtResource("18_y8sih")]
+[node name="RR" parent="." index="26" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 radius = 0.303612
 width = 0.244639
@@ -529,7 +536,7 @@ mesh = SubResource("ImmediateMesh_eek5i")
 
 [node name="gravel" parent="RR/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="RL" parent="." index="26" instance=ExtResource("18_y8sih")]
+[node name="RL" parent="." index="27" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, 1.356)
 radius = 0.303612
 width = 0.244639

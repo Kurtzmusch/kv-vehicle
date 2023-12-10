@@ -360,8 +360,14 @@ func updateCasts(state, delta, oneByDelta, contribution):
 			globalCollisionPoint = $RayCast3D.get_collision_point()
 			collisionNormal = $RayCast3D.get_collision_normal()
 	else:
+		var shapecastTargetPosition = $shapecastPivot/ShapeCast3D.target_position
+		$shapecastPivot/ShapeCast3D.target_position = Vector3.ZERO
 		$shapecastPivot/ShapeCast3D.force_shapecast_update()
+		if !$shapecastPivot/ShapeCast3D.is_colliding():
+			$shapecastPivot/ShapeCast3D.target_position = shapecastTargetPosition
+			$shapecastPivot/ShapeCast3D.force_shapecast_update()
 		grounded = $shapecastPivot/ShapeCast3D.is_colliding()
+		debugString = str(grounded)
 		if grounded:
 			collider = $shapecastPivot/ShapeCast3D.get_collider(0)
 			collisionNormal = $shapecastPivot/ShapeCast3D.get_collision_normal(0)
@@ -568,6 +574,7 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	var fsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_safe_fraction()
 	var funsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_unsafe_fraction()
 	var fraction = (fsafe+funsafe)*0.5
+	debugString = str( str( snapped(fsafe, 0.1) ) + '/'+str(snapped(funsafe, 0.1) ) )
 	var wheelPivotPositionY
 	if useShapecastForPhysics:
 		wheelPivotPositionY = -fraction*maxExtension#-radius

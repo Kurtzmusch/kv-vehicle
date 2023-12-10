@@ -1,4 +1,5 @@
 extends GPUParticles3D
+## particles emitter logic for smoke-like effects
 
 class_name KVTireParticlesSmoke
 

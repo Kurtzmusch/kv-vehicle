@@ -1,5 +1,6 @@
 extends KVComponent
 ## applies break torque to wheels
+
 class_name KVBreak
 
 @export var wheels: Array[KVWheel]

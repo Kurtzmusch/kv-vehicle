@@ -1,7 +1,8 @@
 @tool
+@icon("res://addons/k-vehicle/car-wheel.svg")
 extends Node3D
-
-class_name KVWheelInstancer
+## use this to instantiate a KVWheel scene with its dependency tree 
+class_name KVWheelInstantiator
 var scene = preload("res://addons/kv-vehicle/scene/instantiable/kv-wheel.tscn")
 
 # Called when the node enters the scene tree for the first time.

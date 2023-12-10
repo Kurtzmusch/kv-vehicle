@@ -3,7 +3,7 @@
 
 
 extends Node3D
-## implements a vehicle wheel and its suspension.
+## implements a vehicle wheel and its suspension.[br] [b]do not add this node directly, add a KVWheelInstantiator instead[/b]
 ## 
 ## must be a direct child of a [KVVehicle]. variables get updated in the [KVVehicle]'s _integrate_forces() method
 class_name KVWheel
@@ -225,6 +225,8 @@ func _enter_tree():
 	assert(scene_file_path != '',\
 	'KVWheel is not meant to be instanced by itself. Use a KVWheelInstancer to create the correct node tree structure for the wheel.')
 	if Engine.is_editor_hint(): return
+	
+	
 	var newResponses = tireResponses.duplicate()
 	newResponses.clear()
 	for tireResponse in tireResponses:

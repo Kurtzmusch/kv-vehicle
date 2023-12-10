@@ -1,6 +1,4 @@
 extends KVComponent
-
-class_name KVLimitedSlipDifferential
 ## infinite torque limited slip differential
 ##
 ## differentials allow wheels on an exle to spin at different rates.
@@ -8,6 +6,8 @@ class_name KVLimitedSlipDifferential
 ## [br] this differential also helps with drifting
 ## [br] set limit to 0.0 for a locked/solid axle
 ## [br] see also [KVCentralLSDifferential]
+
+class_name KVLimitedSlipDifferential
 @export var wheels: Array[KVWheel]
 ## angular velocity limit (radians/second)
 @export var limit = 10.0

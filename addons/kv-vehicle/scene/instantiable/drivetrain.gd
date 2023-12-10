@@ -1,9 +1,9 @@
 extends KVComponent
-
 ## implements a drivetrain with clutch and gearbox
 ##
 ## angular velocity is transfered from the engine to the powered wheels using a clutch
 ## that applies opossite torque on both sides
+
 class_name KVDrivetrain
 ## wheels to be powered by this drivetrain
 @export var poweredWheels: Array[KVWheel]

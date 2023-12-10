@@ -1,7 +1,7 @@
 extends KVComponent
-class_name KVCentralLSDifferential
 ## differential between [KVLimitedSlipDifferential]s
 
+class_name KVCentralLSDifferential
 
 @export var lsds: Array[KVLimitedSlipDifferential]
 ## angular velocity limit (radians/second)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://csm6euds2015k"]
+[gd_scene load_steps=58 format=3 uid="uid://csm6euds2015k"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_r7ucc"]
 [ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/kv-vehicle/scene/instantiable/kv-ackerman.tscn" id="2_a2nxy"]
@@ -43,6 +43,10 @@ texture_repeat = false
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_old68"]
 points = PackedVector3Array(-1.06351, 0.243368, 1.17088, 0.972053, 0.0714927, 1.50198, 1.03844, -0.375011, 1.60349, 0.7292, -0.313122, -1.91974, 0.54759, 0.806304, -1.45998, -0.939649, -0.251234, -1.7962, -1.06351, -0.375011, 1.60388, -0.569281, 0.858844, 0.219177, 1.03844, 0.552304, 0.552371, -0.518434, 0.808312, -1.46547, -0.182852, 0.302525, 1.75918, 1.03844, -0.189472, -1.73384, -1.06351, 0.181607, -1.48713, 0.544532, 0.859179, 0.219304, -1.00158, 0.614066, 0.552758, 0.580426, 0.125993, 1.89452, -0.602996, 0.303623, -1.83413, 1.03844, -0.375011, -0.992168, -0.815992, -0.313122, -1.85778, -0.657862, 0.186298, 1.81576, -0.31083, -0.233311, 1.90742, 1.03844, 0.181353, -1.54871, 0.719793, 0.414936, 1.46121, 0.636758, 0.421718, -1.77455, -1.06351, -0.375011, 0.676306, -0.690915, 0.415455, 1.4666, 0.54781, 0.862621, -0.563787, -1.06351, -0.313122, -0.992555, -0.549662, 0.065348, -1.91406, 0.677983, -0.330188, 1.78062, -0.570604, 0.860235, -0.505564, -0.547846, 0.125502, 1.9008)
+
+[sub_resource type="Curve" id="Curve_esef2"]
+_data = [Vector2(0, 0.463158), 0.0, 0.0, 0, 0, Vector2(0.105042, 0.968421), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_eru43"]
 _data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.980392, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.894737), 0.0, 0.0, 0, 0]
@@ -373,6 +377,7 @@ stream = ExtResource("11_d6sra")
 autoplay = true
 streamRevsPerMinute = 4000.0
 engine = NodePath("../engine")
+volumeThrotleCurve = SubResource("Curve_esef2")
 
 [node name="engine" parent="." index="13" instance=ExtResource("12_kd2ra")]
 torqueCurve = SubResource("Curve_eru43")

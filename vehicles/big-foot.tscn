@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://foegnmr6avup"]
+[gd_scene load_steps=55 format=3 uid="uid://foegnmr6avup"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_26vtv"]
 [ext_resource type="ArrayMesh" uid="uid://cqkqh0h585ai2" path="res://mesh/hatchback.obj" id="3_x8x3b"]
@@ -302,6 +302,10 @@ radius = 0.64308
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_l63an"]
 resource_local_to_scene = true
 
+[sub_resource type="Curve" id="Curve_e5kuo"]
+_data = [Vector2(0, 0.873684), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Curve" id="Curve_xpomo"]
 _data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.980392, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.894737), 0.0, 0.0, 0, 0]
 point_count = 4
@@ -522,6 +526,7 @@ stream = ExtResource("16_dmsf2")
 autoplay = true
 streamRevsPerMinute = 4000.0
 engine = NodePath("../engine")
+volumeThrotleCurve = SubResource("Curve_e5kuo")
 
 [node name="engine" parent="." index="16" instance=ExtResource("15_nhioj")]
 torqueCurve = SubResource("Curve_xpomo")

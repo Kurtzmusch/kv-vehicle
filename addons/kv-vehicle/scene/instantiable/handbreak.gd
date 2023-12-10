@@ -1,6 +1,8 @@
 extends KVComponent
-class_name KVHandbreak
 ## break that automatically presses the clutch
+
+class_name KVHandbreak
+
 
 @export var wheels: Array[KVWheel]
 

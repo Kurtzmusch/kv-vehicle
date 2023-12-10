@@ -1,8 +1,7 @@
 @tool
 
 extends RigidBody3D
-
-## rigid body for ground vehicles
+## rigid body for ground vehicles.[br] [b]do not add this node directly, add a KVVehicleInstantiator instead[/b]
 ##
 ## you can add KVComponent nodes as child of this node to extend its behaviour.
 ## [br][b]_integrate_forces loop:[/b]
@@ -95,7 +94,8 @@ func _ready():
 		set_physics_process(false)
 		set_process_input(false)
 		set_process_unhandled_input(false)
-	get_parent().set_editable_instance(self, true)
+		get_parent().set_editable_instance(self, true)
+		return
 	#TODO maybe use same shape resource as shapecaster
 	if createWheelMinimumColliders:
 		for wheel in wheels:

@@ -3,6 +3,7 @@ extends KVComponent
 ##
 ## applies a torque to the vehicle that is proportional to the delta in suspension load.
 ## can be also be used to prevent excessive pitch
+
 class_name KVSwayBar
 @export var wheels: Array[KVWheel]
 

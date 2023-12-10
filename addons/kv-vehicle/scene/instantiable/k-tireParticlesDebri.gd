@@ -1,4 +1,6 @@
 extends GPUParticles3D
+## particles emitter logic for debri-like effects: [br] emission direction
+## relative to [KVWheel]'s relative velocity
 
 class_name KVTireParticlesDebri
 @export var slippingEmitThreshold = 1.0

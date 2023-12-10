@@ -1,4 +1,9 @@
 extends KVComponent
+## engine meant to work with [KVDrivetrain]
+## 
+## will rev itself but won't apply any torque to wheels
+
+class_name KVEngine
 
 @export var torqueCurve: Curve
 @export var peakTorque = 400.0

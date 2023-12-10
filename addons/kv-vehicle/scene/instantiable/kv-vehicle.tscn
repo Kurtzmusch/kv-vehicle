@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://bxw72hy1o23b5"]
 
-[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/kvehicle.gd" id="1_by773"]
-[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/debugVectors.gd" id="2_3gkt3"]
-[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/Label3DRPS.gd" id="3_i1gs3"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kvehicle.gd" id="1_by773"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/debugVectors.gd" id="2_3gkt3"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/Label3DRPS.gd" id="3_i1gs3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mgw6p"]
 friction = 0.0

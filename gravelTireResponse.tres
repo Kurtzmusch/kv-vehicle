@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TireResponse" load_steps=10 format=3 uid="uid://bm5v24h1pg6wn"]
 
-[ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="1_2mhfd"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/TireResponse.gd" id="1_2mhfd"]
 [ext_resource type="AudioStream" uid="uid://xsccdvjjl8c8" path="res://snd/fx/tire-slip-gravel.wav" id="3_fdui6"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xeasq"]

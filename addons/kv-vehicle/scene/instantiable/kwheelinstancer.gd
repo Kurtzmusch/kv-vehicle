@@ -2,7 +2,7 @@
 extends Node3D
 
 class_name KVWheelInstancer
-var scene = preload("res://addons/k-vehicle/scene/instantiable/kwheel.tscn")
+var scene = preload("res://addons/kv-vehicle/scene/instantiable/kv-wheel.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,7 +13,7 @@ func _enter_tree():
 	
 	get_parent().add_child(newKWheel)
 	newKWheel.owner = get_tree().get_edited_scene_root()
-	get_parent().set_editable_instance(newKWheel, true);
+	#get_parent().set_editable_instance(newKWheel, true);
 	queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

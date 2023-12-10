@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dipnsv2gabxnv"]
-
-[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/clutch.gd" id="1_y44w4"]
-
-[node name="clutch" type="Node"]
-script = ExtResource("1_y44w4")

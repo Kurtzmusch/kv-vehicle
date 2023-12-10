@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
 [ext_resource type="Script" path="res://followCamera.gd" id="3_jhh6f"]
 [ext_resource type="ArrayMesh" uid="uid://xh8a5n6aeqs0" path="res://mesh/rock.obj" id="4_2aasw"]
-[ext_resource type="Script" path="res://addons/k-vehicle/TireResponse.gd" id="7_sssnk"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/TireResponse.gd" id="7_3vnxf"]
 [ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="8_y7cqf"]
 [ext_resource type="AudioStream" uid="uid://xsccdvjjl8c8" path="res://snd/fx/tire-slip-gravel.wav" id="9_4nbxb"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
@@ -110,8 +110,8 @@ bake_resolution = 128
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_jo041"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_e6ltu"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -167,8 +167,8 @@ bake_resolution = 128
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_h6qwe"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_ulih2"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -191,15 +191,15 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
 bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_hc0ug"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_y11po"]
 height = 0.523076
 radius = 0.64308
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_h70ea"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_2o4g7"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_o1jaq"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -220,8 +220,8 @@ audioVolumeEase = 0.25
 bumpHeight = 0.0
 bumpVisualBias = 0.0
 
-[sub_resource type="Resource" id="Resource_rgoau"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_l0ftg"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -244,15 +244,15 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
 bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_hacus"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_yw838"]
 height = 0.523076
 radius = 0.64308
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_x716l"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_pm7tn"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_vdit6"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -273,8 +273,8 @@ audioVolumeEase = 0.25
 bumpHeight = 0.0
 bumpVisualBias = 0.0
 
-[sub_resource type="Resource" id="Resource_tumhp"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_3sd04"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -297,15 +297,15 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
 bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_fplox"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_g2ahv"]
 height = 0.523076
 radius = 0.64308
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_6k7hg"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_wuhxd"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_8nij6"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -326,8 +326,8 @@ audioVolumeEase = 0.25
 bumpHeight = 0.0
 bumpVisualBias = 0.0
 
-[sub_resource type="Resource" id="Resource_1f3bs"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_qjefy"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -350,7 +350,7 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
 bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_wf6sq"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xqp1k"]
 height = 0.523076
 radius = 0.64308
 
@@ -375,8 +375,8 @@ bake_resolution = 128
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_myf5t"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_xdjmh"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -432,8 +432,8 @@ bake_resolution = 128
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_sgiik"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_1sc17"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -456,15 +456,15 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
 bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_b4ip5"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_g0rlm"]
 height = 0.244639
 radius = 0.303612
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_58yvu"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_4lvhu"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_6snf8"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -485,8 +485,8 @@ audioVolumeEase = 0.25
 bumpHeight = 0.0
 bumpVisualBias = 0.0
 
-[sub_resource type="Resource" id="Resource_vrkqx"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_danun"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -509,15 +509,15 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
 bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_6ttuc"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_u4fbh"]
 height = 0.244639
 radius = 0.303612
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_t8mcs"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_n6wja"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_owyus"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -538,8 +538,8 @@ audioVolumeEase = 0.25
 bumpHeight = 0.0
 bumpVisualBias = 0.0
 
-[sub_resource type="Resource" id="Resource_42daj"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_f76jx"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -562,15 +562,15 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
 bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_f3cr1"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kx8u4"]
 height = 0.244639
 radius = 0.303612
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_18y07"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_dukdw"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_roqn0"]
+script = ExtResource("7_3vnxf")
 materialName = "tarmac"
 coeficientOfFriction = 1.0
 maxNormalLoadCoeficient = 3.0
@@ -591,8 +591,8 @@ audioVolumeEase = 0.25
 bumpHeight = 0.0
 bumpVisualBias = 0.0
 
-[sub_resource type="Resource" id="Resource_8ip7y"]
-script = ExtResource("7_sssnk")
+[sub_resource type="Resource" id="Resource_3bqgs"]
+script = ExtResource("7_3vnxf")
 materialName = "gravel"
 coeficientOfFriction = 0.8
 maxNormalLoadCoeficient = 3.0
@@ -615,7 +615,7 @@ bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
 bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
 bumpVisualBias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_dj3jw"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_26hp0"]
 height = 0.244639
 radius = 0.303612
 
@@ -971,61 +971,37 @@ freeze = true
 mesh = SubResource("ImmediateMesh_tvslm")
 
 [node name="FR" parent="world/bigFoot" index="4"]
-radius = 0.64308
-width = 0.523076
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_jo041"), SubResource("Resource_h6qwe")])
-
-[node name="RayCast3D" parent="world/bigFoot/FR" index="0"]
-target_position = Vector3(0, -1.53252, 0)
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_e6ltu"), SubResource("Resource_ulih2")])
 
 [node name="ShapeCast3D" parent="world/bigFoot/FR/shapecastPivot" index="0"]
-enabled = true
-shape = SubResource("CylinderShape3D_hc0ug")
+shape = SubResource("CylinderShape3D_y11po")
 
 [node name="contactTransform" parent="world/bigFoot/FR" index="3"]
 mesh = SubResource("ImmediateMesh_h70ea")
 
 [node name="FL" parent="world/bigFoot" index="5"]
-radius = 0.64308
-width = 0.523076
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_2o4g7"), SubResource("Resource_rgoau")])
-
-[node name="RayCast3D" parent="world/bigFoot/FL" index="0"]
-target_position = Vector3(0, -1.53252, 0)
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_o1jaq"), SubResource("Resource_l0ftg")])
 
 [node name="ShapeCast3D" parent="world/bigFoot/FL/shapecastPivot" index="0"]
-enabled = true
-shape = SubResource("CylinderShape3D_hacus")
+shape = SubResource("CylinderShape3D_yw838")
 
 [node name="contactTransform" parent="world/bigFoot/FL" index="3"]
 mesh = SubResource("ImmediateMesh_x716l")
 
 [node name="RR" parent="world/bigFoot" index="6"]
-radius = 0.64308
-width = 0.523076
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_pm7tn"), SubResource("Resource_tumhp")])
-
-[node name="RayCast3D" parent="world/bigFoot/RR" index="0"]
-target_position = Vector3(0, -1.53252, 0)
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_vdit6"), SubResource("Resource_3sd04")])
 
 [node name="ShapeCast3D" parent="world/bigFoot/RR/shapecastPivot" index="0"]
-enabled = true
-shape = SubResource("CylinderShape3D_fplox")
+shape = SubResource("CylinderShape3D_g2ahv")
 
 [node name="contactTransform" parent="world/bigFoot/RR" index="3"]
 mesh = SubResource("ImmediateMesh_6k7hg")
 
 [node name="RL" parent="world/bigFoot" index="7"]
-radius = 0.64308
-width = 0.523076
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_wuhxd"), SubResource("Resource_1f3bs")])
-
-[node name="RayCast3D" parent="world/bigFoot/RL" index="0"]
-target_position = Vector3(0, -1.53252, 0)
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_8nij6"), SubResource("Resource_qjefy")])
 
 [node name="ShapeCast3D" parent="world/bigFoot/RL/shapecastPivot" index="0"]
-enabled = true
-shape = SubResource("CylinderShape3D_wf6sq")
+shape = SubResource("CylinderShape3D_xqp1k")
 
 [node name="contactTransform" parent="world/bigFoot/RL" index="3"]
 mesh = SubResource("ImmediateMesh_2rasg")
@@ -1050,37 +1026,37 @@ top_level = true
 mesh = SubResource("ImmediateMesh_s3hs8")
 
 [node name="FR" parent="world/hatchback" index="23"]
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_myf5t"), SubResource("Resource_sgiik")])
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_xdjmh"), SubResource("Resource_1sc17")])
 
 [node name="ShapeCast3D" parent="world/hatchback/FR/shapecastPivot" index="0"]
-shape = SubResource("CylinderShape3D_b4ip5")
+shape = SubResource("CylinderShape3D_g0rlm")
 
 [node name="contactTransform" parent="world/hatchback/FR" index="3"]
 mesh = SubResource("ImmediateMesh_58yvu")
 
 [node name="FL" parent="world/hatchback" index="24"]
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_4lvhu"), SubResource("Resource_vrkqx")])
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_6snf8"), SubResource("Resource_danun")])
 
 [node name="ShapeCast3D" parent="world/hatchback/FL/shapecastPivot" index="0"]
-shape = SubResource("CylinderShape3D_6ttuc")
+shape = SubResource("CylinderShape3D_u4fbh")
 
 [node name="contactTransform" parent="world/hatchback/FL" index="3"]
 mesh = SubResource("ImmediateMesh_t8mcs")
 
 [node name="RR" parent="world/hatchback" index="25"]
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_n6wja"), SubResource("Resource_42daj")])
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_owyus"), SubResource("Resource_f76jx")])
 
 [node name="ShapeCast3D" parent="world/hatchback/RR/shapecastPivot" index="0"]
-shape = SubResource("CylinderShape3D_f3cr1")
+shape = SubResource("CylinderShape3D_kx8u4")
 
 [node name="contactTransform" parent="world/hatchback/RR" index="3"]
 mesh = SubResource("ImmediateMesh_18y07")
 
 [node name="RL" parent="world/hatchback" index="26"]
-tireResponses = Array[ExtResource("7_sssnk")]([SubResource("Resource_dukdw"), SubResource("Resource_8ip7y")])
+tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_roqn0"), SubResource("Resource_3bqgs")])
 
 [node name="ShapeCast3D" parent="world/hatchback/RL/shapecastPivot" index="0"]
-shape = SubResource("CylinderShape3D_dj3jw")
+shape = SubResource("CylinderShape3D_26hp0")
 
 [node name="contactTransform" parent="world/hatchback/RL" index="3"]
 mesh = SubResource("ImmediateMesh_18y07")

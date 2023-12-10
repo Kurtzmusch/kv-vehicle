@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwb4pvdscasy7"
-path="res://.godot/imported/car-wheel.svg-0e75c104de3ee1b2cfde8f4f8c010862.ctex"
+uid="uid://vftk71fcy5oc"
+path="res://.godot/imported/city-car.svg-e4a1bda7bdda12a4d32dc2aac7e7b38f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/k-vehicle/car-wheel.svg"
-dest_files=["res://.godot/imported/car-wheel.svg-0e75c104de3ee1b2cfde8f4f8c010862.ctex"]
+source_file="res://addons/kv-vehicle/city-car.svg"
+dest_files=["res://.godot/imported/city-car.svg-e4a1bda7bdda12a4d32dc2aac7e7b38f.ctex"]
 
 [params]
 

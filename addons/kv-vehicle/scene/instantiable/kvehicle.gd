@@ -86,6 +86,7 @@ func _enter_tree():
 	if scene_file_path == '':
 		printerr('KVVehicle is meant to be instantiated as a child or inherited scene.')
 	update_configuration_warnings()
+	if Engine.is_editor_hint(): return
 
 func _ready():
 	

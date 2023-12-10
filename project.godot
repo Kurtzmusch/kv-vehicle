@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="k-vehicle"
+config/name="kv-vehicle"
 run/main_scene="res://example.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
@@ -24,7 +24,7 @@ window/stretch/aspect="ignore"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/k-vehicle/plugin.cfg")
+enabled=PackedStringArray("res://addons/kv-vehicle/plugin.cfg")
 
 [input]
 

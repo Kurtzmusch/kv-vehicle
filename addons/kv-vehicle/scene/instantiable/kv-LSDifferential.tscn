@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://csbfypw6a2bh0"]
 
-[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/lsd.gd" id="1_dknmb"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/lsd.gd" id="1_dknmb"]
 
 [node name="lsd" type="Node"]
 script = ExtResource("1_dknmb")

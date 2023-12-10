@@ -222,9 +222,9 @@ func findVehicle():
 func _enter_tree():
 	update_configuration_warnings()
 	
-	assert(scene_file_path == 'res://addons/k-vehicle/scene/instantiable/kwheel.tscn',\
+	assert(scene_file_path != '',\
 	'KVWheel is not meant to be instanced by itself. Use a KVWheelInstancer to create the correct node tree structure for the wheel.')
-	
+	if Engine.is_editor_hint(): return
 	var newResponses = tireResponses.duplicate()
 	newResponses.clear()
 	for tireResponse in tireResponses:
@@ -285,7 +285,8 @@ func _ready():
 		set_physics_process(false)
 		set_process_input(false)
 		set_process_unhandled_input(false)
-	get_parent().set_editable_instance(self, true)
+		get_parent().set_editable_instance(self, true)
+		return
 	validateSubTree()
 	updateMaxSteering()
 	

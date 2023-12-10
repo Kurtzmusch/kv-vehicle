@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://5i7leg7uek4d"]
 
-[ext_resource type="Script" path="res://addons/k-vehicle/scene/instantiable/kInputHandler.gd" id="1_b61al"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kInputHandler.gd" id="1_b61al"]
 
 [node name="kInputHandler" type="Node"]
 script = ExtResource("1_b61al")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://b5fhne1183tjh"]
 
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="1_mjfnm"]
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/k-tireParticles-smoke.gd" id="2_mq2sy"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/nodes/kv-tireParticles-smoke.gd" id="2_mq2sy"]
 
 [sub_resource type="Curve" id="Curve_6etfm"]
 max_value = 4.0

@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://bxw72hy1o23b5"]
 
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kvehicle.gd" id="1_by773"]
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/debugVectors.gd" id="2_3gkt3"]
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/Label3DRPS.gd" id="3_i1gs3"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.gd" id="1_by773"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/nodes/kv-debugVectors.gd" id="2_3gkt3"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/Label3DDebug.gd" id="3_ahf0b"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mgw6p"]
 friction = 0.0
@@ -35,4 +35,4 @@ billboard = 1
 double_sided = false
 no_depth_test = true
 fixed_size = true
-script = ExtResource("3_i1gs3")
+script = ExtResource("3_ahf0b")

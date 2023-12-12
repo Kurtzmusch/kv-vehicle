@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://bj233wg0k5djo"]
 
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kwheel.gd" id="1_2oa8d"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-wheel.gd" id="1_2oa8d"]
 [ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/wheelSteerPivot.gd" id="2_1lmvs"]
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/debugVectors.gd" id="3_mfh17"]
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/Label3DRPS.gd" id="4_snyr5"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/nodes/kv-debugVectors.gd" id="3_wmpnu"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/Label3DDebug.gd" id="4_snyr5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_327r1"]
 no_depth_test = true
@@ -39,7 +39,7 @@ visible = false
 material_override = SubResource("StandardMaterial3D_327r1")
 cast_shadow = 0
 mesh = SubResource("ImmediateMesh_ldieg")
-script = ExtResource("3_mfh17")
+script = ExtResource("3_wmpnu")
 
 [node name="Label3DDebug" type="Label3D" parent="."]
 sorting_offset = 1.0

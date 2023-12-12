@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b0hama08v0ayv"]
 
-[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/engine.gd" id="1_bocld"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/nodes/kv-engine.gd" id="1_bocld"]
 
 [node name="engine" type="Node"]
 script = ExtResource("1_bocld")

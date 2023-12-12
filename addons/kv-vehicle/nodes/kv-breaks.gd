@@ -14,7 +14,14 @@ class_name KVBreak
 ## abs relative velocity(meter/second) threshold
 @export var absThreshold = 0.10
 
+## break strength multiplier when the tire is slipping
+@export var slipStrengthMult = 0.5
+
 var vehicle
+
+## gets set to true when the abs is overriding break input
+var absOverriding = false
+
 func _ready():
 	vehicle = get_parent()
 
@@ -29,5 +36,8 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 			wheel.debugString = ''
 			if abs( wheel.contactRelativeVelocity.z ) > absThreshold:
 				wheel.debugString = 'abs'
-				str *= 0.5
+				str *= slipStrengthMult
+				absOverriding = true
+			else:
+				absOverriding = false
 		wheel.applyBreakTorque(strength*str, modDelta)

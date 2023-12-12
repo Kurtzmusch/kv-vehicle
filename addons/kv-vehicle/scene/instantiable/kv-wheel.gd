@@ -474,7 +474,6 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	#debugString = str( snapped( relativeZSpeed, 0.1 ) )
 	
 	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
-	#debugString = str( snapped(tireResponse.getSamplePositionX(localVelocity, radsPerSec, radius),0.1))
 	#var stream = tireResponse.slippingStream
 	
 	feedback = coeficients.y

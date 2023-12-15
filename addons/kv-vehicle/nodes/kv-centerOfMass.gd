@@ -1,5 +1,6 @@
 extends MeshInstance3D
-
+## helper node to visually set the center of mass
+class_name KVCenterOfMass
 
 # Called when the node enters the scene tree for the first time.
 

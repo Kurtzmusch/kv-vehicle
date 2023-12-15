@@ -13,7 +13,7 @@ config_version=5
 config/name="kv-vehicle"
 run/main_scene="res://example.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://addons/kv-vehicle/addon-cover.png"
 
 [display]
 

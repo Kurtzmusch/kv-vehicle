@@ -72,6 +72,9 @@ var componentIntegrateFunctions = []
 var componentPreSubstepIntegrateFunctions = []
 var componentPostSubstepIntegrateFunctions = []
 
+## [PhysicsDirectBodyState3D] of the vehicle
+var directState: PhysicsDirectBodyState3D
+
 func _get_configuration_warnings():
 	if scene_file_path == '':
 		return['KVVehicle is meant to be instantiated as a child(Ctrl+Shift+A) or inherited(Ctrl+Shift+N) scene.']
@@ -145,6 +148,8 @@ func _integrate_forces(state):
 	#debugString = str( localLinearVelocity.snapped(Vector3.ONE*0.1) )
 	if inertia.is_equal_approx(Vector3.ZERO):
 		inertia = state.inverse_inertia.inverse()
+	if !directState:
+		directState = state
 	var contribution = 1.0/wheels.size()
 	var delta = state.step
 	var oneByDelta = 1.0/delta

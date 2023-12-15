@@ -243,6 +243,7 @@ func _enter_tree():
 	if getDimensionsFromMeshAABB:
 		if $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh:
 			var aabb = $wheelSteerPivot/wheelRollPivot/wheelMesh.mesh.get_aabb()
+			aabb.size *= $wheelSteerPivot/wheelRollPivot/wheelMesh.scale
 			radius = aabb.size.y*0.5
 			width = aabb.size.x
 	
@@ -492,7 +493,7 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	
 	if clampFricionAfterCombining:
 		var desiredFricionVec = Vector3(necessaryXFriction, 0.0, necessaryZFriction)
-		var maxFricLen = max(coeficients.x*gripMultiplier.x, coeficients.z*gripMultiplier.z)*maxedSuspensionForce
+		var maxFricLen = min(coeficients.x*gripMultiplier.x, coeficients.z*gripMultiplier.z)*maxedSuspensionForce
 		if desiredFricionVec.length() > maxFricLen:
 			desiredFricionVec = desiredFricionVec.normalized()*maxFricLen
 		xFriction = desiredFricionVec.x

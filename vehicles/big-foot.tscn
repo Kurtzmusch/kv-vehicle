@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://foegnmr6avup"]
+[gd_scene load_steps=57 format=3 uid="uid://foegnmr6avup"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_26vtv"]
 [ext_resource type="ArrayMesh" uid="uid://cqkqh0h585ai2" path="res://mesh/hatchback.obj" id="3_x8x3b"]
@@ -22,6 +22,8 @@
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/kv-vehicle/scene/instantiable/kv-breaks.tscn" id="17_dodt1"]
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/kv-vehicle/scene/instantiable/kv-swayBar.tscn" id="18_pkrjl"]
 [ext_resource type="Script" path="res://vehicles/big-foot-input.gd" id="20_2cn56"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-LSDifferential.gd" id="23_llmm5"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-CentralLSDifferential.gd" id="24_dye1s"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_w6lhn"]
 resource_local_to_scene = true
@@ -341,6 +343,7 @@ maxSteerAngle = 0.785
 relaxationDamp = 0.95
 rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
+suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="RayCast3D" parent="FR" index="0"]
 target_position = Vector3(0, -1.53252, 0)
@@ -382,6 +385,7 @@ maxSteerAngle = 0.785
 relaxationDamp = 0.95
 rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
+suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="RayCast3D" parent="FL" index="0"]
 target_position = Vector3(0, -1.53252, 0)
@@ -421,6 +425,7 @@ maxSteerAngle = -0.785
 relaxationDamp = 0.95
 rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
+suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="RayCast3D" parent="RR" index="0"]
 target_position = Vector3(0, -1.53252, 0)
@@ -459,6 +464,7 @@ maxSteerAngle = -0.785
 relaxationDamp = 0.95
 rpsDeltaThreshold = 0.1
 useShapecastForPhysics = true
+suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="RayCast3D" parent="RL" index="0"]
 target_position = Vector3(0, -1.53252, 0)
@@ -563,6 +569,19 @@ size = Vector3(2.2, 1, 3.3)
 [node name="input" type="Node" parent="." index="23" node_paths=PackedStringArray("rearWheels")]
 script = ExtResource("20_2cn56")
 rearWheels = [NodePath("../RR"), NodePath("../RL")]
+
+[node name="lsdRear" type="Node" parent="." index="24" node_paths=PackedStringArray("wheels")]
+script = ExtResource("23_llmm5")
+wheels = [NodePath("../RL"), NodePath("../RR")]
+
+[node name="lsdFront" type="Node" parent="." index="25" node_paths=PackedStringArray("wheels")]
+script = ExtResource("23_llmm5")
+wheels = [NodePath("../FR"), NodePath("../FL")]
+
+[node name="KVCentralLSDifferential" type="Node" parent="." index="26" node_paths=PackedStringArray("lsds")]
+script = ExtResource("24_dye1s")
+lsds = [NodePath("../lsdRear"), NodePath("../lsdFront")]
+limit = 4.0
 
 [editable path="FR"]
 [editable path="FL"]

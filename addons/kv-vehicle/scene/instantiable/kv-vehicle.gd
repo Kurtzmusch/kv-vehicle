@@ -29,6 +29,9 @@ class_name KVVehicle
 ## it improves engine and wheel fidgeting/oscilations without needing to increase the engine physics ticks/second
 @export var substeps = 1
 
+## local velocity(meter/second) threshold to apply the 'anti-slip on slope' forces
+@export var slipSlopeFixThreshold = Vector3.ONE
+
 ## read by wheels that steer.
 ## [br]
 ## steering assisters or custom input methods should set this variable
@@ -206,9 +209,9 @@ func _integrate_forces(state):
 			groundedWheels += 1
 	if groundedWheels >= 2:
 		if breaking and ((requiredZFriction.normalized().dot(linear_velocity.normalized())<0.0)\
-		or abs(localLinearVelocity.z) < 0.0625):
+		or abs(localLinearVelocity.z) < slipSlopeFixThreshold.z):
 			applyCentralGlobalForceState(requiredZFriction,  state, Color.LIGHT_SKY_BLUE)
-		if abs(localLinearVelocity.x) < 0.125:
+		if abs(localLinearVelocity.x) < slipSlopeFixThreshold.x:
 			applyCentralGlobalForceState(requiredXFriction,  state, Color.LIGHT_PINK)
 	
 	for wheel in wheels:

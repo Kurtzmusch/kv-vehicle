@@ -56,6 +56,9 @@ var tireResponseDictionary: Dictionary
 ## suspension stiffness: maximum force applied as a coeficient of vehicle mass*gravity/wheelCount
 @export var stiffness = 4.0
 
+## suspension preload: minimum force(when its at maximum extension) applied as a coeficient of vehicle mass*gravity/wheelCount
+@export_range(0.0, 0.95) var preloadCoeficient = 0.0
+
 ## damp when the suspension is compressing
 @export_range(0.0,1.0) var compressionDamp = 0.1
 
@@ -589,6 +592,11 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	1.0, stiffness)
 	compression = clamp(compression, 0.0, stiffness)
 	
+	if abs(wheelPivotPositionY) > abs(restExtension):
+		var d = abs(wheelPivotPositionY)-abs(restExtension)
+		var t = abs(maxExtension)-abs(restExtension)
+		compression = 1.0-remap(d, 0.0, t, 0.0, 1.0)
+		compression = remap(compression, 1.0, 0.0, 1.0, preloadCoeficient)
 	var compressionDelta = compression-previousCompression
 	compressionDelta*=oneByDelta
 	var damp = 0.0

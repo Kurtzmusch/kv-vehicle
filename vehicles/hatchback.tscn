@@ -410,6 +410,7 @@ limit = 2.0
 wheels = [NodePath("../FR"), NodePath("../FL")]
 abs = true
 absThreshold = 2.0
+slipStrengthMult = 0.25
 
 [node name="breakRear" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
@@ -419,9 +420,11 @@ absThreshold = 2.0
 
 [node name="k-swayBarFront" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
+stiffness = 2.0
 
 [node name="k-swayBarRear" parent="." index="21" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
+stiffness = 2.0
 
 [node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="22"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
@@ -454,6 +457,7 @@ steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
 compressionDamp = 0.05
+maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="FR" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -489,6 +493,7 @@ steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
 compressionDamp = 0.05
+maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="FL" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -521,6 +526,7 @@ momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[ExtResource("19_mujh8")]([SubResource("Resource_udqva"), SubResource("Resource_nwlq8")])
 defaultTireResponse = ExtResource("19_x5hqt")
+maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="RR" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -552,6 +558,7 @@ momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[ExtResource("19_mujh8")]([SubResource("Resource_r7sgt"), SubResource("Resource_33fxo")])
 defaultTireResponse = ExtResource("19_x5hqt")
+maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="RL" index="0"]
 target_position = Vector3(0, -0.464612, 0)

@@ -160,9 +160,12 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 			slipRatio = relativeVelocity.z / abs(localVelocity.z)
 		zSamplePosition = slipRatio
 	var z = gripZCurve.sample_baked(zSamplePosition)
+	""" this easing improves stability but breaks KVWheels clampAfterCombining
+	# does not seem necessary when using substeps
 	if abs(relativeZSpeed) < relativeZSpeedBegin:
 		#z = ease(lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) ),0.8 )
 		z = lerp(0.0, 1.0, (abs(relativeZSpeed)/relativeZSpeedBegin) )
+	"""
 	#if z > x: z = x
 	var feedbackRange = slipAngleEnd
 	var feedbackSamplePosition = clamp( abs(slipAngleDeg), 0.0, slipAngleEnd )

@@ -408,15 +408,15 @@ limit = 2.0
 
 [node name="breakFront" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
+strength = 3000.0
 abs = true
-absThreshold = 2.0
-slipStrengthMult = 0.25
+slipStrengthMult = 0.6
 
 [node name="breakRear" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 strength = 300.0
 abs = true
-absThreshold = 2.0
+slipStrengthMult = 0.6
 
 [node name="k-swayBarFront" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../FR"), NodePath("../FL")]

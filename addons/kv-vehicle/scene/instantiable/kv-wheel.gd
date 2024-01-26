@@ -141,6 +141,12 @@ var restRatio = 1.0
 
 var normalForceAtRest = 0.0
 
+## additional force exerted by the suspension on this frame. (N)
+## [br] usefull for adding forces that would stiffen/soften the suspension, like sway bars.
+## [br] can be negative.
+## [br] does not get reset to 0.0
+var additionalSuspensionForceMagnitude = 0.0 
+
 ## update every frame
 var suspensionForceMagnitude = 0.0
 ## ratio of 1.0/totalWheels
@@ -606,6 +612,7 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 		damp = relaxationDamp
 	damp *= compressionDelta*vehicle.mass*wheelContribution
 	suspensionForceMagnitude = compression*normalForceAtRest
+	suspensionForceMagnitude += additionalSuspensionForceMagnitude
 	suspensionForceMagnitude += damp
 	if clampSuspensionForce:
 		suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)

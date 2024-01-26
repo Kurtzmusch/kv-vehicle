@@ -1026,11 +1026,16 @@ top_level = true
 [node name="debugVectors" parent="world/hatchback" index="0"]
 mesh = SubResource("ImmediateMesh_s3hs8")
 
+[node name="k-swayBarFront" parent="world/hatchback" index="20"]
+stiffness = 1.0
+
+[node name="k-swayBarRear" parent="world/hatchback" index="21"]
+stiffness = 1.0
+
 [node name="FR" parent="world/hatchback" index="24"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_xdjmh"), SubResource("Resource_1sc17")])
 compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
-suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="ShapeCast3D" parent="world/hatchback/FR/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_g0rlm")
@@ -1042,7 +1047,6 @@ mesh = SubResource("ImmediateMesh_58yvu")
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_6snf8"), SubResource("Resource_danun")])
 compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
-suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="ShapeCast3D" parent="world/hatchback/FL/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_u4fbh")
@@ -1054,7 +1058,6 @@ mesh = SubResource("ImmediateMesh_t8mcs")
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_owyus"), SubResource("Resource_f76jx")])
 compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
-suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="ShapeCast3D" parent="world/hatchback/RR/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_kx8u4")
@@ -1066,7 +1069,6 @@ mesh = SubResource("ImmediateMesh_18y07")
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_roqn0"), SubResource("Resource_3bqgs")])
 compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
-suspensionForceMult = Vector3(0, 1, 0)
 
 [node name="ShapeCast3D" parent="world/hatchback/RL/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_26hp0")

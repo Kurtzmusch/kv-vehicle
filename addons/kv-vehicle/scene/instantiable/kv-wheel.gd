@@ -186,6 +186,15 @@ var surfaceMaterial: StringName = 'tarmac'
 
 var normalizedCompression = 0.0
 
+## suspension spring compression in meters
+var compressionM = 0.0
+
+## suspension change in compression in meters/second.
+## [br] negative values means it is compressing
+var compressionDeltaMS = 0.0
+
+var previousCompressionMS = 0.0
+
 ## force to be applied by the suspension
 var suspensionForce = Vector3.ZERO
 
@@ -454,6 +463,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 		tireResponse = null
 		feedback = 0.0
 		normalizedCompression = 0.0
+		compressionM = 0.0
 		suspensionForceMagnitude = 0.0
 		$wheelSteerPivot.position.y = -maxExtension
 		$RollingAudioStreamPlayer3D.volume_db = linear_to_db(0.0)
@@ -592,6 +602,8 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	else:
 		wheelPivotPositionY = to_local(contactTransform.origin).y+radius
 	wheelPivotPositionY = min(wheelPivotPositionY, 0.0)
+	compressionM = maxExtension-wheelPivotPositionY
+	compressionDeltaMS = (compressionM-previousCompressionMS)*oneByDelta
 	normalizedCompression = 1.0-abs(wheelPivotPositionY)/maxExtension
 	var compression = remap(normalizedCompression,\
 	(1.0-restRatio), 1.0,\
@@ -606,14 +618,15 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	var compressionDelta = compression-previousCompression
 	compressionDelta*=oneByDelta
 	var damp = 0.0
-	if compressionDelta > 0.0:
+	if compressionDeltaMS > 0.0:
 		damp = compressionDamp
 	else:
 		damp = relaxationDamp
-	damp *= compressionDelta*vehicle.mass*wheelContribution
+	# *60.0 here instead of oneByTimestep so it is consistent for different timesteps
+	damp *= compressionDeltaMS*vehicle.mass*wheelContribution*60.0
 	suspensionForceMagnitude = compression*normalForceAtRest
 	suspensionForceMagnitude += additionalSuspensionForceMagnitude
-	suspensionForceMagnitude += damp
+	suspensionForceMagnitude -= damp
 	if clampSuspensionForce:
 		suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
 	
@@ -630,3 +643,4 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	
 	$wheelSteerPivot.position.y = wheelPivotPositionY+wheelVisualPositionYOffset
 	previousCompression = compression
+	previousCompressionMS = compressionM

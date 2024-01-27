@@ -973,6 +973,8 @@ mesh = SubResource("ImmediateMesh_tvslm")
 
 [node name="FR" parent="world/bigFoot" index="4"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_e6ltu"), SubResource("Resource_ulih2")])
+compressionDamp = 0.05
+relaxationDamp = 0.15
 
 [node name="ShapeCast3D" parent="world/bigFoot/FR/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_y11po")
@@ -982,6 +984,8 @@ mesh = SubResource("ImmediateMesh_h70ea")
 
 [node name="FL" parent="world/bigFoot" index="5"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_o1jaq"), SubResource("Resource_l0ftg")])
+compressionDamp = 0.05
+relaxationDamp = 0.15
 
 [node name="ShapeCast3D" parent="world/bigFoot/FL/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_yw838")
@@ -991,6 +995,8 @@ mesh = SubResource("ImmediateMesh_x716l")
 
 [node name="RR" parent="world/bigFoot" index="6"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_vdit6"), SubResource("Resource_3sd04")])
+compressionDamp = 0.05
+relaxationDamp = 0.15
 
 [node name="ShapeCast3D" parent="world/bigFoot/RR/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_g2ahv")
@@ -1000,6 +1006,8 @@ mesh = SubResource("ImmediateMesh_6k7hg")
 
 [node name="RL" parent="world/bigFoot" index="7"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_8nij6"), SubResource("Resource_qjefy")])
+compressionDamp = 0.05
+relaxationDamp = 0.15
 
 [node name="ShapeCast3D" parent="world/bigFoot/RL/shapecastPivot" index="0"]
 shape = SubResource("CylinderShape3D_xqp1k")
@@ -1034,7 +1042,6 @@ stiffness = 1.0
 
 [node name="FR" parent="world/hatchback" index="24"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_xdjmh"), SubResource("Resource_1sc17")])
-compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/FR/shapecastPivot" index="0"]
@@ -1045,7 +1052,6 @@ mesh = SubResource("ImmediateMesh_58yvu")
 
 [node name="FL" parent="world/hatchback" index="25"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_6snf8"), SubResource("Resource_danun")])
-compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/FL/shapecastPivot" index="0"]
@@ -1056,7 +1062,6 @@ mesh = SubResource("ImmediateMesh_t8mcs")
 
 [node name="RR" parent="world/hatchback" index="26"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_owyus"), SubResource("Resource_f76jx")])
-compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/RR/shapecastPivot" index="0"]
@@ -1067,7 +1072,6 @@ mesh = SubResource("ImmediateMesh_18y07")
 
 [node name="RL" parent="world/hatchback" index="27"]
 tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_roqn0"), SubResource("Resource_3bqgs")])
-compressionDamp = 0.538
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/RL/shapecastPivot" index="0"]

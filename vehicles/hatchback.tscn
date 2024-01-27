@@ -456,7 +456,7 @@ defaultTireResponse = ExtResource("19_x5hqt")
 steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
-compressionDamp = 0.05
+relaxationDamp = 0.2
 maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="FR" index="0"]
@@ -492,7 +492,7 @@ defaultTireResponse = ExtResource("19_x5hqt")
 steer = true
 maxSteerAngle = 0.785
 stiffness = 3.0
-compressionDamp = 0.05
+relaxationDamp = 0.2
 maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="FL" index="0"]
@@ -526,6 +526,7 @@ momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[ExtResource("19_mujh8")]([SubResource("Resource_udqva"), SubResource("Resource_nwlq8")])
 defaultTireResponse = ExtResource("19_x5hqt")
+relaxationDamp = 0.2
 maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="RR" index="0"]
@@ -558,6 +559,7 @@ momentOfInertia = 5.0
 getDimensionsFromMeshAABB = true
 tireResponses = Array[ExtResource("19_mujh8")]([SubResource("Resource_r7sgt"), SubResource("Resource_33fxo")])
 defaultTireResponse = ExtResource("19_x5hqt")
+relaxationDamp = 0.2
 maxNormalLoadCoeficientMultiplier = 3.0
 
 [node name="RayCast3D" parent="RL" index="0"]

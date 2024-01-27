@@ -478,9 +478,11 @@ func updateCasts(state, delta, oneByDelta, contribution):
 	#debugString = str( snapped(slipAngle, 0.1) )
 func applyAccumulatedFrictionForces(state):
 	if !grounded: return
-	
+	var lerpAmount = abs(zFrictionAccumulated)/(tireResponse.coeficientOfFriction*suspensionForceMagnitude)
+	var zFrictionColor = Color.BLUE_VIOLET.lerp(Color.AQUA, lerpAmount)
+	#debugString = str( snapped(abs(lerpAmount), 0.1 ) )
 	vehicle.applyGlobalForceState(xFrictionAccumulated*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
-	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, Color.BLUE_VIOLET)
+	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, zFrictionColor)
 
 func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution):
 	if !grounded: return
@@ -493,37 +495,29 @@ func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contr
 	#var necessaryZFriction = -localVelocity.z*oneByDelta*massPerWheel*0.9
 	#debugString = str( snapped( relativeZSpeed, 0.1 ) )
 	
-	var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
+	#var coeficients = tireResponse.getCoeficients(localVelocity, radsPerSec, radius)
+	
 	#var stream = tireResponse.slippingStream
 	
-	feedback = coeficients.y
 	
+	var loadFactor = suspensionForceMagnitude/normalForceAtRest
 	var maxedMagnitude = tireResponse.maxNormalLoadCoeficient\
 		*maxNormalLoadCoeficientMultiplier*(normalForceAtRest)
 	var biasedMagnitude = lerp(suspensionForceMagnitude, normalForceAtRest, normalLoadRestBias)
 	var maxedSuspensionForce = min(biasedMagnitude, maxedMagnitude)
 	
-	var xFriction = min(abs(necessaryXFriction), coeficients.x*gripMultiplier.x*maxedSuspensionForce)
-	var zFriction = min(abs(necessaryZFriction), coeficients.z*gripMultiplier.z*maxedSuspensionForce)
-	#zFriction = coeficients.z*gripMultiplier.x*maxedSuspensionForce
-	#xFriction = coeficients.x*suspensionForceMagnitude
-	zFriction *= sign(necessaryZFriction)
-	xFriction *= sign(necessaryXFriction)
-	
-	if clampFricionAfterCombining:
-		var desiredFricionVec = Vector3(necessaryXFriction, 0.0, necessaryZFriction)
-		var maxFricLen = min(coeficients.x*gripMultiplier.x, coeficients.z*gripMultiplier.z)*maxedSuspensionForce
-		if desiredFricionVec.length() > maxFricLen:
-			desiredFricionVec = desiredFricionVec.normalized()*maxFricLen
-		xFriction = desiredFricionVec.x
-		zFriction = desiredFricionVec.z
+	var desiredFricionVec = Vector3(necessaryXFriction, 0.0, necessaryZFriction)
+	var friction = tireResponse.getFrictionForces(localVelocity, radsPerSec, radius, slipAngle, desiredFricionVec, gripMultiplier, maxedSuspensionForce, loadFactor, normalForceAtRest)
+	feedback = friction.y
+	var zFriction = friction.z
+	var xFriction = friction.x
 	
 	frictionColor = Color.RED
 	#debugString = str( snapped(coeficients.x, 0.1)
 	if tireResponse.coeficientOfFriction > 0.0:
-		var frictionFraction = coeficients.x/tireResponse.coeficientOfFriction
+		var frictionFraction = abs(friction.x)/suspensionForceMagnitude
 		#debugString = str( snapped(frictionFraction, 0.1 ) )
-		if coeficients.x < tireResponse.coeficientOfFriction:
+		if abs(friction.x) < suspensionForceMagnitude:
 			frictionColor = frictionColor.lerp(Color.YELLOW, 1.0-frictionFraction )
 	#vehicle.applyGlobalForceState(xFriction*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	substepZFriction = zFriction*oneBySubstep

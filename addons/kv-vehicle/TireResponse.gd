@@ -11,11 +11,24 @@ class_name TireResponse
 @export_category('Friction')
 ## coeficient of friction for this material
 @export var coeficientOfFriction = 1.0
+## ease curve that controls how much the grip changes with normal load.
+## [br] 1.0 = linear
+@export_range(0.1, 1.0) var loadEase = 1.0
 
+## clamps the net friction instead of it's individual components
+##[br] prevents breaking steering the vehicle in the opposite direction when using a lot of maxSteerAngle
+##[br] makes drifting easier, since a large longitudinal vector from accceleration or handbraking will cause a reduction in sideways friction
+@export var clampAfterCombining = true
 ## [br] tire friction grows proportional to the normal load, but only up to a certain amount
-@export var maxNormalLoadCoeficient = 3.0
+@export var maxNormalLoadCoeficient = 8.0
 ## curve that multiplies the coeficientOfFriction, depending on slip angle
 @export var gripXCurve: Curve
+## use an ease buildup curve for when the slip angle is smalelr then [member slipAngleBegin]
+## [br]
+@export var useBuildupEase = false
+## ease value to be used for the buildup curve:
+## [br] smaller values are more responsive to steering, bigger values will feel less responsive, more floaty/slippery
+@export var buildupEase = 0.01
 ## slip angle that maps to the beginning of the curve
 @export var slipAngleBegin = 8.0
 ## slip angle that maps to the end of the curve
@@ -129,6 +142,49 @@ func getVelocity(localVelocity, radsPerSec, radius):
 		relativeVelocity.x = localVelocity.x
 	return relativeVelocity
 
+
+func getFrictionForces(localVelocity, radsPerSec, radius, slipAngle, desiredFrictionVec, gripMultiplier, normalForce, loadFactor, normalForceAtRest):
+	var coeficients = getCoeficients(localVelocity, radsPerSec, radius)
+	var normalForceModified = normalForceAtRest*pow(loadFactor, loadEase)
+	
+	var frictionForce
+	if clampAfterCombining:
+		frictionForce = clampCombined(slipAngle, desiredFrictionVec, coeficients, gripMultiplier, normalForceModified)
+	else:
+		frictionForce = clampIndividual(desiredFrictionVec, coeficients, gripMultiplier, normalForceModified )
+	return frictionForce
+
+func clampIndividual(desiredFrictionVec, coeficients, gripMultiplier, normalForce ):
+
+	var xFriction = min(abs(desiredFrictionVec.x), coeficients.x*gripMultiplier.x*normalForce)
+	var zFriction = min(abs(desiredFrictionVec.z), coeficients.z*gripMultiplier.z*normalForce)
+	#zFriction = coeficients.z*gripMultiplier.x*maxedSuspensionForce
+	#xFriction = coeficients.x*suspensionForceMagnitude
+	xFriction *= sign(desiredFrictionVec.x)
+	zFriction *= sign(desiredFrictionVec.z)
+	
+	return Vector3(xFriction, coeficients.y, zFriction)
+
+func clampCombined(slipAngle, desiredFrictionVec, coeficients, gripMultiplier, normalForce):
+	var xFriction = min(abs(desiredFrictionVec.x), coeficients.x*gripMultiplier.x*normalForce)
+	var zFriction = min(abs(desiredFrictionVec.z), coeficients.z*gripMultiplier.z*normalForce)
+	xFriction *= sign(desiredFrictionVec.x)
+	zFriction *= sign(desiredFrictionVec.z)
+	if useBuildupEase and abs(desiredFrictionVec.x) > 0.0:
+		#desiredFricionVec = Vector3(xFriction, 0.0, necessaryZFriction)
+		desiredFrictionVec *= abs(xFriction)/abs(desiredFrictionVec.x)
+	var maxX = coeficients.x*gripMultiplier.x
+	var maxZ = coeficients.z*gripMultiplier.z
+	if abs(slipAngle) < deg_to_rad( slipAngleBegin ):
+		maxX = coeficientOfFriction*gripMultiplier.x
+	
+	var maxFricLen = min(maxX, maxZ)*normalForce
+	
+	if desiredFrictionVec.length() > maxFricLen:
+		desiredFrictionVec = desiredFrictionVec.normalized()*maxFricLen
+	
+	return Vector3(desiredFrictionVec.x, coeficients.y, desiredFrictionVec.z)
+
 func getCoeficients(localVelocity, radsPerSec, radius):
 	var slipAngleDeg = rad_to_deg(localVelocity.signed_angle_to(Vector3.FORWARD, Vector3.UP))
 	var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
@@ -153,6 +209,9 @@ func getCoeficients(localVelocity, radsPerSec, radius):
 	#xSamplePosition = samplePosition
 	
 	var x = gripXCurve.sample_baked(xSamplePosition)
+	if useBuildupEase:
+		if abs(slipAngleDeg) < slipAngleBegin:
+			x = ease(abs(slipAngleDeg)/slipAngleBegin, buildupEase)
 	
 	if useSlipRatio:
 		var slipRatio = 0.000976562

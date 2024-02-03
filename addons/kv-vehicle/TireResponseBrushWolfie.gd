@@ -47,6 +47,8 @@ func clampIndividual(desiredFrictionVec, coeficients, gripMultiplier, normalForc
 	return Vector3(xFriction, coeficients.y, zFriction)
 
 func getCoeficientsBrush(localVelocity, radsPerSec, radius, normal):
+	
+	
 	var relativeZSpeed = (radsPerSec*radius)-localVelocity.z
 	var slipRatio = 0.000976562
 	if not localVelocity.z == 0:
@@ -57,6 +59,8 @@ func getCoeficientsBrush(localVelocity, radsPerSec, radius, normal):
 	slip.z = -slipRatio
 	
 	
+	#wolfe's brush implementation from https://www.gtplanet.net/forum/threads/gdsim-v0-4a-autocross-and-custom-setups.396400/#post-13395986
+	#divided by normal to return a coeficient instead of raw force
 	var stiffness = 500000 * tireStiffness * pow(contactPatchLength, 2)
  
 	var friction = coeficientOfFriction * normal

@@ -87,12 +87,13 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	#print(engineAngular)
 	
 	torque = ((engineMoment*wheelMoment*wheelAngular)-(engineMoment*wheelMoment*engineAngular))/(engineMoment+wheelMoment)
-	
+	vehicle.debugString = str( int(wheelAngularModified) )
+	vehicle.debugString += '/' + str(int(engine.radsPerSec))
 	
 	torque*=oneByModDelta
 	if clutchMaxTorque > 0.0:
 		var maxTorqueActual = clutchMaxTorque*clutchInput
-		vehicle.debugString = str( snapped(abs(torque)/maxTorqueActual, 0.01) )
+		#vehicle.debugString = str( snapped(abs(torque)/maxTorqueActual, 0.01) )
 		torque = sign(torque) * min(abs(torque), maxTorqueActual)
 	var torqueEngine = torque#*ratio#*sign(rpsDelta)
 	#print(torqueEngine)
@@ -110,6 +111,7 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	
 	
 	wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
+	
 	#var rpsDelta = -getFastestWheel().radsPerSec -engineAngularModified 
 	rpsDelta = wheelAngularModified - engine.radsPerSec
 	#print(str(snapped(rpsDelta, 0.1)))
@@ -145,6 +147,6 @@ func getFastestWheel():
 	for wheel in poweredWheels:
 		var wheelRelativeAV = wheel.radsPerSec*sign(gearRatio)-engine.radsPerSec
 		var fastestWheelrelativeAV = fastestWheel.radsPerSec*sign(gearRatio)-engine.radsPerSec
-		if wheelRelativeAV > fastestWheelrelativeAV:
+		if abs(wheelRelativeAV) > abs(fastestWheelrelativeAV):
 			fastestWheel = wheel
 	return fastestWheel

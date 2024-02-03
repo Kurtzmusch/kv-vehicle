@@ -219,13 +219,13 @@ func _integrate_forces(state):
 	#$drivetrain.clutch(delta, oneByDelta)
 	teleportDelta = Vector3.ZERO
 
-func accelerateYaw(delta, oneByDelta, acceleration):
+func accelerateYaw(acceleration):
 	applyYawTorque(acceleration*inertia.y)
 
 func applyYawTorque(torqueMagnitude):
-	apply_torque(global_transform.basis.x*torqueMagnitude)
+	apply_torque(global_transform.basis.y*torqueMagnitude)
 
-func acceleratePitch(delta, oneByDelta, acceleration):
+func acceleratePitch(acceleration):
 	applyPitchTorque(acceleration*inertia.x)
 
 func applyPitchTorque(torqueMagnitude):

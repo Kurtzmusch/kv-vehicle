@@ -1,0 +1,114 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdwntucajyscx"]
+
+[ext_resource type="Script" path="res://plotter.gd" id="1_ubwmc"]
+
+[node name="plotter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ubwmc")
+
+[node name="zero" type="Line2D" parent="."]
+width = 4.0
+
+[node name="kEase" type="Line2D" parent="."]
+modulate = Color(0.592157, 1, 0.698039, 1)
+width = 1.0
+
+[node name="brushWolfie" type="Line2D" parent="."]
+modulate = Color(0.407843, 0.843137, 0.933333, 1)
+width = 1.0
+
+[node name="brushGanta" type="Line2D" parent="."]
+modulate = Color(0.85098, 0.615686, 0.972549, 1)
+width = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "normal"
+
+[node name="SpinBoxNormal" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+max_value = 25000.0
+value = 2000.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "patchLen
+"
+
+[node name="SpinBoxPatchLen" type="SpinBox" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+max_value = 0.5
+step = 0.01
+value = 0.2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "stiffness"
+
+[node name="SpinBoxStiffness" type="SpinBox" parent="VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+max_value = 20.0
+step = 0.01
+value = 2.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "slip longitudinal"
+
+[node name="SpinBoxSlipZ" type="SpinBox" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+max_value = 4.0
+step = 0.001
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "kEase"
+
+[node name="SpinBoxEase" type="SpinBox" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "k peak degree"
+
+[node name="SpinBoxPeak" type="SpinBox" parent="VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+max_value = 90.0
+value = 15.0
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/SpinBoxNormal" to="." method="_on_spin_box_normal_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/SpinBoxPatchLen" to="." method="_on_spin_box_patch_len_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer6/SpinBoxStiffness" to="." method="_on_spin_box_stiffness_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer3/SpinBoxSlipZ" to="." method="_on_spin_box_slip_z_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer4/SpinBoxEase" to="." method="_on_spin_box_ease_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer5/SpinBoxPeak" to="." method="_on_spin_box_peak_value_changed"]

@@ -1,13 +1,12 @@
-[gd_scene load_steps=85 format=3 uid="uid://5daiwjyh4ocx"]
+[gd_scene load_steps=49 format=3 uid="uid://5daiwjyh4ocx"]
 
 [ext_resource type="Script" path="res://example.gd" id="1_53f3a"]
 [ext_resource type="Texture2D" uid="uid://cl6cqhhxewtx7" path="res://texture/texture_01.png" id="2_1wc47"]
 [ext_resource type="Material" uid="uid://b5uu6vobknt6r" path="res://material/tarmac.material" id="2_d6bgi"]
 [ext_resource type="Script" path="res://followCamera.gd" id="3_jhh6f"]
 [ext_resource type="ArrayMesh" uid="uid://xh8a5n6aeqs0" path="res://mesh/rock.obj" id="4_2aasw"]
-[ext_resource type="Script" path="res://addons/kv-vehicle/TireResponse.gd" id="7_3vnxf"]
 [ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="8_y7cqf"]
-[ext_resource type="AudioStream" uid="uid://xsccdvjjl8c8" path="res://snd/fx/tire-slip-gravel.wav" id="9_4nbxb"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/TireResponseBrushWolfie.gd" id="11_ffudo"]
 [ext_resource type="Texture2D" uid="uid://bjs4p01k3gbbm" path="res://texture/icon-cicrcle-64x64-solid.png" id="26_g7xvv"]
 [ext_resource type="Script" path="res://Sprite2D.gd" id="27_pjwq2"]
 [ext_resource type="PackedScene" uid="uid://foegnmr6avup" path="res://vehicles/big-foot.tscn" id="28_ctkhe"]
@@ -95,170 +94,12 @@ texture_filter = 4
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_tvslm"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve" id="Curve_oooal"]
-min_value = -0.1
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_ahlfm"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.184874, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.715789), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_4p6nj"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_e6ltu"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_ahlfm")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_oooal")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xeasq"]
-fractal_octaves = 1
-fractal_lacunarity = 3.305
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kb1a1"]
-generate_mipmaps = false
-seamless = true
-noise = SubResource("FastNoiseLite_xeasq")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_hc8kl"]
-fractal_octaves = 1
-fractal_lacunarity = 3.305
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s4dsl"]
-generate_mipmaps = false
-seamless = true
-as_normal_map = true
-bump_strength = 16.0
-noise = SubResource("FastNoiseLite_hc8kl")
-
-[sub_resource type="Curve" id="Curve_irmtb"]
-min_value = -0.1
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_qo1vr"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.251381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_at0w4"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_ulih2"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_qo1vr")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_at0w4")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_irmtb")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
-bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
-bumpVisualBias = 0.0
-
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_y11po"]
 height = 0.523076
 radius = 0.64308
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_h70ea"]
 resource_local_to_scene = true
-
-[sub_resource type="Resource" id="Resource_o1jaq"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_ahlfm")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_oooal")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="Resource" id="Resource_l0ftg"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_qo1vr")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_at0w4")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_irmtb")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
-bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
-bumpVisualBias = 0.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_yw838"]
 height = 0.523076
@@ -267,120 +108,12 @@ radius = 0.64308
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_x716l"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_vdit6"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_ahlfm")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_oooal")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="Resource" id="Resource_3sd04"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_qo1vr")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_at0w4")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_irmtb")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
-bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
-bumpVisualBias = 0.0
-
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_g2ahv"]
 height = 0.523076
 radius = 0.64308
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_6k7hg"]
 resource_local_to_scene = true
-
-[sub_resource type="Resource" id="Resource_8nij6"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_ahlfm")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_4p6nj")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_oooal")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="Resource" id="Resource_qjefy"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_qo1vr")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_at0w4")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_irmtb")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_kb1a1")
-bumpNoiseNormal = SubResource("NoiseTexture2D_s4dsl")
-bumpVisualBias = 0.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_xqp1k"]
 height = 0.523076
@@ -392,108 +125,20 @@ resource_local_to_scene = true
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_s3hs8"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve" id="Curve_aw113"]
-min_value = -0.1
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_pku14"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.184874, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.715789), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_b2m6o"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.747368), 0.0911277, 0.0911277, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_xdjmh"]
-script = ExtResource("7_3vnxf")
+[sub_resource type="Resource" id="Resource_wyt4r"]
+script = ExtResource("11_ffudo")
+tireStiffness = 4
+contactPatchLength = 0.2
 materialName = "tarmac"
+maxNormalLoadCoeficient = 8.0
 coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_pku14")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_b2m6o")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_aw113")
 slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
+slipAudioMinimumVelocity = 8.0
+slipAudioMinimumPitch = 0.8
 slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
+slipAudioMaximumPitch = 1.1
+audioVolumeEase = 0.5
 bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_khfdk"]
-fractal_octaves = 1
-fractal_lacunarity = 3.305
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bqbvk"]
-generate_mipmaps = false
-seamless = true
-noise = SubResource("FastNoiseLite_khfdk")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_w67iq"]
-fractal_octaves = 1
-fractal_lacunarity = 3.305
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3suc1"]
-generate_mipmaps = false
-seamless = true
-as_normal_map = true
-bump_strength = 16.0
-noise = SubResource("FastNoiseLite_w67iq")
-
-[sub_resource type="Curve" id="Curve_hv4wa"]
-min_value = -0.1
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.808581, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, -0.1), -3.05658, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_lf7ie"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.251381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.547368), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_6u3qo"]
-bake_resolution = 128
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.757895), 0.0911277, 0.0911277, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_1sc17"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_lf7ie")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_6u3qo")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_hv4wa")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
-bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
 bumpVisualBias = 0.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_g0rlm"]
@@ -503,60 +148,6 @@ radius = 0.303612
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_58yvu"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_6snf8"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_pku14")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_b2m6o")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_aw113")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="Resource" id="Resource_danun"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_lf7ie")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_6u3qo")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_hv4wa")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
-bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
-bumpVisualBias = 0.0
-
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_u4fbh"]
 height = 0.244639
 radius = 0.303612
@@ -564,120 +155,12 @@ radius = 0.303612
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_t8mcs"]
 resource_local_to_scene = true
 
-[sub_resource type="Resource" id="Resource_owyus"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_pku14")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_b2m6o")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_aw113")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="Resource" id="Resource_f76jx"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_lf7ie")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_6u3qo")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_hv4wa")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
-bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
-bumpVisualBias = 0.0
-
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kx8u4"]
 height = 0.244639
 radius = 0.303612
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_18y07"]
 resource_local_to_scene = true
-
-[sub_resource type="Resource" id="Resource_roqn0"]
-script = ExtResource("7_3vnxf")
-materialName = "tarmac"
-coeficientOfFriction = 1.0
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_pku14")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 6.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_b2m6o")
-relativeZSpeedBegin = 0.15
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_aw113")
-slippingStream = ExtResource("8_y7cqf")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 0.7
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.0
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpVisualBias = 0.0
-
-[sub_resource type="Resource" id="Resource_3bqgs"]
-script = ExtResource("7_3vnxf")
-materialName = "gravel"
-coeficientOfFriction = 0.8
-loadEase = 1.0
-clampAfterCombining = true
-maxNormalLoadCoeficient = 8.0
-gripXCurve = SubResource("Curve_lf7ie")
-useBuildupEase = false
-buildupEase = 0.01
-slipAngleBegin = 8.0
-slipAngleEnd = 10.0
-gripZCurve = SubResource("Curve_6u3qo")
-relativeZSpeedBegin = 0.5
-relativeZSpeedEnd = 4.0
-useSlipRatio = false
-feedbackCurve = SubResource("Curve_hv4wa")
-slippingStream = ExtResource("9_4nbxb")
-slipAudioMinimumVelocity = 5.0
-slipAudioMinimumPitch = 1.0
-slipAudioMaximumVelocity = 100.0
-slipAudioMaximumPitch = 1.4
-audioVolumeEase = 0.25
-bumpHeight = 0.0
-bumpNoiseHeight = SubResource("NoiseTexture2D_bqbvk")
-bumpNoiseNormal = SubResource("NoiseTexture2D_3suc1")
-bumpVisualBias = 0.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_26hp0"]
 height = 0.244639
@@ -972,6 +455,16 @@ surface_material_override/0 = SubResource("StandardMaterial3D_0x1nl")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="world/map/MeshInstance3D29/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_byb1s")
 
+[node name="MeshInstance3D30" type="MeshInstance3D" parent="world/map"]
+transform = Transform3D(0.866025, 0.157195, -0.474647, 0, 0.949294, 0.31439, 0.5, -0.27227, 0.822113, 41.0634, -1.8458, 79.2647)
+mesh = SubResource("BoxMesh_fanim")
+surface_material_override/0 = SubResource("StandardMaterial3D_0x1nl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="world/map/MeshInstance3D30"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="world/map/MeshInstance3D30/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_byb1s")
+
 [node name="MeshInstance3D26" type="MeshInstance3D" parent="world/map"]
 transform = Transform3D(0.953738, 0.30064, 0, -0.30064, 0.953738, 0, 0, 0, 1, 99.4284, -1.2278, -12.5784)
 mesh = SubResource("BoxMesh_fanim")
@@ -1037,7 +530,6 @@ createWheelMinimumColliders = false
 mesh = SubResource("ImmediateMesh_tvslm")
 
 [node name="FR" parent="world/bigFoot" index="4"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_e6ltu"), SubResource("Resource_ulih2")])
 compressionDamp = 0.05
 relaxationDamp = 0.15
 
@@ -1048,7 +540,6 @@ shape = SubResource("CylinderShape3D_y11po")
 mesh = SubResource("ImmediateMesh_h70ea")
 
 [node name="FL" parent="world/bigFoot" index="5"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_o1jaq"), SubResource("Resource_l0ftg")])
 compressionDamp = 0.05
 relaxationDamp = 0.15
 
@@ -1059,7 +550,6 @@ shape = SubResource("CylinderShape3D_yw838")
 mesh = SubResource("ImmediateMesh_x716l")
 
 [node name="RR" parent="world/bigFoot" index="6"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_vdit6"), SubResource("Resource_3sd04")])
 compressionDamp = 0.05
 relaxationDamp = 0.15
 
@@ -1070,7 +560,6 @@ shape = SubResource("CylinderShape3D_g2ahv")
 mesh = SubResource("ImmediateMesh_6k7hg")
 
 [node name="RL" parent="world/bigFoot" index="7"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_8nij6"), SubResource("Resource_qjefy")])
 compressionDamp = 0.05
 relaxationDamp = 0.15
 
@@ -1099,21 +588,28 @@ top_level = true
 [node name="debugVectors" parent="world/hatchback" index="0"]
 mesh = SubResource("ImmediateMesh_s3hs8")
 
+[node name="CollisionShape3D" parent="world/hatchback" index="4"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.0999999, 0)
+
 [node name="centerOfMass" parent="world/hatchback" index="6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0710001, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.171, 0)
 
 [node name="breakFront" parent="world/hatchback" index="18"]
-strength = 4000.0
+strength = 2000.0
+abs = false
 slipStrengthMult = 0.9
 
-[node name="k-swayBarFront" parent="world/hatchback" index="20"]
-stiffness = 3.0
+[node name="breakRear" parent="world/hatchback" index="19"]
+strength = 400.0
+abs = false
 
 [node name="k-swayBarRear" parent="world/hatchback" index="21"]
-stiffness = 3.0
+stiffness = 1.0
 
 [node name="FR" parent="world/hatchback" index="24"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_xdjmh"), SubResource("Resource_1sc17")])
+defaultTireResponse = SubResource("Resource_wyt4r")
+stiffness = 5.0
+relaxationDamp = 0.2
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/FR/shapecastPivot" index="0"]
@@ -1123,7 +619,9 @@ shape = SubResource("CylinderShape3D_g0rlm")
 mesh = SubResource("ImmediateMesh_58yvu")
 
 [node name="FL" parent="world/hatchback" index="25"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_6snf8"), SubResource("Resource_danun")])
+defaultTireResponse = SubResource("Resource_wyt4r")
+stiffness = 5.0
+relaxationDamp = 0.2
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/FL/shapecastPivot" index="0"]
@@ -1133,8 +631,10 @@ shape = SubResource("CylinderShape3D_u4fbh")
 mesh = SubResource("ImmediateMesh_t8mcs")
 
 [node name="RR" parent="world/hatchback" index="26"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_owyus"), SubResource("Resource_f76jx")])
-stiffness = 3.0
+defaultTireResponse = SubResource("Resource_wyt4r")
+compressionDamp = 0.2
+relaxationDamp = 0.15
+gripMultiplier = Vector3(1, 1, 1)
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/RR/shapecastPivot" index="0"]
@@ -1144,8 +644,10 @@ shape = SubResource("CylinderShape3D_kx8u4")
 mesh = SubResource("ImmediateMesh_18y07")
 
 [node name="RL" parent="world/hatchback" index="27"]
-tireResponses = Array[ExtResource("7_3vnxf")]([SubResource("Resource_roqn0"), SubResource("Resource_3bqgs")])
-stiffness = 3.0
+defaultTireResponse = SubResource("Resource_wyt4r")
+compressionDamp = 0.2
+relaxationDamp = 0.15
+gripMultiplier = Vector3(1, 1, 1)
 maxNormalLoadCoeficientMultiplier = 2.0
 
 [node name="ShapeCast3D" parent="world/hatchback/RL/shapecastPivot" index="0"]

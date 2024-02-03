@@ -388,7 +388,7 @@ func updateCasts(state, delta, oneByDelta, contribution):
 			$shapecastPivot/ShapeCast3D.target_position = shapecastTargetPosition
 			$shapecastPivot/ShapeCast3D.force_shapecast_update()
 		grounded = $shapecastPivot/ShapeCast3D.is_colliding()
-		debugString = str(grounded)
+		#debugString = str(grounded)
 		if grounded:
 			collider = $shapecastPivot/ShapeCast3D.get_collider(0)
 			collisionNormal = $shapecastPivot/ShapeCast3D.get_collision_normal(0)
@@ -483,6 +483,8 @@ func applyAccumulatedFrictionForces(state):
 	#debugString = str( snapped(abs(lerpAmount), 0.1 ) )
 	vehicle.applyGlobalForceState(xFrictionAccumulated*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, zFrictionColor)
+	
+	debugString = str(int(radsPerSec))
 
 func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution):
 	if !grounded: return
@@ -589,7 +591,7 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	var fsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_safe_fraction()
 	var funsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_unsafe_fraction()
 	var fraction = (fsafe+funsafe)*0.5
-	debugString = str( str( snapped(fsafe, 0.1) ) + '/'+str(snapped(funsafe, 0.1) ) )
+	#debugString = str( str( snapped(fsafe, 0.1) ) + '/'+str(snapped(funsafe, 0.1) ) )
 	var wheelPivotPositionY
 	if useShapecastForPhysics:
 		wheelPivotPositionY = -fraction*maxExtension#-radius

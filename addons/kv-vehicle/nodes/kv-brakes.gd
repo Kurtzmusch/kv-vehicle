@@ -36,7 +36,7 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	
 	for wheel in wheels:
 		if !wheel.grounded: continue
-		var threshold = wheel.tireResponse.relativeZSpeedBegin-absThreshold
+		var threshold = absThreshold
 		
 		var strActual = str
 		if abs:

@@ -67,6 +67,14 @@ var tireResponseDictionary: Dictionary
 
 #@export_category('Physics Tweaking')
 
+## stiffness to be used when the suspension cannot compress any more and the wheel is sinking into the ground
+## [br] usefull when combined with a collision shape that is slightly above the actual mesh.
+## [br] the idea is to use this to prevent actual physical collision from happening, since those are unstable.
+@export var overCompressionStiffness = 10.0
+## damp to be used when the wheel is sinking into the ground
+## [br] provides stability after jumps, when damping the rebound from a collision or overCompression. also helps avoid the collision with the floor or ramps
+@export_range(0.0, 1.0) var overCompressionDamp = 0.9
+
 ## for the purposes of calculating friction, bias the normal load towards the load at rest.
 ## [br] 0.0: no biasing, behaves physically
 ## [br] 1.0: full biasing, fricting will be the same no matter how much compressed the suspension is
@@ -186,14 +194,18 @@ var surfaceMaterial: StringName = 'tarmac'
 
 var normalizedCompression = 0.0
 
-## suspension spring compression in meters
+## suspension spring compression in meters, does not get smaller then wheel radius
 var compressionM = 0.0
+var previousCompressionM = 0.0
 
 ## suspension change in compression in meters/second.
 ## [br] negative values means it is compressing
 var compressionDeltaMS = 0.0
 
-var previousCompressionMS = 0.0
+## compression of the collision ray/shapecast, can get smaller then wheel radius
+var rayCompressionM = 0.0
+var previousRayCompressionM = 0.0
+var rayCompressionDeltaMS = 0.0
 
 ## force to be applied by the suspension
 var suspensionForce = Vector3.ZERO
@@ -484,7 +496,7 @@ func applyAccumulatedFrictionForces(state):
 	vehicle.applyGlobalForceState(xFrictionAccumulated*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, zFrictionColor)
 	
-	debugString = str(int(radsPerSec))
+	#debugString = str(int(radsPerSec))
 
 func applyFrictionForces(state, delta, oneByDelta, modDelta, oneBySubstep, contribution):
 	if !grounded: return
@@ -587,7 +599,11 @@ func applyTorque(torque, delta):
 	radsPerSec += torque/(momentOfInertia)*delta
 
 func applySuspensionForce(state, delta, oneByDelta, contribution):
-	if !grounded: return
+	if !grounded:
+		previousCompression = 0.0
+		previousCompressionM = 0.0
+		previousRayCompressionM = 0.0
+		return
 	var fsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_safe_fraction()
 	var funsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_unsafe_fraction()
 	var fraction = (fsafe+funsafe)*0.5
@@ -597,9 +613,20 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 		wheelPivotPositionY = -fraction*maxExtension#-radius
 	else:
 		wheelPivotPositionY = to_local(contactTransform.origin).y+radius
+	var overCompressionM = max(0.0, wheelPivotPositionY)
 	wheelPivotPositionY = min(wheelPivotPositionY, 0.0)
-	compressionM = maxExtension-wheelPivotPositionY
-	compressionDeltaMS = (compressionM-previousCompressionMS)*oneByDelta
+	rayCompressionM = -($RayCast3D.target_position.y-(to_local(contactTransform.origin).y))
+	compressionM = (maxExtension+wheelPivotPositionY)
+	compressionDeltaMS = (compressionM-previousCompressionM)*oneByDelta
+	rayCompressionDeltaMS = (rayCompressionM-previousRayCompressionM)*oneByDelta
+	"""
+	debugString = str( snapped( compressionM, 0.01 ) )
+	debugString += '/'
+	debugString += str( snapped( rayCompressionM, 0.01 ) )
+	"""
+	#debugString += '/'
+	#debugString = str( snapped( overCompressionM*10.0, 0.1 ) )
+	
 	normalizedCompression = 1.0-abs(wheelPivotPositionY)/maxExtension
 	var compression = remap(normalizedCompression,\
 	(1.0-restRatio), 1.0,\
@@ -618,11 +645,19 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 		damp = compressionDamp
 	else:
 		damp = relaxationDamp
+	
 	# *60.0 here instead of oneByTimestep so it is consistent for different timesteps
 	damp *= compressionDeltaMS*vehicle.mass*wheelContribution*60.0
+	var overCompressionDampForce = 0.0
+	var overCompressionForce = 0.0
+	if overCompressionM > 0.0:
+		overCompressionDampForce = overCompressionDamp*rayCompressionDeltaMS*vehicle.mass*wheelContribution*60.0
+		overCompressionForce = overCompressionM*overCompressionStiffness*normalForceAtRest
 	suspensionForceMagnitude = compression*normalForceAtRest
+	suspensionForceMagnitude += overCompressionForce
 	suspensionForceMagnitude += additionalSuspensionForceMagnitude
-	suspensionForceMagnitude -= damp
+	suspensionForceMagnitude += damp
+	suspensionForceMagnitude += overCompressionDampForce
 	if clampSuspensionForce:
 		suspensionForceMagnitude = max(0.0, suspensionForceMagnitude)
 	
@@ -639,4 +674,5 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	
 	$wheelSteerPivot.position.y = wheelPivotPositionY+wheelVisualPositionYOffset
 	previousCompression = compression
-	previousCompressionMS = compressionM
+	previousCompressionM = compressionM
+	previousRayCompressionM = rayCompressionM

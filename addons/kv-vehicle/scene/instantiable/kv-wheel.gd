@@ -70,10 +70,11 @@ var tireResponseDictionary: Dictionary
 ## stiffness to be used when the suspension cannot compress any more and the wheel is sinking into the ground
 ## [br] usefull when combined with a collision shape that is slightly above the actual mesh.
 ## [br] the idea is to use this to prevent actual physical collision from happening, since those are unstable.
-@export var overCompressionStiffness = 10.0
+@export var overCompressionStiffness = 0.05
 ## damp to be used when the wheel is sinking into the ground
 ## [br] provides stability after jumps, when damping the rebound from a collision or overCompression. also helps avoid the collision with the floor or ramps
-@export_range(0.0, 1.0) var overCompressionDamp = 0.9
+## [br] too much and going over sidewalks will throw the car around
+@export_range(0.0, 1.0) var overCompressionDamp = 0.2
 
 ## for the purposes of calculating friction, bias the normal load towards the load at rest.
 ## [br] 0.0: no biasing, behaves physically

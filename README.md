@@ -1,8 +1,8 @@
 
 
-## Physics based vehicle addon for Godot 4.x
+# Modular, Physics based vehicle addon for Godot 4
 
-# Features:
+## Features:
 - flexible
 --physics tweaking allows you to make things ranging from arcade to lite-sim
 - modular
@@ -12,7 +12,7 @@
 - documented
 --no guessing, most variables are documented, even the ones that are not exposed/exported in the godot editor.
 
-# Implemented Components:
+## Implemented Components:
 - engine
 - drivetrain with analogue clutch
 - basic infinite torque limited slip differential(can behave as open or locked)
@@ -21,7 +21,7 @@
 - input handler(mouse steering, keyboard, or gpad)
 - sway bar(anti-roll)
 
-# Core Nodes/Resources
+## Core Nodes/Resources
 
 KVVehicle:
 - helper physics functions that abstracts away some physics math
@@ -44,14 +44,14 @@ Helper Nodes and extra features:
 - ackerman ratio helper
 
 
-# Limitations:
+## Limitations:
 - suspension travels in a straight line, no real or fake suspension geometry yet
 - no simracer hardware support yet
 - godot's shapecast gets more broken the farther you get from world origin
 - since the torque forces on the tires are a feedback system that uses data from the previous frame, some wheel or engine oscilations can happen, a substep sytem is implemented and other tweakable fixes. this is not an issue for arcade games that won't use the physical drivetrain or for low mass vehicles.
 
-# Acknowledgments and similar projects
-* [Dechode, open source impolementation and sources](https://github.com/Dechode/Godot-Advanced-Vehicle/tree/main)
+## Acknowledgments and similar projects
+* [Dechode, open source implementation and sources](https://github.com/Dechode/Godot-Advanced-Vehicle/tree/main)
 * [Wolfe, written tutorial of his GDSim vehicle physics](https://www.gtplanet.net/forum/threads/gdsim-v0-4a-autocross-and-custom-setups.396400/) -- [itch.io demo](https://lupine-vidya.itch.io/gdsim)
 * [jreo, open source, feature rich simulator](https://github.com/jreo03/g-rcp2) -- [itch.io demo](https://jreo.itch.io/rcp4)
 

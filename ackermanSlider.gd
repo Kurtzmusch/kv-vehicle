@@ -1,10 +1,9 @@
-extends WorldEnvironment
+extends HSlider
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$world/Camera3D.vehicleUI = $UI
-	$UI.setVehicle($world/Camera3D.target)
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -12,5 +11,5 @@ func _process(delta):
 	pass
 
 
-func _on_h_slider_value_changed(value):
-	$world/hatchback/kackerman.updateAmount(value)
+func _on_value_changed(value):
+	pass # Replace with function body.

@@ -5,6 +5,9 @@ class_name KVAckerman
 
 @export var steeringPair: Array[KVWheel]
 @export var staticPair: Array[KVWheel]
+@export var amount = 1.0
+
+var ratio = 1.0
 
 func _ready():
 	
@@ -34,11 +37,15 @@ func _ready():
 	var hip = sqrt( pow(xDist, 2) + pow(Zdist, 2) )
 	var angle = acos(Zdist/hip)
 	angle = 0.5*PI-angle
-	var ratio = angle/maxAngle
+	ratio = angle/maxAngle
 	
-	for wheel in steeringPair:
-		wheel.updateAckerman(ratio)
+	updateAmount(amount)
 
+
+func updateAmount(newAmount):
+	amount = newAmount
+	for wheel in steeringPair:
+		wheel.updateAckerman( lerp(1.0, ratio, amount) )
 
 func _process(delta):
 	pass

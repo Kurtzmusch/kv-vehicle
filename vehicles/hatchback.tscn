@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://csm6euds2015k"]
+[gd_scene load_steps=39 format=3 uid="uid://csm6euds2015k"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_r7ucc"]
 [ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/kv-vehicle/scene/instantiable/kv-ackerman.tscn" id="2_a2nxy"]
@@ -24,6 +24,7 @@
 [ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="21_n7ij5"]
 [ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="22_wvjgt"]
 [ext_resource type="PackedScene" uid="uid://bfqa1bfvsj6hl" path="res://particles-gravel.tscn" id="23_elsxg"]
+[ext_resource type="PackedScene" uid="uid://c12ekqv7i3v3j" path="res://addons/kv-vehicle/scene/instantiable/shiftAssist.tscn" id="25_57v8b"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_widss"]
 resource_local_to_scene = true
@@ -47,7 +48,7 @@ _data = [Vector2(0, 0.463158), 0.0, 0.0, 0, 0, Vector2(0.105042, 0.968421), 0.0,
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_eru43"]
-_data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.980392, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.894737), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.880519, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.505263), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ppypq"]
@@ -354,6 +355,11 @@ mesh = SubResource("ImmediateMesh_eek5i")
 [node name="tarmac" parent="RL/Particles" index="0" instance=ExtResource("22_wvjgt")]
 
 [node name="gravel" parent="RL/Particles" index="1" instance=ExtResource("23_elsxg")]
+
+[node name="shiftAssist" parent="." index="28" node_paths=PackedStringArray("engine", "drivetrain") instance=ExtResource("25_57v8b")]
+engine = NodePath("../engine")
+drivetrain = NodePath("../drivetrain")
+shiftMethod = 2
 
 [editable path="FR"]
 [editable path="FL"]

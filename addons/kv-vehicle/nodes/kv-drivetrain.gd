@@ -49,13 +49,18 @@ func updatePoweredWheels():
 		wheel.powered = true
 		_totalWheelMomentOfInertia += wheel.momentOfInertia
 
+func shiftIntoGear(gearIndex):
+	if vehicle.freeze: return
+	currentGearIndex = gearIndex 
+	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+
+func shiftGear(gearOffset):
+	if vehicle.freeze: return
+	currentGearIndex += gearOffset 
+	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+
 func _physics_process(delta):
 	if vehicle.freeze: return
-	if Input.is_action_just_pressed('shift+'):
-		currentGearIndex += 1 
-	if Input.is_action_just_pressed('shift-'):
-		currentGearIndex -= 1
-	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
 	
 	
 	var samplePosition = engine.revsPerMinute/engine.maxRevsPerMinute

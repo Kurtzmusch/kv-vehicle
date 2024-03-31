@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c12ekqv7i3v3j"]
+
+[ext_resource type="Script" path="res://addons/kv-vehicle/nodes/shiftAssist.gd" id="1_3hw7u"]
+
+[node name="shiftAssist" type="Node"]
+script = ExtResource("1_3hw7u")

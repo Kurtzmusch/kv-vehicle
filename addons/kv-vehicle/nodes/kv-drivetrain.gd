@@ -9,6 +9,7 @@ class_name KVDrivetrain
 @export var poweredWheels: Array[KVWheel]
 ## engine that powers this drivetrain
 @export var engine: Node
+# FIXME, this torque should probably be *oneModDelta
 ## maximum torque of the clutch, use 0.0 for infinite torque. should be generally higher then the engine torque
 @export var clutchMaxTorque = 0.0
 
@@ -32,6 +33,10 @@ var vehicle
 var clutchInput = 0.0
 
 var prevCT = 0.0
+
+var wheelEngineAngularDelta = 0.0
+
+var rpsDelta = 0.0
 
 func _ready():
 	for idx in range(gearRatios.size()):
@@ -76,7 +81,7 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var engineAngularModified = engine.radsPerSec*gearRatio
 	var wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
 	#var rpsDelta = -getFastestWheel().radsPerSec -engineAngularModified 
-	var rpsDelta = wheelAngularModified - engine.radsPerSec
+	rpsDelta = wheelAngularModified - engine.radsPerSec
 	var ratio1 = engine.momentOfInertia/(_totalWheelMomentOfInertia*gearRatio*gearRatio)
 	
 	#var torque = (-getFastestWheel().radsPerSec-engineAngularModified)/(-1.0-ratio)
@@ -87,6 +92,7 @@ func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var wheelMoment = _totalWheelMomentOfInertia*gearRatio*gearRatio
 	var wheelAngular = -getFastestWheel().radsPerSec/gearRatio
 	var engineAngular = engine.radsPerSec
+	
 	#print('_____')
 	#print(wheelAngular)
 	#print(engineAngular)

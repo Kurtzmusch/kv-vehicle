@@ -1,5 +1,7 @@
 extends Node
 
+## this node must be after the input handler, since it needs to overwrite clutch and throtle
+
 @export var engine: KVEngine
 @export var drivetrain: KVDrivetrain
 
@@ -15,6 +17,8 @@ var steeringFunctions = [
 	shiftClamp,
 	shiftMaximizeTorque
 ]
+@export var revMatch = true
+@export var revMatchClutchInput = 0.94
 
 var vehicle: KVVehicle
 
@@ -24,10 +28,21 @@ func _ready():
 func _physics_process(delta):
 	if Input.is_action_just_pressed('shift+'):
 		drivetrain.shiftGear(1)
+		return
 	if Input.is_action_just_pressed('shift-'):
 		drivetrain.shiftGear(-1)
+		return
+	if Input.get_action_strength('clutch') >= 0.99: return
 	
-	steeringFunctions[shiftMethod].call()
+	if abs(drivetrain.rpsDelta) > 2 and engine.radsPerSec>engine.idleRadsPerSec+2:
+		if revMatch:
+			vehicle.clutchInput = revMatchClutchInput
+			
+			if sign(drivetrain.rpsDelta) != 0.0:
+				vehicle.accelerationInput = max(0.0, sign(drivetrain.rpsDelta) )
+	else:
+		
+		steeringFunctions[shiftMethod].call()
 
 func shiftNone(): return
 
@@ -60,22 +75,32 @@ func shiftMaximizeTorque():
 		shiftFromNeutral()
 	else:
 		var currentTorque = getEngineTorque(engine.revsPerMinute)
-		var wheelRPM = getWheelRPM()
+		var wheelRPM = abs(drivetrain.getFastestWheel().radsPerSec)/TAU*60.0
 		var nextGear = min(drivetrain.currentGearIndex+1, drivetrain.gearRatios.size()-1)
 		if nextGear > drivetrain.currentGearIndex:
 			var nextGearRatio = getGearRatio(nextGear)
 			var nextRPM = getEngineRPM(nextGearRatio, wheelRPM)
 			var nextTorque = getEngineTorque(nextRPM)
-			if nextTorque > currentTorque:
+			var threshold = currentTorque+0.3
+			if Input.get_action_strength("acceleration+")>0.1:
+				threshold = currentTorque
+			if nextTorque > threshold:
 				drivetrain.shiftGear(1)
+				vehicle.accelerationInput = 0.0
+				vehicle.clutchInput = 0.0
 				return
 		var prevGear = max(drivetrain.neutralGearIndex+1, drivetrain.currentGearIndex-1)
 		if prevGear < drivetrain.currentGearIndex:
 			var prevGearRatio = getGearRatio(prevGear)
 			var prevRPM = getEngineRPM(prevGearRatio, wheelRPM)
 			var prevTorque = getEngineTorque(prevRPM)
-			if prevTorque > currentTorque:
+			var threshold = currentTorque
+			if Input.get_action_strength("acceleration+")>0.1:
+				threshold += 0.3
+			if prevTorque > threshold:
 				drivetrain.shiftGear(-1)
+				vehicle.accelerationInput = 1.0
+				vehicle.clutchInput = 0.0
 		else:
 			if engine.radsPerSec <= engine.idleRadsPerSec+5\
 			and drivetrain.currentGearIndex != drivetrain.neutralGearIndex:

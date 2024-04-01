@@ -26,4 +26,5 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 		for wheel in wheels:
 			wheel.applyBreakTorque(strength, modDelta)
 		if overrideClutch:
+			# this overwrites clutch value from input/assits nodes since this is on _integrate
 			vehicle.clutchInput = 1.0

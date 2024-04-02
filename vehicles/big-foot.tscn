@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://foegnmr6avup"]
+[gd_scene load_steps=38 format=3 uid="uid://foegnmr6avup"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_26vtv"]
 [ext_resource type="ArrayMesh" uid="uid://cqkqh0h585ai2" path="res://mesh/hatchback.obj" id="3_x8x3b"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://di8yt3gcgfhdu" path="res://addons/kv-vehicle/scene/instantiable/kv-breaks.tscn" id="17_dodt1"]
 [ext_resource type="PackedScene" uid="uid://dkitefvmd6uu0" path="res://addons/kv-vehicle/scene/instantiable/kv-swayBar.tscn" id="18_pkrjl"]
 [ext_resource type="Script" path="res://vehicles/big-foot-input.gd" id="20_2cn56"]
+[ext_resource type="PackedScene" uid="uid://c12ekqv7i3v3j" path="res://addons/kv-vehicle/scene/instantiable/shiftAssist.tscn" id="23_5qx0g"]
 [ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-LSDifferential.gd" id="23_llmm5"]
 [ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-CentralLSDifferential.gd" id="24_dye1s"]
 
@@ -342,6 +343,10 @@ wheels = [NodePath("../FR"), NodePath("../FL")]
 script = ExtResource("24_dye1s")
 lsds = [NodePath("../lsdRear"), NodePath("../lsdFront")]
 limit = 4.0
+
+[node name="shiftAssist" parent="." index="27" node_paths=PackedStringArray("engine", "drivetrain") instance=ExtResource("23_5qx0g")]
+engine = NodePath("../engine")
+drivetrain = NodePath("../drivetrain")
 
 [editable path="FR"]
 [editable path="FL"]

@@ -370,6 +370,7 @@ mesh = SubResource("ImmediateMesh_eek5i")
 engine = NodePath("../engine")
 drivetrain = NodePath("../drivetrain")
 shiftMethod = 2
+antiEngineBreak = true
 
 [editable path="FR"]
 [editable path="FL"]

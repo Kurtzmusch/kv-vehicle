@@ -58,11 +58,13 @@ func shiftIntoGear(gearIndex):
 	if vehicle.freeze: return
 	currentGearIndex = gearIndex 
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+	gearRatio = gearRatios[currentGearIndex]*finalRatio
 
 func shiftGear(gearOffset):
 	if vehicle.freeze: return
 	currentGearIndex += gearOffset 
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+	gearRatio = gearRatios[currentGearIndex]*finalRatio
 
 func _physics_process(delta):
 	if vehicle.freeze: return

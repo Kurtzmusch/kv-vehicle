@@ -10,15 +10,27 @@ enum shiftMethods {
 	Clamp,
 	MaximizeTorque
 }
+## shifting logic to be used.
+##[br] [b]clamp[/b]: shifts if below engine idle, or above engine rev limit
+##[br] [b]maximizeTorque[/b]: shifts up or down trying to obtain the maximum amount of torque
 @export var shiftMethod = shiftMethods.Clamp
 
-var steeringFunctions = [
+var shiftingFunctions = [
 	shiftNone,
 	shiftClamp,
 	shiftMaximizeTorque
 ]
+## if true, ignores user input
+@export var disableUserShifting = false
+## if true, overrides acceleration to help with smoother gear transition
 @export var revMatch = true
-@export var revMatchClutchInput = 0.94
+## amount of clutch to use when rev matching, overrides user input
+@export_range(0.0,1.0) var revMatchClutchInput = 0.8
+## if true, makes the clutch input proportional to gear ratio. this is useful to make shifting at lower gears more smooth
+@export var clutchProportionalToGear = true
+## if true, presses the accelerator to counter engine breaking.
+@export var antiEngineBreak = false
+@export_range(0.0,1.0) var antiEngineBreakPressure = 0.05
 
 var vehicle: KVVehicle
 
@@ -26,23 +38,29 @@ func _ready():
 	vehicle = get_parent()
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed('shift+'):
-		drivetrain.shiftGear(1)
-		return
-	if Input.is_action_just_pressed('shift-'):
-		drivetrain.shiftGear(-1)
-		return
+	if !disableUserShifting:
+		if Input.is_action_just_pressed('shift+'):
+			drivetrain.shiftGear(1)
+			return
+		if Input.is_action_just_pressed('shift-'):
+			drivetrain.shiftGear(-1)
+			return
 	if Input.get_action_strength('clutch') >= 0.99: return
 	
 	if abs(drivetrain.rpsDelta) > 2 and engine.radsPerSec>engine.idleRadsPerSec+2:
 		if revMatch:
 			vehicle.clutchInput = revMatchClutchInput
+			if clutchProportionalToGear:
+				vehicle.clutchInput = (1.0 - clamp((1.0-revMatchClutchInput)*drivetrain.gearRatio, 0.0, 1.0) )*revMatchClutchInput
 			
 			if sign(drivetrain.rpsDelta) != 0.0:
 				vehicle.accelerationInput = max(0.0, sign(drivetrain.rpsDelta) )
 	else:
-		
-		steeringFunctions[shiftMethod].call()
+		if antiEngineBreak and is_zero_approx(vehicle.break2Input):
+			# constant for now since there is no rolling resist
+			var counterEngineBreak = antiEngineBreakPressure# * drivetrain.gearRatio
+			vehicle.accelerationInput = max(vehicle.accelerationInput, counterEngineBreak)
+		shiftingFunctions[shiftMethod].call()
 
 func shiftNone(): return
 

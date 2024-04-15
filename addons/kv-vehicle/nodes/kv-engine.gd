@@ -10,7 +10,9 @@ class_name KVEngine
 @export var maxRevsPerMinute = 6500.0
 @export var idleRevsPerMinute = 800.0
 @export var internalFrictionTorque = 100.0
+## additional friction torque to be applied when vehicle acceleration input is 0.0
 @export var breakTorque = 100.0
+## torque applyed when engine revs are above maximum, multiplied by peakToruqe
 @export var limmiterCounterTorqueRatio = 8.0
 ## how difficult the engine is to rev,
 ## but also how much energy it stores when

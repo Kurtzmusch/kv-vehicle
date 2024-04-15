@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://csm6euds2015k"]
+[gd_scene load_steps=41 format=3 uid="uid://csm6euds2015k"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_r7ucc"]
 [ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/kv-vehicle/scene/instantiable/kv-ackerman.tscn" id="2_a2nxy"]
@@ -22,6 +22,7 @@
 [ext_resource type="Resource" uid="uid://cf0sd0qtsj4nx" path="res://tireResponseKVTarmac.tres" id="20_fby83"]
 [ext_resource type="Resource" uid="uid://cgwcrmqgatx6" path="res://tireResponseKVGravel.tres" id="21_dyxnm"]
 [ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="21_n7ij5"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/SuspensionGeometrySimple.gd" id="22_r8uw3"]
 [ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="22_wvjgt"]
 [ext_resource type="PackedScene" uid="uid://bfqa1bfvsj6hl" path="res://particles-gravel.tscn" id="23_elsxg"]
 [ext_resource type="PackedScene" uid="uid://c12ekqv7i3v3j" path="res://addons/kv-vehicle/scene/instantiable/shiftAssist.tscn" id="25_57v8b"]
@@ -50,6 +51,11 @@ point_count = 3
 [sub_resource type="Curve" id="Curve_eru43"]
 _data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.880519, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.505263), 0.0, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="Resource" id="Resource_80t22"]
+script = ExtResource("22_r8uw3")
+radsPerMeter = 1.2
+neutralCamber = 0.063
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ppypq"]
 height = 0.244639
@@ -223,6 +229,7 @@ maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="FR" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -259,6 +266,7 @@ maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="FL" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -296,6 +304,7 @@ compressionDamp = 0.15
 relaxationDamp = 0.25
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="RR" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -332,6 +341,7 @@ compressionDamp = 0.15
 relaxationDamp = 0.25
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="RL" index="0"]
 target_position = Vector3(0, -0.464612, 0)

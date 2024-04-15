@@ -128,6 +128,10 @@ var shapeCastAngleThreshold = deg_to_rad(5.0)
 ##[br] makes drifting easier
 @export var clampFricionAfterCombining = true
 ## angle (radians) between the direction the wheel is pointg and the direction it is moving 
+
+## calculates how a wheel should be oriented as the suspension compresses
+@export var suspensionGeometry: SuspensionGeometry
+
 var slipAngle = 0.0
 
 var debugString: String
@@ -604,6 +608,8 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 		previousCompression = 0.0
 		previousCompressionM = 0.0
 		previousRayCompressionM = 0.0
+		var wheelPivotPositionY = -maxExtension
+		suspensionGeometry.applyGeometryTransform(vehicle, self, $wheelSteerPivot, wheelPivotPositionY)
 		return
 	var fsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_safe_fraction()
 	var funsafe = $shapecastPivot/ShapeCast3D.get_closest_collision_unsafe_fraction()
@@ -673,7 +679,10 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	
 	vehicle.applyGlobalForceState(suspensionForceApplied, contactTransform.origin, state, Color.GREEN)
 	
-	$wheelSteerPivot.position.y = wheelPivotPositionY+wheelVisualPositionYOffset
+	#$wheelSteerPivot.position.y = wheelPivotPositionY+wheelVisualPositionYOffset
+	
+	suspensionGeometry.applyGeometryTransform(vehicle, self, $wheelSteerPivot, wheelPivotPositionY)
+	
 	previousCompression = compression
 	previousCompressionM = compressionM
 	previousRayCompressionM = rayCompressionM

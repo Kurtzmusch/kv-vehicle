@@ -42,6 +42,17 @@ enum steeringMethods {
 }
 @export var steeringMethod = steeringMethods.Mouse
 
+## if true, enabled assist for gpad and mouse inputs, the variables below affect this assist
+@export var assisted = true
+
+## slip angle threshold(degress) to consider the rear to be sliding
+@export var rearDriftingThresholdDeg = 10.0
+
+## amount of steering to counter rear slip
+@export var antiRearSlip = 0.5
+
+@export var rearWheels: Array[KVWheel]
+
 var steeringFunctions = [
 	steerMouse,
 	steerKeyboard,
@@ -54,6 +65,80 @@ var steeringWheels = Array()
 
 var oneByWheelCount = 0.0
 
+
+func steerAssisted(delta, steeringInput, steerNonLinearity):
+	
+	var avgSlipAngle = 0.0
+	var avgTargetAngle = 0.0
+	var avgAngleActual = 0.0
+	for wheel in steeringWheels:
+		var currentAngle = wheel.get_node('wheelSteerPivot').rotation.y
+		avgSlipAngle += wheel.slipAngle*oneByWheelCount
+		avgAngleActual += (currentAngle)*oneByWheelCount
+		avgTargetAngle += (currentAngle-wheel.slipAngle)*oneByWheelCount
+	var tireResponse = steeringWheels[0].tireResponse as TireResponse
+	var avgTargetAngleNormalized = avgTargetAngle/steeringWheels[0].maxSteerAngle
+	var maxSteerNromalizedRelative = deg_to_rad(16.0)/steeringWheels[0].maxSteerAngle
+	var max = -avgTargetAngleNormalized+maxSteerNromalizedRelative
+	var min = -avgTargetAngleNormalized-maxSteerNromalizedRelative
+	
+	#reduces the assist at low speeds, since the assits have a tendecy of keeping the vehicle turning to keep a good slip angle
+	var adjustedVelocity = pow(0.125*vehicle.linear_velocity.length(), 2.0)
+	var inputWeight = maxSteerNromalizedRelative + ( (1.0-maxSteerNromalizedRelative)/(adjustedVelocity+1.0) )
+	
+	var modMouseX =sign(steeringInput) * pow(abs(steeringInput), steerNonLinearity)
+	
+	var clampedInput = clamp(modMouseX*inputWeight, min, max)
+	
+	var rearDrifting = abs(rearWheels[0].slipAngle) > deg_to_rad(rearDriftingThresholdDeg)
+	
+	if rearDrifting:
+		var lerpBegin = lerp(0.0,-avgTargetAngleNormalized, antiRearSlip)
+		clampedInput = lerp(lerpBegin, -avgTargetAngleNormalized, -sign(avgTargetAngleNormalized)*steeringInput)
+	
+	
+	vehicle.normalizedSteering = clamp(clampedInput, -1.0,1.0)
+	if -vehicle.localLinearVelocity.z < 1.0:
+		vehicle.normalizedSteering = steeringInput
+
+func steerGpad(delta):
+	#mouse emulation
+	
+	"""
+	printerr('mouse emulation is on')
+	var viewport = get_viewport()
+	var normalizedMouseX = viewport.get_mouse_position()/viewport.get_visible_rect().size
+	normalizedMouseX = normalizedMouseX.x
+	normalizedMouseX = (normalizedMouseX-0.5)*2.0
+	if normalizedMouseX < 0.0:
+		Input.action_press('steer-',abs(normalizedMouseX))
+	if normalizedMouseX > 0.0:
+		Input.action_press('steer+',abs(normalizedMouseX))
+	"""
+	
+	var steeringInput = Input.get_axis('steer-', 'steer+')
+	
+	if assisted:
+		steerAssisted(delta, steeringInput, gPadSteerNonLinearity)
+		return
+	steeringInput = sign(steeringInput) * pow(abs(steeringInput), gPadSteerNonLinearity)
+	vehicle.normalizedSteering = steeringInput
+
+func steerMouse(delta):
+	
+	#print(get_viewport().get_mouse_position())
+	var viewport = get_viewport()
+	var normalizedMouseX = viewport.get_mouse_position()/viewport.get_visible_rect().size
+	normalizedMouseX = normalizedMouseX.x
+	normalizedMouseX = (normalizedMouseX-0.5)*2.0
+	
+	if assisted:
+		steerAssisted(delta, normalizedMouseX, mouseSteerNonLinearity)
+		return
+	
+	normalizedMouseX = sign(normalizedMouseX) * pow(abs(normalizedMouseX), mouseSteerNonLinearity)
+	vehicle.normalizedSteering = normalizedMouseX
+"""
 func steerMouse(delta):
 	#print(get_viewport().get_mouse_position())
 	var viewport = get_viewport()
@@ -62,7 +147,7 @@ func steerMouse(delta):
 	normalizedMouseX = (normalizedMouseX-0.5)*2.0
 	normalizedMouseX = sign(normalizedMouseX) * pow(abs(normalizedMouseX), mouseSteerNonLinearity)
 	vehicle.normalizedSteering = normalizedMouseX
-
+"""
 func steerKeyboard(delta):
 	var inverseSpeed = 1.0/(1.0 + (abs(vehicle.localLinearVelocity.z)*inverseSpeedScale))
 	vehicle.normalizedSteering += Input.get_axis('steer-', 'steer+')*delta*steeringSensitivity*inverseSpeed
@@ -78,11 +163,6 @@ func steerKeyboard(delta):
 	if vehicle.linear_velocity.length_squared() > .125 and vehicle.localLinearVelocity.z < 0.0:
 		vehicle.normalizedSteering = move_toward(vehicle.normalizedSteering, sign(avgSlipAngle), delta*abs(avgSlipAngle)*modAntiSlip)
 
-func steerGpad(delta):
-	var steeringInput = Input.get_axis('steer-', 'steer+')
-	steeringInput = sign(steeringInput) * pow(abs(steeringInput), gPadSteerNonLinearity)
-	vehicle.normalizedSteering = steeringInput
-
 func _enter_tree():
 	if !vehicle:
 		vehicle = get_parent()
@@ -92,7 +172,7 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_just_pressed('enable-gpad'):
-		steeringMethod = steeringMethod.Gpad
+		steeringMethod = steeringMethods.Gpad
 	if Input.is_action_just_pressed('toggle-mouse-steering'):
 		if steeringMethod == steeringMethods.Keyboard:
 			steeringMethod = steeringMethods.Mouse

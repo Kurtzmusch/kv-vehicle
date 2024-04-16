@@ -253,8 +253,9 @@ mesh = SubResource("ImmediateMesh_l63an")
 
 [node name="gravel" parent="RL/Particles" index="0" instance=ExtResource("7_1hgqb")]
 
-[node name="kInputHandler" parent="." index="8" node_paths=PackedStringArray("transmission") instance=ExtResource("7_de01d")]
+[node name="kInputHandler" parent="." index="8" node_paths=PackedStringArray("transmission", "rearWheels") instance=ExtResource("7_de01d")]
 transmission = NodePath("../drivetrain")
+rearWheels = [NodePath("../RR"), NodePath("../RL")]
 
 [node name="centerOfMass" parent="." index="9" instance=ExtResource("9_41sye")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.341436, 0)

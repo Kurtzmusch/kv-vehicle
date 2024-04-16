@@ -104,12 +104,14 @@ surface_material_override/1 = SubResource("StandardMaterial3D_mnu25")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.1, 0)
 shape = SubResource("ConvexPolygonShape3D_old68")
 
-[node name="kInputHandler" parent="." index="5" node_paths=PackedStringArray("vehicle", "transmission") instance=ExtResource("4_bmimy")]
+[node name="kInputHandler" parent="." index="5" node_paths=PackedStringArray("vehicle", "transmission", "rearWheels") instance=ExtResource("4_bmimy")]
 vehicle = NodePath("..")
 transmission = NodePath("../drivetrain")
+mouseSteerNonLinearity = 2.0
 steeringSensitivity = 4.0
 steerMaxSlipAngle = 0.14
 antiSlip = 4.0
+rearWheels = [NodePath("../RL"), NodePath("../RR")]
 
 [node name="centerOfMass" parent="." index="6" instance=ExtResource("5_8nvih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.071, 0)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://csm6euds2015k"]
+[gd_scene load_steps=42 format=3 uid="uid://csm6euds2015k"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_r7ucc"]
 [ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/kv-vehicle/scene/instantiable/kv-ackerman.tscn" id="2_a2nxy"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="22_wvjgt"]
 [ext_resource type="PackedScene" uid="uid://bfqa1bfvsj6hl" path="res://particles-gravel.tscn" id="23_elsxg"]
 [ext_resource type="PackedScene" uid="uid://c12ekqv7i3v3j" path="res://addons/kv-vehicle/scene/instantiable/shiftAssist.tscn" id="25_57v8b"]
+[ext_resource type="PackedScene" uid="uid://cdae6buqwnrrh" path="res://addons/kv-vehicle/scene/instantiable/kv-weightDistributor.tscn" id="27_17h86"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_widss"]
 resource_local_to_scene = true
@@ -371,6 +372,11 @@ engine = NodePath("../engine")
 drivetrain = NodePath("../drivetrain")
 shiftMethod = 2
 antiEngineBreak = true
+
+[node name="weightDistributor" parent="." index="29" node_paths=PackedStringArray("centerOfMass", "frontWheels", "rearWheels") instance=ExtResource("27_17h86")]
+centerOfMass = NodePath("../centerOfMass")
+frontWheels = [NodePath("../FL"), NodePath("../FR")]
+rearWheels = [NodePath("../RL"), NodePath("../RR")]
 
 [editable path="FR"]
 [editable path="FL"]

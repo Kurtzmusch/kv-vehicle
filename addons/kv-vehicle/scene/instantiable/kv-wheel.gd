@@ -152,6 +152,8 @@ var restExtension = 0.0
 var maxExtension = 0.0
 var restRatio = 1.0
 
+var normalForceAtRestActual = 0.0
+
 var normalForceAtRest = 0.0
 
 ## additional force exerted by the suspension on this frame. (N)
@@ -164,6 +166,9 @@ var additionalSuspensionForceMagnitude = 0.0
 var suspensionForceMagnitude = 0.0
 ## ratio of 1.0/totalWheels
 var wheelContribution = 0.25
+
+## how much of the vehicle weight is sustained by this spring
+var weightDistribution = 0.25
 
 ## vehicle mass/totalWheels
 var massPerWheel = 0.0
@@ -341,6 +346,10 @@ func _ready():
 	#$shapecastPivot/ShapeCast3D.target_position.z = -maxExtension
 	$shapecastPivot/ShapeCast3D.add_exception(get_parent())
 	#$shapecastPivot/ShapeCast3D.rotation.z *= sign(position.x)
+	updateWeightDistribution()
+
+func updateWeightDistribution():
+	normalForceAtRestActual = vehicle.mass*vehicle.gravity_scale*globalGravity*weightDistribution
 
 func updateMaxSteering():
 	ackermanSide = sign(position.x)
@@ -659,8 +668,8 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	var overCompressionForce = 0.0
 	if overCompressionM > 0.0:
 		overCompressionDampForce = overCompressionDamp*rayCompressionDeltaMS*vehicle.mass*wheelContribution*60.0
-		overCompressionForce = overCompressionM*overCompressionStiffness*normalForceAtRest
-	suspensionForceMagnitude = compression*normalForceAtRest
+		overCompressionForce = overCompressionM*overCompressionStiffness*normalForceAtRestActual
+	suspensionForceMagnitude = compression*normalForceAtRestActual
 	suspensionForceMagnitude += overCompressionForce
 	suspensionForceMagnitude += additionalSuspensionForceMagnitude
 	suspensionForceMagnitude += damp

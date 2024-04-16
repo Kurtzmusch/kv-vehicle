@@ -92,7 +92,7 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_just_pressed('enable-gpad'):
-		steeringFunction = steeringMethod.Gpad
+		steeringMethod = steeringMethod.Gpad
 	if Input.is_action_just_pressed('toggle-mouse-steering'):
 		if steeringMethod == steeringMethods.Keyboard:
 			steeringMethod = steeringMethods.Mouse

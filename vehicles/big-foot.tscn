@@ -259,6 +259,7 @@ mesh = SubResource("ImmediateMesh_l63an")
 
 [node name="kInputHandler" parent="." index="8" node_paths=PackedStringArray("transmission", "rearWheels") instance=ExtResource("7_de01d")]
 transmission = NodePath("../drivetrain")
+maxSlipAngleDeg = 8.0
 rearWheels = [NodePath("../RR"), NodePath("../RL")]
 
 [node name="centerOfMass" parent="." index="9" instance=ExtResource("9_41sye")]

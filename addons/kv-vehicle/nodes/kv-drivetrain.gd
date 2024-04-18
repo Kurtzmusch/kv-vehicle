@@ -79,11 +79,13 @@ func _physics_process(delta):
 
 func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var oneByModDelta = 1.0/modDelta
-	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput): return
+	
 	var engineAngularModified = engine.radsPerSec*gearRatio
 	var wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
 	#var rpsDelta = -getFastestWheel().radsPerSec -engineAngularModified 
 	rpsDelta = wheelAngularModified - engine.radsPerSec
+	
+	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput): return
 	var ratio1 = engine.momentOfInertia/(_totalWheelMomentOfInertia*gearRatio*gearRatio)
 	
 	#var torque = (-getFastestWheel().radsPerSec-engineAngularModified)/(-1.0-ratio)

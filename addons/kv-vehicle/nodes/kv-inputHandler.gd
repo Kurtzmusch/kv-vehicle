@@ -45,11 +45,17 @@ enum steeringMethods {
 ## if true, enabled assist for gpad and mouse inputs, the variables below affect this assist
 @export var assisted = true
 
+## max slip angle in degrees of the steering wheels
+@export var maxSlipAngleDeg = 12.0
+
 ## slip angle threshold(degress) to consider the rear to be sliding
 @export var rearDriftingThresholdDeg = 10.0
 
 ## amount of steering to counter rear slip
 @export var antiRearSlip = 0.5
+
+## 
+@export var responseSpeed = 1.0
 
 @export var rearWheels: Array[KVWheel]
 
@@ -78,12 +84,12 @@ func steerAssisted(delta, steeringInput, steerNonLinearity):
 		avgTargetAngle += (currentAngle-wheel.slipAngle)*oneByWheelCount
 	var tireResponse = steeringWheels[0].tireResponse as TireResponse
 	var avgTargetAngleNormalized = avgTargetAngle/steeringWheels[0].maxSteerAngle
-	var maxSteerNromalizedRelative = deg_to_rad(16.0)/steeringWheels[0].maxSteerAngle
+	var maxSteerNromalizedRelative = deg_to_rad(maxSlipAngleDeg)/steeringWheels[0].maxSteerAngle
 	var max = -avgTargetAngleNormalized+maxSteerNromalizedRelative
 	var min = -avgTargetAngleNormalized-maxSteerNromalizedRelative
 	
 	#reduces the assist at low speeds, since the assits have a tendecy of keeping the vehicle turning to keep a good slip angle
-	var adjustedVelocity = pow(0.125*vehicle.linear_velocity.length(), 2.0)
+	var adjustedVelocity = pow(0.2*vehicle.linear_velocity.length(), 2.0)
 	var inputWeight = maxSteerNromalizedRelative + ( (1.0-maxSteerNromalizedRelative)/(adjustedVelocity+1.0) )
 	
 	var modMouseX =sign(steeringInput) * pow(abs(steeringInput), steerNonLinearity)
@@ -91,13 +97,20 @@ func steerAssisted(delta, steeringInput, steerNonLinearity):
 	var clampedInput = clamp(modMouseX*inputWeight, min, max)
 	
 	var rearDrifting = abs(rearWheels[0].slipAngle) > deg_to_rad(rearDriftingThresholdDeg)
-	
+	var rearDriftingAmount = abs(rearWheels[0].slipAngle+rearWheels[1].slipAngle)*0.5 - deg_to_rad(rearDriftingThresholdDeg)
+	rearDriftingAmount *= 1.0
+	rearDriftingAmount = clamp(rearDriftingAmount, 0.0, 1.0)
+	var antiDriftInput = clampedInput
 	if rearDrifting:
 		var lerpBegin = lerp(0.0,-avgTargetAngleNormalized, antiRearSlip)
-		clampedInput = lerp(lerpBegin, -avgTargetAngleNormalized, -sign(avgTargetAngleNormalized)*steeringInput)
+		antiDriftInput = lerp(lerpBegin, -avgTargetAngleNormalized, -sign(avgTargetAngleNormalized)*steeringInput)
 	
-	
-	vehicle.normalizedSteering = clamp(clampedInput, -1.0,1.0)
+	clampedInput = lerp(clampedInput, antiDriftInput, rearDriftingAmount)
+	clampedInput = clamp(clampedInput, -1.0,1.0)
+	if rearDrifting:
+		vehicle.normalizedSteering = move_toward(vehicle.normalizedSteering, clampedInput, delta*8.0)
+	else:
+		vehicle.normalizedSteering = move_toward(vehicle.normalizedSteering, clampedInput, delta*responseSpeed)
 	if -vehicle.localLinearVelocity.z < 1.0:
 		vehicle.normalizedSteering = steeringInput
 

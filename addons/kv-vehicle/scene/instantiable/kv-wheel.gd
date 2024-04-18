@@ -67,6 +67,9 @@ var tireResponseDictionary: Dictionary
 
 #@export_category('Physics Tweaking')
 
+## additional offset to use when considering the suspension to be 'over compressing'.
+## [br] negative values will apply over compression forces sooner, before the wheel sinks into the ground
+@export var overCompressionBegin = 0.0
 ## stiffness to be used when the suspension cannot compress any more and the wheel is sinking into the ground
 ## [br] usefull when combined with a collision shape that is slightly above the actual mesh.
 ## [br] the idea is to use this to prevent actual physical collision from happening, since those are unstable.
@@ -75,6 +78,9 @@ var tireResponseDictionary: Dictionary
 ## [br] provides stability after jumps, when damping the rebound from a collision or overCompression. also helps avoid the collision with the floor or ramps
 ## [br] too much and going over sidewalks will throw the car around
 @export_range(0.0, 1.0) var overCompressionDamp = 0.2
+
+## use damping when the suspension is expanding while still over compressed
+@export var dampOverCompressionRebound = false
 
 ## for the purposes of calculating friction, bias the normal load towards the load at rest.
 ## [br] 0.0: no biasing, behaves physically
@@ -119,7 +125,8 @@ var shapeCastAngleThreshold = deg_to_rad(5.0)
 @export var clampSuspensionForce = true
 
 ## multiplier for the suspension force, in vehicles local space.
-## can be used to disable or reduce some force component of the suspension force
+## can be used to disable or reduce some force component of the suspension force.
+## [br]can be set to Vector3.UP to prevent any vehicle yaw rotation due to suspension forces when the vehicle is on irregular terrain. 
 ## [br]example: to disable the lateral force set to Vector3(0.0,1.0,1.0)
 @export var suspensionForceMult = Vector3.ONE
 
@@ -629,7 +636,8 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 		wheelPivotPositionY = -fraction*maxExtension#-radius
 	else:
 		wheelPivotPositionY = to_local(contactTransform.origin).y+radius
-	var overCompressionM = max(0.0, wheelPivotPositionY)
+	
+	var overCompressionM = max(0.0, wheelPivotPositionY-overCompressionBegin)
 	wheelPivotPositionY = min(wheelPivotPositionY, 0.0)
 	rayCompressionM = -($RayCast3D.target_position.y-(to_local(contactTransform.origin).y))
 	compressionM = (maxExtension+wheelPivotPositionY)
@@ -666,8 +674,11 @@ func applySuspensionForce(state, delta, oneByDelta, contribution):
 	damp *= compressionDeltaMS*vehicle.mass*wheelContribution*60.0
 	var overCompressionDampForce = 0.0
 	var overCompressionForce = 0.0
+	var doOverDamp = !( (rayCompressionDeltaMS < 0.0) and (!dampOverCompressionRebound) )
 	if overCompressionM > 0.0:
-		overCompressionDampForce = overCompressionDamp*rayCompressionDeltaMS*vehicle.mass*wheelContribution*60.0
+		if doOverDamp:
+			
+			overCompressionDampForce = overCompressionDamp*rayCompressionDeltaMS*vehicle.mass*wheelContribution*60.0
 		overCompressionForce = overCompressionM*overCompressionStiffness*normalForceAtRestActual
 	suspensionForceMagnitude = compression*normalForceAtRestActual
 	suspensionForceMagnitude += overCompressionForce

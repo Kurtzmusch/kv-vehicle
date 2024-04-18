@@ -101,7 +101,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_mfj4t")
 surface_material_override/1 = SubResource("StandardMaterial3D_mnu25")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="4"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.1, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.195935, 0)
 shape = SubResource("ConvexPolygonShape3D_old68")
 
 [node name="kInputHandler" parent="." index="5" node_paths=PackedStringArray("vehicle", "transmission", "rearWheels") instance=ExtResource("4_bmimy")]
@@ -231,6 +231,8 @@ steer = true
 maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
+overCompressionStiffness = 0.025
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")
 
@@ -268,6 +270,8 @@ steer = true
 maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
+overCompressionStiffness = 0.025
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")
 
@@ -305,6 +309,8 @@ defaultTireResponse = ExtResource("20_fby83")
 stiffness = 3.5
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
+overCompressionStiffness = 0.025
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")
@@ -342,6 +348,8 @@ defaultTireResponse = ExtResource("20_fby83")
 stiffness = 3.5
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
+overCompressionStiffness = 0.025
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")

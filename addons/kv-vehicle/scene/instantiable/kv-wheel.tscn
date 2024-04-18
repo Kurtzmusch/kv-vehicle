@@ -19,6 +19,8 @@ resource_local_to_scene = true
 
 [node name="kwheel" type="Node3D"]
 script = ExtResource("1_2oa8d")
+overCompressionBegin = null
+dampOverCompressionRebound = null
 suspensionGeometry = SubResource("Resource_tv730")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]

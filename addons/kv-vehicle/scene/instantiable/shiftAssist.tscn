@@ -4,5 +4,4 @@
 
 [node name="shiftAssist" type="Node"]
 script = ExtResource("1_3hw7u")
-revMatchClutchInput = 0.9
 antiEngineBreakPressure = 0.01

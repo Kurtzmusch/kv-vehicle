@@ -141,7 +141,7 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput):
 		for wheel in poweredWheels:
 			wheel.powered = false
-		return
+		
 	var counterTorque = 0.0
 	for wheel in poweredWheels:
 		counterTorque -= wheel.frictionTorque*gearRatio

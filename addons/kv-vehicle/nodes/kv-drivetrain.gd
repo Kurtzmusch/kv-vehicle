@@ -59,12 +59,14 @@ func shiftIntoGear(gearIndex):
 	currentGearIndex = gearIndex 
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
 	gearRatio = gearRatios[currentGearIndex]*finalRatio
+	updateRPSDelta()
 
 func shiftGear(gearOffset):
 	if vehicle.freeze: return
 	currentGearIndex += gearOffset 
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
 	gearRatio = gearRatios[currentGearIndex]*finalRatio
+	updateRPSDelta()
 
 func _physics_process(delta):
 	if vehicle.freeze: return
@@ -76,6 +78,12 @@ func _physics_process(delta):
 	var f = t/vehicle.wheels[0].radius
 
 	#vehicle.debugString = str((int(f)))
+
+func updateRPSDelta():
+	var engineAngularModified = engine.radsPerSec*gearRatio
+	var wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
+	
+	rpsDelta = wheelAngularModified - engine.radsPerSec
 
 func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var oneByModDelta = 1.0/modDelta

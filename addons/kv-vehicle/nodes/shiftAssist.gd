@@ -24,12 +24,21 @@ var shiftingFunctions = [
 @export var disableUserShifting = false
 ## if true, overrides acceleration to help with smoother gear transition
 @export var revMatch = true
+## how much rev matching overrides user input
+@export_range(0.0, 1.0) var revMatchAuthority = 0.5
 ## amount of clutch to use when updshifting, overrides user input
 @export var upshiftClutchMult = 1.0
 ## amount of clutch to use when downshifting, overrides user input
 @export var downshiftClutchMult = .25
 ## if true, presses the accelerator to counter engine breaking.
 @export var antiEngineBreak = false
+## threshold as a coeficient of max engine torque to use when downshifting.
+##[br] increase this if the vehicle downshifts right after an upshift. useful when the clutch is not very agressive.
+@export_range(0.0, 1.0) var downshiftThreshold = 0.1
+## threshold as a coeficient of max engine torque to use when upshifting.
+##[br] increase this if the vehicle downshifts right after an upshift. useful when the clutch is not very agressive.
+@export_range(0.0, 1.0) var upshiftThreshold = 0.1
+
 @export_range(0.0,1.0) var antiEngineBreakPressure = 0.05
 
 var vehicle: KVVehicle
@@ -42,12 +51,10 @@ func _physics_process(delta):
 	if !disableUserShifting:
 		if Input.is_action_just_pressed('shift+'):
 			drivetrain.shiftGear(1)
-			if revMatch:
-				vehicle.clutchInput = 1.0
+			
 		if Input.is_action_just_pressed('shift-'):
 			drivetrain.shiftGear(-1)
-			if revMatch:
-				vehicle.clutchInput = 1.0
+			
 	
 	
 	var isNeutral = is_zero_approx(drivetrain.gearRatio)
@@ -66,9 +73,9 @@ func _physics_process(delta):
 		print(drivetrain.rpsDelta)
 		vehicle.clutchInput = 0.9"
 	if (abs(drivetrain.rpsDelta) > 2.0 or downshifting) and engine.radsPerSec>(engine.idleRadsPerSec+20):
-		if revMatch:
-			if sign(drivetrain.rpsDelta) != 0.0:
-				vehicle.accelerationInput = max(0.0, sign(drivetrain.rpsDelta) )
+		if sign(drivetrain.rpsDelta) != 0.0:
+			var desired = max(0.0, sign(drivetrain.rpsDelta) )
+			vehicle.accelerationInput = lerp(vehicle.accelerationInput, desired, revMatchAuthority)
 			
 			
 			
@@ -76,7 +83,7 @@ func _physics_process(delta):
 		if downshifting: mult = downshiftClutchMult
 		
 		#vehicle.clutchInput = (1.0 - clamp((1.0-revMatchClutchInput)*drivetrain.gearRatio, 0.0, 1.0) )*revMatchClutchInput
-		vehicle.clutchInput = clamp(( ( 1.0-(drivetrain.gearRatio)*mult) ), 0.0, 1.0)
+		vehicle.clutchInput = clamp(( ( 1.0-(abs(drivetrain.gearRatio) )*mult) ), 0.0, 1.0)
 			
 	else:
 		if antiEngineBreak and is_zero_approx(vehicle.break2Input):
@@ -125,9 +132,8 @@ func shiftMaximizeTorque():
 			var nextGearRatio = getGearRatio(nextGear)
 			var nextRPM = getEngineRPM(nextGearRatio, wheelRPM)
 			var nextTorque = getEngineTorque(nextRPM)
-			var threshold = currentTorque+0.3
-			if Input.get_action_strength("acceleration+")>0.1:
-				threshold = currentTorque
+			var threshold = currentTorque+upshiftThreshold
+			
 			if nextTorque > threshold:
 				drivetrain.shiftGear(1)
 				vehicle.accelerationInput = 0.0
@@ -138,9 +144,8 @@ func shiftMaximizeTorque():
 			var prevGearRatio = getGearRatio(prevGear)
 			var prevRPM = getEngineRPM(prevGearRatio, wheelRPM)
 			var prevTorque = getEngineTorque(prevRPM)
-			var threshold = currentTorque
-			if Input.get_action_strength("acceleration+")>0.1:
-				threshold += 0.2
+			var threshold = currentTorque+downshiftThreshold
+			
 			if prevTorque > threshold:
 				drivetrain.shiftGear(-1)
 				
@@ -152,7 +157,7 @@ func shiftMaximizeTorque():
 				shiftToNeutral()
 
 func getEngineRPM(gearRatio, wheelRPM):
-	return wheelRPM/gearRatio
+	return wheelRPM/abs(gearRatio)
 
 func getGearRatio(gearIndex):
 	return drivetrain.gearRatios[gearIndex]*drivetrain.finalRatio

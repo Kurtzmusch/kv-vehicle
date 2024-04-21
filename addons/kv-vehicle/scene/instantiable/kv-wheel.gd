@@ -73,7 +73,7 @@ var tireResponseDictionary: Dictionary
 ## stiffness to be used when the suspension cannot compress any more and the wheel is sinking into the ground
 ## [br] usefull when combined with a collision shape that is slightly above the actual mesh.
 ## [br] the idea is to use this to prevent actual physical collision from happening, since those are unstable.
-@export var overCompressionStiffness = 0.05
+@export var overCompressionStiffness = 10.0
 ## damp to be used when the wheel is sinking into the ground
 ## [br] provides stability after jumps, when damping the rebound from a collision or overCompression. also helps avoid the collision with the floor or ramps
 ## [br] too much and going over sidewalks will throw the car around
@@ -513,6 +513,7 @@ func applyAccumulatedFrictionForces(state):
 	if !grounded: return
 	var lerpAmount = abs(zFrictionAccumulated)/(tireResponse.coeficientOfFriction*suspensionForceMagnitude)
 	var zFrictionColor = Color.BLUE_VIOLET.lerp(Color.AQUA, lerpAmount)
+	if lerpAmount > 0.95: zFrictionColor = Color.WHITE
 	#debugString = str( snapped(abs(lerpAmount), 0.1 ) )
 	vehicle.applyGlobalForceState(xFrictionAccumulated*-contactTransform.basis.x, contactTransform.origin, state, frictionColor)
 	vehicle.applyGlobalForceState(zFrictionAccumulated*contactTransform.basis.z, contactTransform.origin, state, zFrictionColor)

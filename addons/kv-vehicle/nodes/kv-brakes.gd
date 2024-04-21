@@ -14,10 +14,10 @@ class_name KVBreak
 
 ## abs relative velocity(meter/second) threshold.
 ## [br] the abs will reduce break input when the contact patch relative velocity is over this threshold
-@export var absThreshold = 0.10
+@export var absThreshold = 2.0
 
 ## break strength multiplier when the tire is over the throshold.
-## [br] if the tire is slipping, the abs releases the brake completely
+
 @export var slipStrengthMult = 0.5
 
 var vehicle
@@ -41,13 +41,14 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 		var strActual = str
 		if abs:
 			#wheel.debugString = ''
-			var slipping =  abs( wheel.contactRelativeVelocity.z ) > wheel.tireResponse.relativeZSpeedBegin
+			#var slipping =  abs( wheel.contactRelativeVelocity.z ) > wheel.tireResponse.relativeZSpeedBegin
+			#TODO maybe different tire response should have a method that tells if/how much it's slipping
+			#current brush implementation never slips
 			if abs( wheel.contactRelativeVelocity.z ) > threshold:
 				#wheel.debugString = 'abs'
 				strActual = str*slipStrengthMult
 				absOverriding = true
-				if slipping:
-					strActual = 0.0
+				
 			else:
 				absOverriding = false
 		wheel.applyBreakTorque(strength*strActual, modDelta)

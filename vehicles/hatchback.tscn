@@ -117,10 +117,12 @@ rearWheels = [NodePath("../RL"), NodePath("../RR")]
 [node name="shiftAssist" parent="." index="6" node_paths=PackedStringArray("engine", "drivetrain") instance=ExtResource("25_57v8b")]
 engine = NodePath("../engine")
 drivetrain = NodePath("../drivetrain")
-shiftMethod = 0
-upshiftClutchMult = 4.0
-downshiftClutchMult = 0.5
+shiftMethod = 2
+revMatchAuthority = 0.9
+upshiftClutchMult = 5.0
+downshiftClutchMult = 3.0
 antiEngineBreak = true
+upshiftThreshold = 0.25
 
 [node name="centerOfMass" parent="." index="7" instance=ExtResource("5_8nvih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.071, 0)
@@ -241,7 +243,6 @@ maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
 overCompressionBegin = -0.05
-overCompressionStiffness = 0.025
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")
 
@@ -280,7 +281,6 @@ maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
 overCompressionBegin = -0.05
-overCompressionStiffness = 0.025
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")
 
@@ -319,7 +319,6 @@ stiffness = 3.5
 compressionDamp = 0.15
 relaxationDamp = 0.25
 overCompressionBegin = -0.05
-overCompressionStiffness = 0.025
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")
@@ -358,7 +357,6 @@ stiffness = 3.5
 compressionDamp = 0.15
 relaxationDamp = 0.25
 overCompressionBegin = -0.05
-overCompressionStiffness = 0.025
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
 suspensionGeometry = SubResource("Resource_80t22")

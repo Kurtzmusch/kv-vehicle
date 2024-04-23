@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://csm6euds2015k"]
+[gd_scene load_steps=42 format=3 uid="uid://csm6euds2015k"]
 
 [ext_resource type="PackedScene" uid="uid://bxw72hy1o23b5" path="res://addons/kv-vehicle/scene/instantiable/kv-vehicle.tscn" id="1_r7ucc"]
 [ext_resource type="PackedScene" uid="uid://bhhtvl7tjwfbw" path="res://addons/kv-vehicle/scene/instantiable/kv-ackerman.tscn" id="2_a2nxy"]
@@ -22,9 +22,11 @@
 [ext_resource type="Resource" uid="uid://cf0sd0qtsj4nx" path="res://tireResponseKVTarmac.tres" id="20_fby83"]
 [ext_resource type="Resource" uid="uid://cgwcrmqgatx6" path="res://tireResponseKVGravel.tres" id="21_dyxnm"]
 [ext_resource type="ArrayMesh" uid="uid://m0m1mu6tggmc" path="res://mesh/hatchback-wheel.obj" id="21_n7ij5"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/SuspensionGeometrySimple.gd" id="22_r8uw3"]
 [ext_resource type="PackedScene" uid="uid://b5fhne1183tjh" path="res://particles-tarmac-slipping.tscn" id="22_wvjgt"]
 [ext_resource type="PackedScene" uid="uid://bfqa1bfvsj6hl" path="res://particles-gravel.tscn" id="23_elsxg"]
 [ext_resource type="PackedScene" uid="uid://c12ekqv7i3v3j" path="res://addons/kv-vehicle/scene/instantiable/shiftAssist.tscn" id="25_57v8b"]
+[ext_resource type="PackedScene" uid="uid://cdae6buqwnrrh" path="res://addons/kv-vehicle/scene/instantiable/kv-weightDistributor.tscn" id="27_17h86"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_widss"]
 resource_local_to_scene = true
@@ -48,8 +50,14 @@ _data = [Vector2(0, 0.463158), 0.0, 0.0, 0, 0, Vector2(0.105042, 0.968421), 0.0,
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_eru43"]
+bake_resolution = 1000
 _data = [Vector2(0, 0), 0.0, 1.82817, 0, 0, Vector2(0.0748899, 0.631579), 0.0, 0.0, 0, 0, Vector2(0.880519, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.505263), 0.0, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="Resource" id="Resource_80t22"]
+script = ExtResource("22_r8uw3")
+radsPerMeter = 1.2
+neutralCamber = 0.063
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ppypq"]
 height = 0.244639
@@ -94,20 +102,32 @@ surface_material_override/0 = SubResource("StandardMaterial3D_mfj4t")
 surface_material_override/1 = SubResource("StandardMaterial3D_mnu25")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="4"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.1, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.195935, 0)
 shape = SubResource("ConvexPolygonShape3D_old68")
 
-[node name="kInputHandler" parent="." index="5" node_paths=PackedStringArray("vehicle", "transmission") instance=ExtResource("4_bmimy")]
+[node name="kInputHandler" parent="." index="5" node_paths=PackedStringArray("vehicle", "transmission", "rearWheels") instance=ExtResource("4_bmimy")]
 vehicle = NodePath("..")
 transmission = NodePath("../drivetrain")
+mouseSteerNonLinearity = 2.0
 steeringSensitivity = 4.0
 steerMaxSlipAngle = 0.14
 antiSlip = 4.0
+rearWheels = [NodePath("../RL"), NodePath("../RR")]
 
-[node name="centerOfMass" parent="." index="6" instance=ExtResource("5_8nvih")]
+[node name="shiftAssist" parent="." index="6" node_paths=PackedStringArray("engine", "drivetrain") instance=ExtResource("25_57v8b")]
+engine = NodePath("../engine")
+drivetrain = NodePath("../drivetrain")
+shiftMethod = 2
+revMatchAuthority = 0.9
+upshiftClutchMult = 5.0
+downshiftClutchMult = 3.0
+antiEngineBreak = true
+upshiftThreshold = 0.25
+
+[node name="centerOfMass" parent="." index="7" instance=ExtResource("5_8nvih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.071, 0)
 
-[node name="Decal" type="Decal" parent="." index="7"]
+[node name="Decal" type="Decal" parent="." index="8"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.26241, -1.33013)
 layers = 128
 size = Vector3(1.082, 1.082, 1.082)
@@ -116,7 +136,7 @@ modulate = Color(1, 0.121569, 0.133333, 1)
 upper_fade = 1e-05
 lower_fade = 4.20666e-05
 
-[node name="Decal2" type="Decal" parent="." index="8"]
+[node name="Decal2" type="Decal" parent="." index="9"]
 transform = Transform3D(-1, 0, -8.74228e-08, 8.74228e-08, -4.37114e-08, -1, -3.82137e-15, -1, 4.37114e-08, 0, 0.26241, 1.81877)
 layers = 128
 size = Vector3(0.9, 0.9, 0.9)
@@ -125,18 +145,18 @@ modulate = Color(1, 0.121569, 0.133333, 1)
 upper_fade = 1e-05
 lower_fade = 7.32422e-05
 
-[node name="sideCamera" type="Camera3D" parent="." index="9"]
+[node name="sideCamera" type="Camera3D" parent="." index="10"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.3359, 0.0191476, 0.945084)
 script = ExtResource("7_5vs8v")
 
-[node name="handbreak" parent="." index="10" node_paths=PackedStringArray("wheels") instance=ExtResource("8_ukng8")]
+[node name="handbreak" parent="." index="11" node_paths=PackedStringArray("wheels") instance=ExtResource("8_ukng8")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="Camera3D" type="Camera3D" parent="." index="11"]
+[node name="Camera3D" type="Camera3D" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358006, 0.671878, -0.233562)
 script = ExtResource("9_aso8r")
 
-[node name="enginePitcherSFX" parent="." index="12" node_paths=PackedStringArray("engine") instance=ExtResource("10_2xagk")]
+[node name="enginePitcherSFX" parent="." index="13" node_paths=PackedStringArray("engine") instance=ExtResource("10_2xagk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -1.39999)
 stream = ExtResource("11_d6sra")
 autoplay = true
@@ -144,7 +164,7 @@ streamRevsPerMinute = 4000.0
 engine = NodePath("../engine")
 volumeThrotleCurve = SubResource("Curve_esef2")
 
-[node name="engine" parent="." index="13" instance=ExtResource("12_kd2ra")]
+[node name="engine" parent="." index="14" instance=ExtResource("12_kd2ra")]
 torqueCurve = SubResource("Curve_eru43")
 peakTorque = 250.0
 internalFrictionTorque = 20.0
@@ -152,50 +172,50 @@ breakTorque = 50.0
 limmiterCounterTorqueRatio = 4.0
 momentOfInertia = 0.2
 
-[node name="drivetrain" parent="." index="14" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("13_5s550")]
+[node name="drivetrain" parent="." index="15" node_paths=PackedStringArray("poweredWheels", "engine") instance=ExtResource("13_5s550")]
 poweredWheels = [NodePath("../FR"), NodePath("../FL"), NodePath("../RR"), NodePath("../RL")]
 engine = NodePath("../engine")
 clutchMaxTorque = 400.0
 gearRatios = Array[float]([-0.1, 0.0, 0.12, 0.3, 0.5, 0.7, 1.0, 1.2])
 finalRatio = 0.28
 
-[node name="lsdRear" parent="." index="15" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
+[node name="lsdRear" parent="." index="16" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 
-[node name="lsdFront" parent="." index="16" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
+[node name="lsdFront" parent="." index="17" node_paths=PackedStringArray("wheels") instance=ExtResource("14_uitsv")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 limit = 15.0
 
-[node name="KVCentralLSDifferential" type="Node" parent="." index="17" node_paths=PackedStringArray("lsds")]
+[node name="KVCentralLSDifferential" type="Node" parent="." index="18" node_paths=PackedStringArray("lsds")]
 script = ExtResource("15_wddpj")
 lsds = [NodePath("../lsdRear"), NodePath("../lsdFront")]
 limit = 2.0
 
-[node name="breakFront" parent="." index="18" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
+[node name="breakFront" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 strength = 3000.0
 abs = true
 slipStrengthMult = 0.6
 
-[node name="breakRear" parent="." index="19" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
+[node name="breakRear" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("15_x1rcs")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 strength = 300.0
 abs = true
 slipStrengthMult = 0.6
 
-[node name="k-swayBarFront" parent="." index="20" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
+[node name="k-swayBarFront" parent="." index="21" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../FR"), NodePath("../FL")]
 stiffness = 2.0
 
-[node name="k-swayBarRear" parent="." index="21" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
+[node name="k-swayBarRear" parent="." index="22" node_paths=PackedStringArray("wheels") instance=ExtResource("16_hb30c")]
 wheels = [NodePath("../RR"), NodePath("../RL")]
 stiffness = 2.0
 
-[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="22"]
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="23"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189934, 0.16197)
 size = Vector3(2.2, 1, 3.3)
 
-[node name="vehicleHint" type="Label" parent="." index="23" node_paths=PackedStringArray("frontWheels", "drivetrain", "centralLSD")]
+[node name="vehicleHint" type="Label" parent="." index="24" node_paths=PackedStringArray("frontWheels", "drivetrain", "centralLSD")]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -210,7 +230,7 @@ frontWheels = [NodePath("../FR"), NodePath("../FL")]
 drivetrain = NodePath("../drivetrain")
 centralLSD = NodePath("../KVCentralLSDifferential")
 
-[node name="FR" parent="." index="24" instance=ExtResource("18_y8sih")]
+[node name="FR" parent="." index="25" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874519, -0.10862, -1.19449)
 radius = 0.303612
 width = 0.244639
@@ -222,7 +242,9 @@ steer = true
 maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="FR" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -246,7 +268,7 @@ mesh = SubResource("ImmediateMesh_466e8")
 
 [node name="gravel" parent="FR/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="FL" parent="." index="25" instance=ExtResource("18_y8sih")]
+[node name="FL" parent="." index="26" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, -1.194)
 radius = 0.303612
 width = 0.244639
@@ -258,7 +280,9 @@ steer = true
 maxSteerAngle = 0.785
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="FL" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -283,7 +307,7 @@ mesh = SubResource("ImmediateMesh_t1flb")
 
 [node name="gravel" parent="FL/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="RR" parent="." index="26" instance=ExtResource("18_y8sih")]
+[node name="RR" parent="." index="27" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, -0.10862, 1.356)
 radius = 0.303612
 width = 0.244639
@@ -294,8 +318,10 @@ defaultTireResponse = ExtResource("20_fby83")
 stiffness = 3.5
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="RR" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -319,7 +345,7 @@ mesh = SubResource("ImmediateMesh_eek5i")
 
 [node name="gravel" parent="RR/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="RL" parent="." index="27" instance=ExtResource("18_y8sih")]
+[node name="RL" parent="." index="28" instance=ExtResource("18_y8sih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, -0.109, 1.356)
 radius = 0.303612
 width = 0.244639
@@ -330,8 +356,10 @@ defaultTireResponse = ExtResource("20_fby83")
 stiffness = 3.5
 compressionDamp = 0.15
 relaxationDamp = 0.25
+overCompressionBegin = -0.05
 gripMultiplier = Vector3(1.2, 1, 1)
 maxNormalLoadCoeficientMultiplier = 3.0
+suspensionGeometry = SubResource("Resource_80t22")
 
 [node name="RayCast3D" parent="RL" index="0"]
 target_position = Vector3(0, -0.464612, 0)
@@ -356,10 +384,10 @@ mesh = SubResource("ImmediateMesh_eek5i")
 
 [node name="gravel" parent="RL/Particles" index="1" instance=ExtResource("23_elsxg")]
 
-[node name="shiftAssist" parent="." index="28" node_paths=PackedStringArray("engine", "drivetrain") instance=ExtResource("25_57v8b")]
-engine = NodePath("../engine")
-drivetrain = NodePath("../drivetrain")
-shiftMethod = 2
+[node name="weightDistributor" parent="." index="29" node_paths=PackedStringArray("centerOfMass", "frontWheels", "rearWheels") instance=ExtResource("27_17h86")]
+centerOfMass = NodePath("../centerOfMass")
+frontWheels = [NodePath("../FL"), NodePath("../FR")]
+rearWheels = [NodePath("../RL"), NodePath("../RR")]
 
 [editable path="FR"]
 [editable path="FL"]

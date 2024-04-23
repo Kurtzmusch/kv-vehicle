@@ -58,11 +58,15 @@ func shiftIntoGear(gearIndex):
 	if vehicle.freeze: return
 	currentGearIndex = gearIndex 
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+	gearRatio = gearRatios[currentGearIndex]*finalRatio
+	updateRPSDelta()
 
 func shiftGear(gearOffset):
 	if vehicle.freeze: return
 	currentGearIndex += gearOffset 
 	currentGearIndex = clamp(currentGearIndex, 0, gearRatios.size()-1)
+	gearRatio = gearRatios[currentGearIndex]*finalRatio
+	updateRPSDelta()
 
 func _physics_process(delta):
 	if vehicle.freeze: return
@@ -75,13 +79,21 @@ func _physics_process(delta):
 
 	#vehicle.debugString = str((int(f)))
 
+func updateRPSDelta():
+	var engineAngularModified = engine.radsPerSec*gearRatio
+	var wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
+	
+	rpsDelta = wheelAngularModified - engine.radsPerSec
+
 func clutch(delta, oneByDelta, modDelta, oneBySubstep):
 	var oneByModDelta = 1.0/modDelta
-	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput): return
+	
 	var engineAngularModified = engine.radsPerSec*gearRatio
 	var wheelAngularModified = -getFastestWheel().radsPerSec/gearRatio
 	#var rpsDelta = -getFastestWheel().radsPerSec -engineAngularModified 
 	rpsDelta = wheelAngularModified - engine.radsPerSec
+	
+	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput): return
 	var ratio1 = engine.momentOfInertia/(_totalWheelMomentOfInertia*gearRatio*gearRatio)
 	
 	#var torque = (-getFastestWheel().radsPerSec-engineAngularModified)/(-1.0-ratio)
@@ -137,7 +149,7 @@ func _integrate(delta, oneByDelta, modDelta, oneBySubstep):
 	if is_zero_approx(gearRatio) or is_zero_approx(clutchInput):
 		for wheel in poweredWheels:
 			wheel.powered = false
-		return
+		
 	var counterTorque = 0.0
 	for wheel in poweredWheels:
 		counterTorque -= wheel.frictionTorque*gearRatio

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TireResponseBrushWolfie" load_steps=3 format=3 uid="uid://d15111s7l2ibm"]
+
+[ext_resource type="Script" path="res://addons/kv-vehicle/TireResponseBrushWolfie.gd" id="1_lmriu"]
+[ext_resource type="AudioStream" uid="uid://cv6l53q3kvo1a" path="res://snd/fx/tire-slip-tarmac.wav" id="2_8mba1"]
+
+[resource]
+script = ExtResource("1_lmriu")
+tireStiffness = 4
+contactPatchLength = 0.2
+materialName = "tarmac"
+maxNormalLoadCoeficient = 8.0
+coeficientOfFriction = 1.0
+slippingStream = ExtResource("2_8mba1")
+slipAudioMinimumVelocity = 8.0
+slipAudioMinimumPitch = 0.8
+slipAudioMaximumVelocity = 100.0
+slipAudioMaximumPitch = 1.1
+audioVolumeEase = 0.5
+bumpHeight = 0.0
+bumpVisualBias = 0.0

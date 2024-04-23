@@ -1,9 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj233wg0k5djo"]
+[gd_scene load_steps=9 format=3 uid="uid://bj233wg0k5djo"]
 
 [ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/kv-wheel.gd" id="1_2oa8d"]
 [ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/wheelSteerPivot.gd" id="2_1lmvs"]
+[ext_resource type="Script" path="res://addons/kv-vehicle/SuspensionGeometry.gd" id="2_b75h0"]
 [ext_resource type="Script" path="res://addons/kv-vehicle/nodes/kv-debugVectors.gd" id="3_wmpnu"]
 [ext_resource type="Script" path="res://addons/kv-vehicle/scene/instantiable/Label3DDebug.gd" id="4_snyr5"]
+
+[sub_resource type="Resource" id="Resource_tv730"]
+script = ExtResource("2_b75h0")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_327r1"]
 no_depth_test = true
@@ -15,6 +19,9 @@ resource_local_to_scene = true
 
 [node name="kwheel" type="Node3D"]
 script = ExtResource("1_2oa8d")
+overCompressionBegin = null
+dampOverCompressionRebound = null
+suspensionGeometry = SubResource("Resource_tv730")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 enabled = false

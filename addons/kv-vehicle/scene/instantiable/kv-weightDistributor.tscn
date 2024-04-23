@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdae6buqwnrrh"]
+
+[ext_resource type="Script" path="res://addons/kv-vehicle/nodes/kv-weightDistributor.gd" id="1_f1js5"]
+
+[node name="weightDistributor" type="Node"]
+script = ExtResource("1_f1js5")

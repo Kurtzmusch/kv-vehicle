@@ -49,6 +49,7 @@ func getVelocity(localVelocity, radsPerSec, radius):
 		relativeVelocity.x = localVelocity.x
 	return relativeVelocity
 
+#TODO alternative clamp mode: use final force as final direction vector instead of contatct patch relative velocity
 func getFrictionForces(localVelocity, radsPerSec, radius, slipAngle, desiredFrictionVec, gripMultiplier, normalForce, loadFactor, normalForceAtRest):
 	var coeficients = getCoeficients(localVelocity, radsPerSec, radius)
 	var normalForceModified = normalForceAtRest*pow(loadFactor, loadEase)

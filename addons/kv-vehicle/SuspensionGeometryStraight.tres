@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="SuspensionGeometry" load_steps=2 format=3 uid="uid://cpwfb7vmahsye"]
+
+[ext_resource type="Script" path="res://addons/kv-vehicle/SuspensionGeometry.gd" id="1_3gmmk"]
+
+[resource]
+script = ExtResource("1_3gmmk")

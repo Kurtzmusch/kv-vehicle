@@ -4,3 +4,4 @@
 
 [node name="shiftAssist" type="Node"]
 script = ExtResource("1_3hw7u")
+antiEngineBreakPressure = 0.01
